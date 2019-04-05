@@ -18,7 +18,8 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
  On a side note this contract also allows us to secure the Livepeer Controller address. If this is specified in the web app and passed in,
   there might be risk of the Livepeer Controller address being changed by an attacker before execution of a function.
 
- LivepeerDelegator includes a reference to a modified Agent contract which includes a reference to a modified Vault contract.
+ LivepeerDelegator includes a reference to a modified Agent contract which includes a reference to a modified Vault contract. Including
+ removing the initialize function from the Vault app as it seemed to gets used instead of the one in this contract when installing externally.
 
  TODO: Get decimal numbers from LPT contract in Radspec strings
  TODO: Remove trailing zeros from fractional token amount (not sure how)

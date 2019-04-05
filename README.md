@@ -42,7 +42,12 @@ To install the Livepeer Aragon app into an existing Aragon DAO:
 ```sh
 dao install <DAO Address> livepeer.open.aragonpm.eth --set-permissions open --environment staging --app-init-args 0x37dC71366Ec655093b9930bc816E16e6b587F968
 ```
-Note the success of this call could be dependant on the permissions set in the DAO. Ensure the account connected can action the Manage Apps permission either directly or through a forwarder eg the Voting app. See Permissions -> Kernal in the UI to check.  
+Note the success of this call could be dependant on the permissions set in the DAO. Ensure the account connected can action the Manage Apps permission either directly or through a forwarder eg the Voting app. See Permissions -> Kernal in the UI to check.
+
+If set without `--set-permissions open` then create a permission for the app to appear with:
+```sh
+dao acl create <DAO Address> <App Proxy Address> APPROVE_ROLE <Entity> <Manager> --environment staging
+```
 
 
 After app installation the permissions can be modified through the UI or through the CLI. Roles available include:  

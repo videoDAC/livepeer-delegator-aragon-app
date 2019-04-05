@@ -38,8 +38,6 @@ const initialState = async (state) => {
 
 const onNewEvent = async (state, event) => {
 
-    console.log(event)
-
     switch (event.event) {
         // TODO: Work out when the store emits, and why it emits lots of events on init (it isn't due to cache/cookies)
         case 'AppInitialized':
