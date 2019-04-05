@@ -1,4 +1,4 @@
-# solidity-livepeer-aragon-app
+# livepeer-delegator-aragon-app
 Livepeer Delegator Aragon app for managing Livepeer Delegation actions.
 
 This project uses the Aragon Agent app (Agent.sol) for storing LPT and interacting with Livepeer contracts. 
