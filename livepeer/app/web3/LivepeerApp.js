@@ -42,6 +42,12 @@ const bondingManagerBond = (api, numberOfTokens, bondToAddress) => {
         .subscribe()
 }
 
+const approveAndBond = (api, tokenCount, bondToAddress) => {
+    const convertedTokenCount = toDecimals(tokenCount, TOKEN_DECIMALS)
+    api.approveAndBond(convertedTokenCount, bondToAddress)
+        .subscribe()
+}
+
 const bondingManagerUnbond = (api, numberOfTokens) => {
     const convertedTokenCount = toDecimals(numberOfTokens, TOKEN_DECIMALS)
     api.unbond(convertedTokenCount)
@@ -64,6 +70,7 @@ export {
     transferFromApp,
     transferToApp,
     bondingManagerBond,
+    approveAndBond,
     bondingManagerUnbond,
     bondingManagerWithdraw,
     bondingManagerClaimEarnings

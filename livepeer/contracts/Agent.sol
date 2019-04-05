@@ -103,6 +103,17 @@ contract Agent is IERC165, ERC1271Bytes, IForwarder, IsContract, Vault {
     * @dev IForwarder interface conformance. Forwards any token holder action.
     * @param _evmScript Script being executed
     */
+    function forward(bytes _evmScript)
+    public
+    authP(RUN_SCRIPT_ROLE, arr(getScriptACLParam(_evmScript))) {
+        _forward(_evmScript);
+    }
+
+    /**
+    * @notice Execute the script as the Agent app
+    * @dev IForwarder interface conformance. Forwards any token holder action.
+    * @param _evmScript Script being executed
+    */
     function _forward(bytes _evmScript)
     internal
     {

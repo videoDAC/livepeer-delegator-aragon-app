@@ -94,7 +94,6 @@ contract Kit is KitBase {
 
         // Agent Permissions
         acl.createPermission(ANY_ENTITY, app, app.SET_CONTROLLER_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.RUN_SCRIPT_ROLE(), root);
         acl.createPermission(ANY_ENTITY, app, app.TRANSFER_ROLE(), root);
         acl.createPermission(ANY_ENTITY, app, app.APPROVE_ROLE(), root);
         acl.createPermission(ANY_ENTITY, app, app.BOND_ROLE(), root);

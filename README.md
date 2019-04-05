@@ -1,11 +1,11 @@
 # solidity-livepeer-aragon-app
-Aragon app for managing Livepeer actions.
+Livepeer Delegator Aragon app for managing Livepeer Delegation actions.
 
 This project uses the Aragon Agent app (Agent.sol) for storing LPT and interacting with Livepeer contracts. 
 
-Initial development includes functions for Livepeer interaction as a typical bonder/delegator. These include the ability to call the functions: approve, bond, claimEarnings, unbond, rebond and withdraw.
+Initial development includes functions for Livepeer interaction as a typical bonder/delegator. These include the ability to call the functions: approve, bond, claimEarnings, unbond, rebond and withdrawStake.
 
-Further development will include functions for declaring the app as a transcoder and modifying transcoder variables (reward, fee etc) and integrating voting rights weighted by the amount and time spent bonded to the transcoder. However, this requires further investigation into how to properly incentivize and securely monitor transcoder node operation. A brief discussion can be found here: https://github.com/livepeer/research/issues/13  
+Further investigation may be made into creating a Livepeer Transcoder app, some discussion here: https://github.com/livepeer/research/issues/13 
 
 ## Project contents
 ### aragon-livepeer-experiment
@@ -18,7 +18,7 @@ The full livepeer contract deployment for testing locally. Modified to compile w
 - `rewardWithLpt.js` for declaring account[0] as a transcoder, doing the necessary setup and calling reward.  
 
 ### livepeer
-The in development Livepeer Aragon app using the Agent app. Uses the Aragon `react-kit` template. Currently includes basic functions including approve, bond, unbond, withdraw and transfer. 
+The Livepeer Delegator Aragon app uses a modified version of Agent.sol to workaround limitations with the aragonAPI. Uses the Aragon `react-kit` template. Currently includes basic functions including approve, bond, unbond, claimEarnings, withdrawStake and transfer. 
 
 ## Aragon DAO Rinkeby Installation Instructions
 
@@ -45,9 +45,14 @@ dao install <DAO Address> livepeer.open.aragonpm.eth --set-permissions open --en
 Note the success of this call could be dependant on the permissions set in the DAO. Ensure the account connected can action the Manage Apps permission either directly or through a forwarder eg the Voting app. See Permissions -> Kernal in the UI to check.  
 
 
-After app installation the permissions can be modified through the UI or through the CLI. Roles available are parameterised and include:  
-- EXECUTE_ROLE
-- RUN_SCRIPT_ROLE
+After app installation the permissions can be modified through the UI or through the CLI. Roles available include:  
+- SET_CONTROLLER_ROLE
+- APPROVE_ROLE
+- BOND_ROLE
+- APPROVE_AND_BOND_ROLE
+- CLAIM_EARNINGS_ROLE
+- UNBOND_ROLE
+- WITHDRAW_STAKE_ROLE
 - TRANSFER_ROLE  
 
 Depending on your set up, they may require parameter permissions to be set to restrict access to certain functions. A preliminary script for modifying parameter permissions can be found at `/livepeer/scripts/grantPermissionWithParameters.js`
@@ -86,6 +91,11 @@ Depending on your set up, they may require parameter permissions to be set to re
     ```sh
     aragon run
     ```
+    
+To test the bonded amount increases as expected after reward is executed, bond to the main account in your local chain (if using `aragon devchain` it will likely be `0xb4124cEB3451635DAcedd11767f004d8a28c6eE7`) and execute this in the `/livepeer-protocol` directory:
+```sh
+truffle exec scripts/livepeerAragonApp/rewardWithLpt.js
+```
 
 Finally, before unbonding or withdrawing, you must skip one or more Livepeer rounds and initialise the latest one. To do this, modify the constants as necessary and execute this in the `/livepeer-protocol` directory:  
 ```sh

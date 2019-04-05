@@ -9,11 +9,11 @@ import {
     transferFromApp,
     transferToApp,
     bondingManagerBond,
+    approveAndBond,
     bondingManagerUnbond,
     bondingManagerWithdraw,
     bondingManagerClaimEarnings
 } from "../web3/LivepeerApp"
-import approveAndBond from "../web3/ApproveAndBondScript"
 
 import LivepeerBalance from "./components/LivepeerTokenBalance"
 import ApproveTokens from "./components/ApproveTokens"

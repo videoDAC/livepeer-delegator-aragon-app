@@ -8,20 +8,18 @@ import {
     bondingManager$,
     roundsManager$
 } from '../web3/ExternalContracts'
-import {of, range} from "rxjs";
-import {first, mergeMap, map, filter, toArray, zip, tap} from "rxjs/operators"
+import {range} from "rxjs";
+import {first, mergeMap, map, filter, toArray, zip} from "rxjs/operators"
 
-const INITIALISE_EVENT = Symbol("INITIALISE_APP")
 const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
 
 const api = new AragonApi()
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
 //TODO: Add rebond functions.
-//TODO: Replace most external contract events with app events to minimise processing and complexity
+//TODO: Add withdraw fees function.
 //TODO: Rearrange UI, make actions appear in slide in menu.
 //TODO: More disabling of buttons/error handling when functions can't be called.
-//TODO: Bond Tokens should display claimable tokens plus bonded tokens, as that's the amount that is earned on.
 
 const initialState = async (state) => {
     return {
@@ -40,14 +38,10 @@ const initialState = async (state) => {
 
 const onNewEvent = async (state, event) => {
 
+    console.log(event)
+
     switch (event.event) {
         // TODO: Work out when the store emits, and why it emits lots of events on init (it isn't due to cache/cookies)
-        //  then sort out storing of the app address for the script. Is currently confusing and potentially unreliable.
-        // case INITIALISE_EVENT:
-        //     console.log("INITIALISE")
-        //     return await initialState(state)
-            // TODO: Determine if we need to listen to execute here (definitely overkill but sometimes appinitialized isn't fired...)
-        // case 'Execute':
         case 'AppInitialized':
             console.log("APP INITIALIZED OR EXECUTE")
             livepeerAppAddress = event.address
@@ -64,51 +58,60 @@ const onNewEvent = async (state, event) => {
                 ...state,
                 livepeerControllerAddress: event.returnValues.livepeerController
             }
-            // Can be replaced, as long as VaultDeposit is added
         case 'Transfer':
-            console.log("TRANSFER")
+            console.log("LPT TRANSFER")
+            const account = (await api.accounts().pipe(first()).toPromise())[0]
+
+            if (account === event.returnValues.from || account === event.returnValues.to) {
+                return {
+                    ...state,
+                    userLptBalance: await userLptBalance$().toPromise()
+                }
+            } else {
+                return state
+            }
+        case 'VaultTransfer':
+        case 'VaultDeposit':
+            console.log("TRANSFER IN/OUT")
             return {
                 ...state,
                 userLptBalance: await userLptBalance$().toPromise(),
                 appsLptBalance: await appLptBalance$().toPromise()
             }
-            // Can be replaced
-        case 'Approval':
+        case 'LivepeerDelegatorApproval':
             console.log("APPROVAL")
             return {
                 ...state,
-                appApprovedTokens: await appApprovedTokens$().toPromise()
+                appApprovedTokens: event.returnValues.value
             }
-            // Can be replaced
-        case 'Bond':
+        case 'LivepeerDelegatorBond':
             console.log("BOND")
             return {
                 ...state,
-                delegatorInfo: await delegatorInfo$().toPromise(),
                 appApprovedTokens: await appApprovedTokens$().toPromise(),
                 appsLptBalance: await appLptBalance$().toPromise(),
+                delegatorInfo: await delegatorInfo$().toPromise(),
                 disableUnbondTokens: await disableUnbondTokens$().toPromise()
             }
-        case 'Reward':
-            console.log("REWARD")
-            return {
-                ...state,
-                delegatorInfo: await delegatorInfo$().toPromise()
-            }
-            // Already from livepeer app.
-        case 'ClaimEarnings':
+        case 'LivepeerDelegatorClaimEarnings':
             console.log("CLAIM EARNINGS")
             return {
                 ...state,
                 delegatorInfo: await delegatorInfo$().toPromise()
             }
-            // Can be replaced
-        case 'Unbond':
+        case 'LivepeerDelegatorUnbond':
             console.log("UNBOND")
             return {
                 ...state,
                 delegatorInfo: await delegatorInfo$().toPromise(),
                 unbondingLockInfos: await unbondingLockInfos$().toPromise()
+            }
+        case 'LivepeerDelegatorWithdrawStake':
+            console.log("WITHDRAW STAKE")
+            return {
+                ...state,
+                unbondingLockInfos: await unbondingLockInfos$().toPromise(),
+                appsLptBalance: await appLptBalance$().toPromise()
             }
         case 'NewRound':
             console.log("NEW ROUND")
@@ -118,13 +121,11 @@ const onNewEvent = async (state, event) => {
                 unbondingLockInfos: await unbondingLockInfos$().toPromise(),
                 disableUnbondTokens: await disableUnbondTokens$().toPromise()
             }
-            // Can be replaced
-        case 'WithdrawStake':
-            console.log("WITHDRAW STAKE")
+        case 'Reward':
+            console.log("REWARD")
             return {
                 ...state,
-                unbondingLockInfos: await unbondingLockInfos$().toPromise(),
-                appsLptBalance: await appLptBalance$().toPromise()
+                delegatorInfo: await delegatorInfo$().toPromise()
             }
         case ACCOUNT_CHANGED_EVENT:
             console.log("ACCOUNT CHANGED")
@@ -145,7 +146,6 @@ const accountChangedEvent$ = () =>
 
 api.store(onNewEvent,
     [
-        of({event: INITIALISE_EVENT}),
         accountChangedEvent$(),
         livepeerToken$(api).pipe(mergeMap(livepeerToken => livepeerToken.events())),
         bondingManager$(api).pipe(mergeMap(bondingManager => bondingManager.events())),

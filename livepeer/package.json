@@ -11,7 +11,7 @@
     "@aragon/os": "^4.0.1",
     "ethereumjs-abi": "^0.6.6",
     "ethereumjs-util": "^6.1.0",
-    "web3-eth-abi": "^1.0.0-beta.48"
+    "solidity-bytes-utils": "0.0.6"
   },
   "devDependencies": {
     "@aragon/cli": "^5.4.0"
@@ -21,7 +21,7 @@
     "start:ipfs": "aragon run",
     "start:http": "aragon run --http localhost:8001 --http-served-from ./dist",
     "start:ipfs:template": "npm run start:ipfs -- --template Kit --template-init @ARAGON_ENS",
-    "start:http:template": "npm run start:http -- --template Kit --template-init @ARAGON_ENS 0x80e17dB1e81b3fBd2900B802D939792b850f0937",
+    "start:http:template": "npm run start:http -- --template Kit --template-init @ARAGON_ENS 0x3360C1F01e6cE5Ac034e740C01C8e4bfCac8F05b",
     "prepare": "cd app && npm install && cd ..",
     "start:app": "cd app && npm start && cd ..",
     "test": "aragon contracts test",

@@ -36,13 +36,6 @@
       "params": []
     },
     {
-      "name": "Execute a script",
-      "id": "RUN_SCRIPT_ROLE",
-      "params": [
-        "EVM Script"
-      ]
-    },
-    {
       "name": "Transfer tokens",
       "id": "TRANSFER_ROLE",
       "params": [
