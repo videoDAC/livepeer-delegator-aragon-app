@@ -1,0 +1,17 @@
+<svg width="400" height="421.0526315789474" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <g stroke="null" style="vector-effect: non-scaling-stroke;" transform="translate(26,23) translate(15,17) translate(0,0) scale(0.9300000071525574,0.8859315514564514) translate(0,0) translate(0,0) scale(0.9975000023841858,1.0451520681381226) translate(0,0) translate(0,0) scale(0.8725000023841858,0.8288973569869995) translate(0,0) translate(0,0) scale(0.9800000190734863,1.0499049425125122) translate(0,0) translate(0,0) scale(0.9700000286102295,0.9762357473373413) translate(0,0) translate(400,420.79998779296875) scale(0.9649999737739563,0.9714828729629517) translate(-400,-420.79998779296875) translate(0,0) scale(1,0.9952471256256104) translate(0,0) " id="svgg">
+   <path style="vector-effect: non-scaling-stroke;" fill-rule="evenodd" fill="#8B9396" d="m0,37.4l0,37.4l37.4,0l37.4,0l0,-37.4l0,-37.4l-37.4,0l-37.4,0l0,37.4m161.2,85.6l0,37.8l37.8,0l37.8,0l0,-37.8l0,-37.8l-37.8,0l-37.8,0l0,37.8m-161.2,88.4l0,37.8l37.4,0l37.4,0l0,-37.8l0,-37.8l-37.4,0l-37.4,0l0,37.8m325.467,-37.533c-0.147,0.146 -0.267,17.156 -0.267,37.8l0,37.533l37.4,0l37.4,0l0,-37.8l0,-37.8l-37.133,0c-20.424,0 -37.254,0.12 -37.4,0.267m-164.267,121.933l0,37.8l37.8,0l37.8,0l0,-37.8l0,-37.8l-37.8,0l-37.8,0l0,37.8m-161.2,87.8l0,37.2l37.4,0l37.4,0l0,-37.2l0,-37.2l-37.4,0l-37.4,0l0,37.2" id="path0"/>
+   <path style="vector-effect: non-scaling-stroke;" fill-rule="evenodd" fill="#8B9396" id="path1"/>
+   <path style="vector-effect: non-scaling-stroke;" fill-rule="evenodd" fill="#8B9396" id="path2"/>
+   <path style="vector-effect: non-scaling-stroke;" fill-rule="evenodd" fill="#8B9396" id="path3"/>
+   <path style="vector-effect: non-scaling-stroke;" fill-rule="evenodd" fill="#8B9396" id="path4"/>
+  </g>
+ </g>
+</svg>

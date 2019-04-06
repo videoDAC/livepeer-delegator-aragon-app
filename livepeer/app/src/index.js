@@ -3,7 +3,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import {AragonApi} from '@aragon/api-react'
-import {fromDecimals} from "./lib/math-utils";
+import {fromDecimals} from "./lib/math-utils"
+import {BN} from "bn.js"
 
 const TOKEN_DECIMALS = 18;
 
@@ -42,12 +43,11 @@ const reducer = state => {
     }
 }
 
-//TODO: Fix the null check.
 const calculateTotalStake = (delegatorInfo) => {
-    const bondedAmount = fromDecimals(delegatorInfo.bondedAmount.toString(), TOKEN_DECIMALS)
-    const pendingStake = fromDecimals(delegatorInfo.pendingStake ? delegatorInfo.pendingStake.toString() : "0", TOKEN_DECIMALS)
-
-    return Math.max(bondedAmount, pendingStake)
+    const bondedAmountBn = new BN(delegatorInfo.bondedAmount ? delegatorInfo.bondedAmount : 0)
+    const pendingStakeBn = new BN(delegatorInfo.pendingStake ? delegatorInfo.pendingStake : 0)
+    const totalStake = bondedAmountBn.gt(pendingStakeBn) ? bondedAmountBn : pendingStakeBn
+    return fromDecimals(totalStake.toString(), TOKEN_DECIMALS)
 }
 
 ReactDOM.render(
