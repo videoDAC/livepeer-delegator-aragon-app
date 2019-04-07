@@ -20,6 +20,7 @@ let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 //TODO: Add withdraw fees function.
 //TODO: Rearrange UI, make actions appear in slide in menu.
 //TODO: More disabling of buttons/error handling when functions can't be called.
+//TODO: Add menu  hamburger to smaller view.
 
 const initialState = async (state) => {
     return {

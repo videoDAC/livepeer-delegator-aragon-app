@@ -192,4 +192,4 @@ To deploy from a different account, you can:
 
 ## Licensing
 
-Note that the [Kit contract](contracts/Kit.sol) has a special requirement on licensing because it includes contract dependencies that are licensed as `GPL-3.0-or-later`. This is the only file in your project that is required to be licensed this way, and you are free to choose a different license for the rest of the project.
+Note that the [Kit contract](contracts/Template.sol) has a special requirement on licensing because it includes contract dependencies that are licensed as `GPL-3.0-or-later`. This is the only file in your project that is required to be licensed this way, and you are free to choose a different license for the rest of the project.

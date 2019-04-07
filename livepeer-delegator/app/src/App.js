@@ -57,7 +57,7 @@ function App() {
 
     return (
         <Main>
-            <AppContainer title="Livepeer">
+            <AppContainer title="Livepeer Delegator">
 
                 <BondBalanceApprovalContainer>
 

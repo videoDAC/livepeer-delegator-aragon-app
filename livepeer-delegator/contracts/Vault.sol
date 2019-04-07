@@ -5,6 +5,11 @@ import "@aragon/os/contracts/common/DepositableStorage.sol";
 import "@aragon/os/contracts/common/EtherTokenConstant.sol";
 import "@aragon/os/contracts/lib/token/ERC20.sol";
 
+/**
+* Modified to remove deposit function (hoisted into a child contract),
+* converted transfer to internal for access by child contract
+* and removed the initialize function.
+*/
 contract Vault is EtherTokenConstant, AragonApp, DepositableStorage {
     bytes32 public constant TRANSFER_ROLE = keccak256("TRANSFER_ROLE");
 

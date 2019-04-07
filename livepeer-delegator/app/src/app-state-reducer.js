@@ -1,10 +1,5 @@
-import '@babel/polyfill'
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
-import {AragonApi} from '@aragon/api-react'
-import {fromDecimals} from "./lib/math-utils"
-import {BN} from "bn.js"
+import {fromDecimals} from "./lib/math-utils";
+import {BN} from "../../node_modules/bn.js/lib/bn";
 
 const TOKEN_DECIMALS = 18;
 
@@ -50,9 +45,4 @@ const calculateTotalStake = (delegatorInfo) => {
     return fromDecimals(totalStake.toString(), TOKEN_DECIMALS)
 }
 
-ReactDOM.render(
-    <AragonApi reducer={reducer}>
-        <App />
-    </AragonApi>,
-    document.getElementById('root')
-)
+export default reducer

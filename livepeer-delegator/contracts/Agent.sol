@@ -7,6 +7,9 @@ import "@aragon/os/contracts/common/IForwarder.sol";
 
 import "./Vault.sol";
 
+/**
+* Modified from v1.0.1 so execute and forward are internal functions, callable by a child contract.
+*/
 contract Agent is IERC165, ERC1271Bytes, IForwarder, IsContract, Vault {
     bytes32 public constant EXECUTE_ROLE = keccak256("EXECUTE_ROLE");
     bytes32 public constant RUN_SCRIPT_ROLE = keccak256("RUN_SCRIPT_ROLE");
@@ -117,10 +120,8 @@ contract Agent is IERC165, ERC1271Bytes, IForwarder, IsContract, Vault {
     function _forward(bytes _evmScript)
     internal
     {
-        bytes memory input = "";
-        // no input
-        address[] memory blacklist = new address[](0);
-        // no addr blacklist, can interact with anything
+        bytes memory input = ""; // no input
+        address[] memory blacklist = new address[](0); // no addr blacklist, can interact with anything
         runScript(_evmScript, input, blacklist);
         // We don't need to emit an event here as EVMScriptRunner will emit ScriptResult if successful
     }
