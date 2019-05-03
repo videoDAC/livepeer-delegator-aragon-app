@@ -37,12 +37,83 @@ const initialState = async (state) => {
     }
 }
 
+const set = (event, ...keys) => keys.find(key => key === event)
+
+const delegatorEventHandler = (event) => ({
+
+    [set(event, 'VaultTransfer', 'VaultDeposit')]: async (state) => {
+        console.log("TRANSFER IN/OUT")
+        return {
+            ...state,
+            userLptBalance: await userLptBalance$().toPromise(),
+            appsLptBalance: await appLptBalance$().toPromise()
+        }
+    },
+    'LivepeerDelegatorApproval': async (state) => {
+        console.log("APPROVAL")
+        return {
+            ...state,
+            // TODO: Remove this, set to fetch value not use event valuedao .
+            appApprovedTokens: event.returnValues.value
+        }
+    },
+    'LivepeerDelegatorBond': async (state) => {
+        console.log("BOND")
+        return {
+            ...state,
+            appApprovedTokens: await appApprovedTokens$().toPromise(),
+            appsLptBalance: await appLptBalance$().toPromise(),
+            delegatorInfo: await delegatorInfo$().toPromise(),
+            disableUnbondTokens: await disableUnbondTokens$().toPromise()
+        }
+    }
+})
+
+const onNewEventNew = (event) => ({
+    'AppInitialized': async (state, event) => {
+        console.log("APP INITIALIZED")
+        livepeerAppAddress = event.address
+
+        const initState = await initialState(state)
+
+        return {
+            ...initState,
+            appAddress: livepeerAppAddress
+        }
+    },
+    ...delegatorEventHandler(event)
+})[event] || (async (state) => state)
+
 const onNewEvent = async (state, event) => {
 
+    console.log(`App address ${livepeerAppAddress}`)
+
+    const newState = await onNewEventNew(event.event)(state, event)
+
+    console.log(`App address ${livepeerAppAddress}`)
+
+    return newState
+
+
+    // See example: https://medium.com/chrisburgin/rewriting-javascript-replacing-the-switch-statement-cfff707cf045
+    //
+    // germone = (breed) => ({
+    //     [set(breed, "german", "nala")]: "German Shepherds are good boys and girls."
+    // })
+    //
+    // dogSwotch = (breed) => ({
+    //     "border": "Border Collies are good boys and girls.",
+    //     "pitbull": "Pit Bulls are good boys and girls.",
+    //     ...germone(breed)
+    // })[breed]
+    //
+    //
+    // dogSwitch("border") // "Border Collies are good boys and girls."
+
+
     switch (event.event) {
-        // TODO: Work out when the store emits, and why it emits lots of events on init (it isn't due to cache/cookies)
         case 'AppInitialized':
-            console.log("APP INITIALIZED OR EXECUTE")
+            console.log("APP INITIALIZED")
             livepeerAppAddress = event.address
 
             const initState = await initialState(state)
