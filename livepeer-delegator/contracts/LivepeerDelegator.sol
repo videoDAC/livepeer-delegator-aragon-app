@@ -8,9 +8,10 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
  This fairly hacky contract was originally a workaround for some limitations with using Agent.sol directly and the aragonAPI,
  outlined below, and has become somewhat necessary.
  1) We cannot access functions on inherited contracts in the aragonAPI so we need to hoist some functions into this child contract.
- 2) Since we can't set permission params using the UI, necessary to appropriately restrict access to Agent.sol functions, we can create
-    custom permissions applied to custom and hoisted functions, which can be modified in the UI.
- 3) We use this child contract to add an initialized event, necessary to get the app's address in the front-end during init.
+ 2) Since we can't set permission params using the UI, necessary to appropriately restrict access to Agent.sol functions, we must create
+    custom permissions applied to the custom hoisted functions, which can be modified in the UI.
+ 3) We can't get the apps address from aragonAPI so we use this child contract to add an initialized event, which we can
+    use to get the app's address in the front-end during init.
  4) It enables us to add relevant radspec strings to functions that use execute or forward from Agent.sol, which can't be customised
     that much using the aragonAPI. In particular we can't currently include the function parameter values, necessary for voters to see
     details about what they're voting for.
@@ -18,8 +19,7 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
  On a side note this contract also allows us to secure the Livepeer Controller address. If this is specified in the web app and passed in,
   there might be risk of the Livepeer Controller address being changed by an attacker before execution of a function.
 
- LivepeerDelegator includes a reference to a modified Agent contract which includes a reference to a modified Vault contract. Including
- removing the initialize function from the Vault app as it seemed to gets used instead of the one in this contract when installing externally.
+ LivepeerDelegator includes a reference to a modified Agent contract which includes a reference to a modified Vault contract.
 
  TODO: Get decimal numbers from LPT contract in Radspec strings
  TODO: Remove trailing zeros from fractional token amount (not sure how)

@@ -20,7 +20,9 @@ let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 //TODO: Add withdraw fees function.
 //TODO: Rearrange UI, make actions appear in slide in menu.
 //TODO: More disabling of buttons/error handling when functions can't be called.
-//TODO: Add menu  hamburger to smaller view.
+//TODO: Add menu hamburger to smaller view.
+
+//TODO: Update dependencies
 
 const initialState = async (state) => {
     return {
@@ -40,9 +42,8 @@ const initialState = async (state) => {
 const onNewEvent = async (state, event) => {
 
     switch (event.event) {
-        // TODO: Work out when the store emits, and why it emits lots of events on init (it isn't due to cache/cookies)
         case 'AppInitialized':
-            console.log("APP INITIALIZED OR EXECUTE")
+            console.log("APP INITIALIZED")
             livepeerAppAddress = event.address
 
             const initState = await initialState(state)
@@ -81,6 +82,7 @@ const onNewEvent = async (state, event) => {
             console.log("APPROVAL")
             return {
                 ...state,
+                // TODO: Remove this, set to fetch value not use event valuedao .
                 appApprovedTokens: event.returnValues.value
             }
         case 'LivepeerDelegatorBond':

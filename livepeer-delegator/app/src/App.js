@@ -1,5 +1,5 @@
-import React from 'react'
-import {Main, AppView} from '@aragon/ui'
+import React, {useState} from 'react'
+import {Main, AppView, TabBar} from '@aragon/ui'
 import styled from 'styled-components'
 import {useAragonApi} from '@aragon/api-react'
 
@@ -15,27 +15,19 @@ import {
     bondingManagerClaimEarnings
 } from "../web3/LivepeerApp"
 
-import LivepeerBalance from "./components/LivepeerTokenBalance"
-import ApproveTokens from "./components/ApproveTokens"
-import BondTokens from "./components/BondTokens"
-import UnbondTokens from "./components/UnbondTokens"
-import Addresses from "./components/Addresses";
+import Delegator from "./components/Delegator"
+import Transcoder from "./components/Transcoder";
 
 const AppContainer = styled(AppView)`
     display: flex;
     flex-direction: column;
-`
-const BondBalanceApprovalContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
 `
 
 // TODO: Add defaultProps and propTypes to components. Extract strings. Extract common spacing (px values).
 function App() {
 
     const {api, appState} = useAragonApi()
+    const [tabBarSelected, setTabBarSelected] = useState(0)
 
     const setController = (address) => setLivepeerController(api, address)
 
@@ -55,27 +47,34 @@ function App() {
 
     const withdrawTokens = (unbondingLockId) => bondingManagerWithdraw(api, unbondingLockId)
 
+    const tabs = [
+        {
+            tabName: "Delegator",
+            tabComponent: (
+                <Delegator appState={appState} setController={setController} transferTokensIn={transferTokensIn}
+                           transferTokensOut={transferTokensOut} approveTokens={approveTokens} bondTokens={bondTokens}
+                           approveAndBondTokens={approveAndBondTokens} unbondTokens={unbondTokens}
+                           claimEarnings={claimEarnings} withdrawTokens={withdrawTokens}/>)
+        },
+        {
+            tabName: "Transcoder",
+            tabComponent: (<Transcoder/>)
+        }
+    ]
+    const tabsNames = tabs.map(tab => tab.tabName)
+    const selectedTabComponent = tabs[tabBarSelected].tabComponent
+
     return (
         <Main>
-            <AppContainer title="Livepeer Delegator">
+            <AppContainer title="Livepeer"
+                          tabs={<TabBar
+                              items={tabsNames}
+                              selected={tabBarSelected}
+                              onChange={setTabBarSelected}
+                          />}
+            >
 
-                <BondBalanceApprovalContainer>
-
-                    <Addresses appState={appState} handleNewController={setController}/>
-
-                    <LivepeerBalance appState={appState} handleTransferIn={transferTokensIn}
-                                     handleTransferOut={transferTokensOut}/>
-
-                    <ApproveTokens appState={appState} handleApproveTokens={approveTokens}/>
-
-                    <BondTokens appState={appState} handleBondTokens={bondTokens}
-                                handleApproveAndBond={approveAndBondTokens}/>
-
-                </BondBalanceApprovalContainer>
-
-                <UnbondTokens appState={appState} handleUnbondTokens={unbondTokens}
-                              handleClaimEarnings={claimEarnings}
-                              handleWithdrawTokens={withdrawTokens}/>
+                {selectedTabComponent}
 
             </AppContainer>
         </Main>
