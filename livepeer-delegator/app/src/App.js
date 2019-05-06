@@ -58,7 +58,7 @@ function App() {
         },
         {
             tabName: "Transcoder",
-            tabComponent: (<Transcoder/>)
+            tabComponent: (<Transcoder appState={appState}/>)
         }
     ]
     const tabsNames = tabs.map(tab => tab.tabName)

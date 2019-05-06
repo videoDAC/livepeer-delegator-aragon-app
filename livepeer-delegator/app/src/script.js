@@ -35,7 +35,8 @@ const initialState = async (state) => {
         delegatorInfo: await delegatorInfo$().toPromise(),
         currentRound: await currentRound$().toPromise(),
         disableUnbondTokens: await disableUnbondTokens$().toPromise(),
-        unbondingLockInfos: await unbondingLockInfos$().toPromise()
+        unbondingLockInfos: await unbondingLockInfos$().toPromise(),
+        transcoder: await transcoderDetails$().toPromise()
     }
 }
 
@@ -82,8 +83,7 @@ const onNewEvent = async (state, event) => {
             console.log("APPROVAL")
             return {
                 ...state,
-                // TODO: Remove this, set to fetch value not use event valuedao .
-                appApprovedTokens: event.returnValues.value
+                appApprovedTokens: await appApprovedTokens$().toPromise()
             }
         case 'LivepeerDelegatorBond':
             console.log("BOND")
@@ -220,3 +220,22 @@ const disableUnbondTokens$ = () =>
         mergeMap(bondingManager => bondingManager.maxEarningsClaimsRounds()),
         zip(currentRound$(), delegatorInfo$()),
         map(([maxRounds, currentRound, delegatorInfo]) => delegatorInfo.lastClaimRound <= currentRound - maxRounds))
+
+const transcoderTotalStake$ = () =>
+    bondingManager$(api).pipe(
+        mergeMap(bondingManager => bondingManager.transcoderTotalStake(livepeerAppAddress)))
+
+const transcoderDetails$ = () =>
+    bondingManager$(api).pipe(
+        mergeMap(bondingManager => bondingManager.getTranscoder(livepeerAppAddress)),
+        zip(transcoderTotalStake$()),
+        map(([transcoderDetails, totalStake])=> {
+            return {
+                lastRewardRound: transcoderDetails.lastRewardRound,
+                rewardCut: transcoderDetails.rewardCut,
+                feeShare: transcoderDetails.feeShare,
+                pricePerSegment: transcoderDetails.pricePerSegment,
+                totalStake: totalStake
+            }
+        })
+    )

@@ -12,7 +12,14 @@ let defaultState = {
     delegatorInfo: {bondedAmount: 0, delegateAddress: "", lastClaimRound: 0, pendingStake: 0},
     currentRound: 0,
     disableUnbondTokens: false,
-    unbondingLockInfos: []
+    unbondingLockInfos: [],
+    transcoder: {
+        lastRewardRound: 0,
+        rewardCut: 0,
+        feeShare: 0,
+        pricePerSegment: 0,
+        totalStake: 0
+    }
 }
 
 const reducer = state => {
@@ -20,6 +27,7 @@ const reducer = state => {
         return defaultState
     } else {
         return {
+            ...defaultState,
             ...state,
             userLptBalance: fromDecimals(state.userLptBalance.toString(), TOKEN_DECIMALS),
             appsLptBalance: fromDecimals(state.appsLptBalance.toString(), TOKEN_DECIMALS),
