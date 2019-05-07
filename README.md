@@ -1,26 +1,26 @@
-# Livepeer Delegator Aragon App
+# Livepeer Aragon App
 An example installation can be found here: https://rinkeby.aragon.org/#/livepeerdelegator.aragonid.eth/0x4a7335f3ecb43b685526c1b39043bf696c78c641
 
-Livepeer Delegator Aragon app for managing Livepeer Delegation actions.
+Livepeer Aragon app for managing Livepeer actions.
 
 This project uses a modified version of the Aragon Agent app (Agent.sol) for storing LPT and interacting with Livepeer contracts. 
 
 Initial development includes functions for Livepeer interaction as a typical bonder/delegator. These include the ability to call the functions: approve, bond, claimEarnings, unbond, rebond and withdrawStake.
 
-Further investigation may be made into creating a Livepeer Transcoder app, some discussion here: https://github.com/livepeer/research/issues/13 
+Further investigation is being made into creating a Livepeer Transcoder app, some discussion here: https://github.com/livepeer/research/issues/13 
 
 ## Project contents
-#### aragon-livepeer-experiment
+### aragon-livepeer-experiment
 Initial Solidity tests to experiment with the interaction between the Aragon Agent.sol and the Livepeer BondingManager.sol. See the test file if interested.
 
-#### livepeer-protocol
+### livepeer-protocol
 The full livepeer contract deployment for testing locally. Modified to compile with the current version of Truffle v5.0.6. Includes extra truffle scripts:  
 - `initialiseFirstRound.js` for preparing the BondingManager to be bonded too after initial deployment.  
 - `skipRoundAndInitialise.js` for skipping a specified number of Livepeer rounds, required for speeding up the protocol for testing.
 - `rewardWithLpt.js` for declaring account[0] as a transcoder, doing the necessary setup and calling reward.  
 
-#### livepeer-delegator
-The Livepeer Delegator Aragon app. It uses a modified version of Agent.sol to workaround limitations with the aragonAPI, see the `LivepeerDelegator.sol` for more info. It was also initially based on the Aragon `react-kit` template. The template code has almost entirely been replaced. 
+### livepeer-aragon-app
+The Livepeer Aragon app. It uses a modified version of Agent.sol to workaround limitations with the aragonAPI, see the `LivepeerAragonApp.sol` for more info. It was also initially based on the Aragon `react-kit` template. The template code has almost entirely been replaced. 
 
 ## Installation Instructions
 ### Installing to a deployed Aragon DAO 
@@ -33,7 +33,7 @@ Using the aragonCLI with access to Rinkeby through the staging environment you c
     npm install -g @aragon/cli 
     ```  
 
-2. To get access to a staging environment you can download this project and `cd` into `/livepeer-delegator` then set the network endpoint and accounts as specified here: https://hack.aragon.org/docs/guides-faq#set-a-private-key.  
+2. To get access to a staging environment you can download this project and `cd` into `/livepeer-aragon-app` then set the network endpoint and accounts as specified here: https://hack.aragon.org/docs/guides-faq#set-a-private-key.  
 
 
 To see info about the published app:
@@ -41,7 +41,7 @@ To see info about the published app:
 aragon apm info livepeer.open.aragonpm.eth --environment staging
 ```  
 
-To install the Livepeer Delegator Aragon app into an existing Aragon DAO:  
+To install the Livepeer Aragon app into an existing Aragon DAO:  
 ```sh
 dao install <DAO Address> livepeer.open.aragonpm.eth --set-permissions open --environment staging --app-init-args 0x37dC71366Ec655093b9930bc816E16e6b587F968
 ```
@@ -63,7 +63,7 @@ After app installation the permissions can be modified through the UI or through
 - WITHDRAW_STAKE_ROLE
 - TRANSFER_ROLE  
 
-Depending on your DAO's set up and intended usage, some permissions may require parameters to be set to restrict/allow access to certain functions. A preliminary script for modifying parameter permissions can be found at `/livepeer-delegator/scripts/grantPermissionWithParameters.js`
+Depending on your DAO's set up and intended usage, some permissions may require parameters to be set to restrict/allow access to certain functions. A preliminary script for modifying parameter permissions can be found at `/livepeer-aragon-app/scripts/grantPermissionWithParameters.js`
 
 
 ### Creating and installing to a Local Deployment
@@ -72,7 +72,7 @@ Depending on your DAO's set up and intended usage, some permissions may require 
     ```
     npm install -g truffle 
     npm install -g @aragon/cli 
-    npm install (In /livepeer-delegator directory)
+    npm install (In /livepeer-aragon-app directory)
     npm install (In /livepeer-protocol directory)
     ```
 
@@ -88,12 +88,12 @@ Depending on your DAO's set up and intended usage, some permissions may require 
     truffle exec scripts/livepeerAragonApp/initialiseFirstRound.js
     ```
 
-4. Compile with the local version of truffle, execute in the `/livepeer-delegator` directory (this is necessary as the Aragon CLI truffle config doesn't optimize Solidity compilation and the contract will not deploy unless optimized):  
+4. Compile with the local version of truffle, execute in the `/livepeer-aragon-app` directory (this is necessary as the Aragon CLI truffle config doesn't optimize Solidity compilation and the contract will not deploy unless optimized):  
     ```sh
     truffle compile --all
     ```
   
-5. Deploy the Aragon Dao and Livepeer app, execute in the `/livepeer-delegator` directory (find the Livepeer Controller address after the `truffle migrate` in the `livepeer-protocol` directory):  
+5. Deploy the Aragon Dao and Livepeer app, execute in the `/livepeer-aragon-app` directory (find the Livepeer Controller address after the `truffle migrate` in the `livepeer-protocol` directory):  
     ```sh
     aragon run --app-init-args <Livepeer Controller Address>
     ```

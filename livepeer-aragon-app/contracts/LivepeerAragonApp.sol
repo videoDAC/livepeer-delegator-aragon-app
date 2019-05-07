@@ -25,7 +25,7 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
  TODO: Remove trailing zeros from fractional token amount (not sure how)
  TODO: Write tests
  */
-contract LivepeerDelegator is Agent {
+contract LivepeerAragonApp is Agent {
 
     bytes32 public constant SET_CONTROLLER_ROLE = keccak256("SET_CONTROLLER_ROLE");
     bytes32 public constant APPROVE_ROLE = keccak256("APPROVE_ROLE");
@@ -39,11 +39,11 @@ contract LivepeerDelegator is Agent {
 
     event AppInitialized(address livepeerController);
     event NewControllerSet(address livepeerController);
-    event LivepeerDelegatorApproval(uint256 value);
-    event LivepeerDelegatorBond(uint256 amount, address to);
-    event LivepeerDelegatorClaimEarnings(uint256 upToRound);
-    event LivepeerDelegatorUnbond(uint256 amount);
-    event LivepeerDelegatorWithdrawStake(uint256 unbondingLockId);
+    event LivepeerAragonAppApproval(uint256 value);
+    event LivepeerAragonAppBond(uint256 amount, address to);
+    event LivepeerAragonAppEarnings(uint256 upToRound);
+    event LivepeerAragonAppUnbond(uint256 amount);
+    event LivepeerAragonAppWithdrawStake(uint256 unbondingLockId);
 
     /**
     * @notice Initialize the LivepeerHack contract
@@ -78,7 +78,7 @@ contract LivepeerDelegator is Agent {
         string memory functionSignature = "approve(address,uint256)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, bondingManagerAddress, _value);
 
-        emit LivepeerDelegatorApproval(_value);
+        emit LivepeerAragonAppApproval(_value);
 
         _execute(livepeerTokenAddress, 0, encodedFunctionCall);
     }
@@ -94,7 +94,7 @@ contract LivepeerDelegator is Agent {
         string memory functionSignature = "bond(uint256,address)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _amount, _to);
 
-        emit LivepeerDelegatorBond(_amount, _to);
+        emit LivepeerAragonAppBond(_amount, _to);
 
         _execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
@@ -118,8 +118,8 @@ contract LivepeerDelegator is Agent {
         bytes memory specAndApprove = BytesLib.concat(spec1, approveScript);
         bytes memory specAndApproveAndBond = BytesLib.concat(specAndApprove, bondScript);
 
-        emit LivepeerDelegatorApproval(_amount);
-        emit LivepeerDelegatorBond(_amount, _to);
+        emit LivepeerAragonAppApproval(_amount);
+        emit LivepeerAragonAppBond(_amount, _to);
 
         _forward(specAndApproveAndBond);
     }
@@ -134,7 +134,7 @@ contract LivepeerDelegator is Agent {
         string memory functionSignature = "claimEarnings(uint256)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _endRound);
 
-        emit LivepeerDelegatorClaimEarnings(_endRound);
+        emit LivepeerAragonAppEarnings(_endRound);
 
         _execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
@@ -149,7 +149,7 @@ contract LivepeerDelegator is Agent {
         string memory functionSignature = "unbond(uint256)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _amount);
 
-        emit LivepeerDelegatorUnbond(_amount);
+        emit LivepeerAragonAppUnbond(_amount);
 
         _execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
@@ -164,7 +164,7 @@ contract LivepeerDelegator is Agent {
         string memory functionSignature = "withdrawStake(uint256)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _unbondingLockId);
 
-        emit LivepeerDelegatorWithdrawStake(_unbondingLockId);
+        emit LivepeerAragonAppWithdrawStake(_unbondingLockId);
 
         _execute(bondingManagerAddress, 0, encodedFunctionCall);
     }

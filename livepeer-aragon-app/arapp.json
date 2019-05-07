@@ -63,5 +63,5 @@
       "network": "mainnet"
     }
   },
-  "path": "contracts/LivepeerDelegator.sol"
+  "path": "contracts/LivepeerAragonApp.sol"
 }

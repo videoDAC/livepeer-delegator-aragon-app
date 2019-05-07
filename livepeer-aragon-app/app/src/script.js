@@ -79,13 +79,13 @@ const onNewEvent = async (state, event) => {
                 userLptBalance: await userLptBalance$().toPromise(),
                 appsLptBalance: await appLptBalance$().toPromise()
             }
-        case 'LivepeerDelegatorApproval':
+        case 'LivepeerAragonAppApproval':
             console.log("APPROVAL")
             return {
                 ...state,
                 appApprovedTokens: await appApprovedTokens$().toPromise()
             }
-        case 'LivepeerDelegatorBond':
+        case 'LivepeerAragonAppBond':
             console.log("BOND")
             return {
                 ...state,
@@ -94,20 +94,20 @@ const onNewEvent = async (state, event) => {
                 delegatorInfo: await delegatorInfo$().toPromise(),
                 disableUnbondTokens: await disableUnbondTokens$().toPromise()
             }
-        case 'LivepeerDelegatorClaimEarnings':
+        case 'LivepeerAragonAppClaimEarnings':
             console.log("CLAIM EARNINGS")
             return {
                 ...state,
                 delegatorInfo: await delegatorInfo$().toPromise()
             }
-        case 'LivepeerDelegatorUnbond':
+        case 'LivepeerAragonAppUnbond':
             console.log("UNBOND")
             return {
                 ...state,
                 delegatorInfo: await delegatorInfo$().toPromise(),
                 unbondingLockInfos: await unbondingLockInfos$().toPromise()
             }
-        case 'LivepeerDelegatorWithdrawStake':
+        case 'LivepeerAragonAppWithdrawStake':
             console.log("WITHDRAW STAKE")
             return {
                 ...state,

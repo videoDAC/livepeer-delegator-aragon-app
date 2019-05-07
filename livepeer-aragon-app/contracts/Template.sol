@@ -20,7 +20,7 @@ import "@aragon/apps-voting/contracts/Voting.sol";
 import "@aragon/apps-token-manager/contracts/TokenManager.sol";
 import "@aragon/apps-shared-minime/contracts/MiniMeToken.sol";
 
-import "./LivepeerDelegator.sol";
+import "./LivepeerAragonApp.sol";
 
 contract TemplateBase is APMNamehash {
     ENS public ens;
@@ -72,7 +72,7 @@ contract Template is TemplateBase {
         bytes32 votingAppId = apmNamehash("voting");
         bytes32 tokenManagerAppId = apmNamehash("token-manager");
 
-        LivepeerDelegator app = LivepeerDelegator(dao.newAppInstance(appId, latestVersionAppBase(appId)));
+        LivepeerAragonApp app = LivepeerAragonApp(dao.newAppInstance(appId, latestVersionAppBase(appId)));
 
         Voting voting = Voting(dao.newAppInstance(votingAppId, latestVersionAppBase(votingAppId)));
         TokenManager tokenManager = TokenManager(dao.newAppInstance(tokenManagerAppId, latestVersionAppBase(tokenManagerAppId)));
