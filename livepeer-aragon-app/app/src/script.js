@@ -92,7 +92,8 @@ const onNewEvent = async (state, event) => {
                 appApprovedTokens: await appApprovedTokens$().toPromise(),
                 appsLptBalance: await appLptBalance$().toPromise(),
                 delegatorInfo: await delegatorInfo$().toPromise(),
-                disableUnbondTokens: await disableUnbondTokens$().toPromise()
+                disableUnbondTokens: await disableUnbondTokens$().toPromise(),
+                transcoder: await transcoderDetails$().toPromise()
             }
         case 'LivepeerAragonAppClaimEarnings':
             console.log("CLAIM EARNINGS")
@@ -241,6 +242,7 @@ const transcoderTotalStake$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.transcoderTotalStake(livepeerAppAddress)))
 
+// TODO: Split up transcoder detail fetching.
 const transcoderDetails$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.getTranscoder(livepeerAppAddress)),

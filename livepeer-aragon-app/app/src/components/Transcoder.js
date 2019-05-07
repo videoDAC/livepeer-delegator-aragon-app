@@ -2,21 +2,40 @@ import React from 'react'
 import {Card, Text, Button} from "@aragon/ui"
 import styled from "styled-components";
 
+// TODO: Add pending values to UI.
+
 const TranscoderContainer = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: center;
 `
 const DetailsContainer = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: auto;
-    margin-right: 30px;
     margin-bottom: 30px;
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
     border-color: rgb(179,179,179);
     padding: 10px; 
+`
+const DetailsRowContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly
+`
+const DetailContainerLeft = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+`
+const DetailContainerRight = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `
 const TranscoderFunctions = styled.div`
     display: flex;
@@ -27,7 +46,9 @@ const DetailCard = styled(Card)`
     height: auto;
     margin-top: 10px;
     margin-bottom: 10px;
-    width: auto;
+`
+const InnerText = styled(Text.Block)`
+    text-align: center;
 `
 
 const Transcoder = ({openDeclareTranscoderSidePanel, appState}) => {
@@ -38,30 +59,44 @@ const Transcoder = ({openDeclareTranscoderSidePanel, appState}) => {
         <TranscoderContainer>
             <DetailsContainer>
 
-                <Text.Block weight="bold" size="normal">Last reward round</Text.Block>
-                <DetailCard>
-                    <Text.Block size="normal">{lastRewardRound}</Text.Block>
-                </DetailCard>
+                <DetailsRowContainer>
+                    <DetailContainerLeft>
+                        <Text.Block weight="bold" size="normal">Reward cut</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{`${rewardCut}%`}</InnerText>
+                        </DetailCard>
+                    </DetailContainerLeft>
 
-                <Text.Block weight="bold" size="normal">Reward cut (%)</Text.Block>
-                <DetailCard>
-                    <Text.Block size="normal">{rewardCut}</Text.Block>
-                </DetailCard>
+                    <DetailContainerRight>
+                        <Text.Block weight="bold" size="normal">Fee share</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{`${feeShare}%`}</InnerText>
+                        </DetailCard>
+                    </DetailContainerRight>
+                </DetailsRowContainer>
 
-                <Text.Block weight="bold" size="normal">Fee share (%)</Text.Block>
-                <DetailCard>
-                    <Text.Block size="normal">{feeShare}</Text.Block>
-                </DetailCard>
+                <DetailsRowContainer>
+                    <DetailContainerLeft>
+                        <Text.Block weight="bold" size="normal">Price per segment</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{`${pricePerSegment} wei`}</InnerText>
+                        </DetailCard>
+                    </DetailContainerLeft>
 
-                <Text.Block weight="bold" size="normal">Price per segment (wei)</Text.Block>
-                <DetailCard>
-                    <Text.Block size="normal">{pricePerSegment}</Text.Block>
-                </DetailCard>
+                    <DetailContainerRight>
+                        <Text.Block weight="bold" size="normal">Last reward round</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{lastRewardRound}</InnerText>
+                        </DetailCard>
+                    </DetailContainerRight>
+                </DetailsRowContainer>
 
-                <Text.Block weight="bold" size="normal">Total stake</Text.Block>
-                <DetailCard>
-                    <Text.Block size="normal">{totalStake}</Text.Block>
-                </DetailCard>
+                <DetailContainerRight>
+                    <Text.Block weight="bold" size="normal">Total stake</Text.Block>
+                    <DetailCard>
+                        <InnerText size="normal">{`${totalStake} eth`}</InnerText>
+                    </DetailCard>
+                </DetailContainerRight>
 
             </DetailsContainer>
 

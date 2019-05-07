@@ -42,7 +42,14 @@ const reducer = state => {
                     ...unbondingLockInfo,
                     amount: fromDecimals(unbondingLockInfo.amount, TOKEN_DECIMALS)
                 }
-            })
+            }),
+            transcoder: {
+                lastRewardRound: state.transcoder.lastRewardRound,
+                rewardCut: state.transcoder.rewardCut / 1000,
+                feeShare: state.transcoder.feeShare / 1000,
+                pricePerSegment: state.transcoder.pricePerSegment,
+                totalStake: fromDecimals(state.transcoder.totalStake, TOKEN_DECIMALS)
+            }
         }
     }
 }
