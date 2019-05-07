@@ -4,18 +4,18 @@
   "description": "",
   "dependencies": {
     "@aragon/apps-agent": "^1.0.1",
-    "@aragon/apps-shared-minime": "^1.0.0",
+    "@aragon/apps-shared-minime": "^1.0.1",
     "@aragon/apps-token-manager": "2.0.0",
     "@aragon/apps-vault": "^4.0.0",
     "@aragon/apps-voting": "2.0.0",
-    "@aragon/os": "^4.0.1",
+    "@aragon/os": "^4.2.0",
     "bn.js": "^4.11.8",
-    "ethereumjs-abi": "^0.6.6",
+    "ethereumjs-abi": "^0.6.7",
     "ethereumjs-util": "^6.1.0",
     "solidity-bytes-utils": "0.0.6"
   },
   "devDependencies": {
-    "@aragon/cli": "^5.4.0"
+    "@aragon/cli": "^5.7.1"
   },
   "scripts": {
     "start": "npm run start:ipfs",
