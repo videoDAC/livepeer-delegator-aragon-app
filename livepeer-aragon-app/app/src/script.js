@@ -8,8 +8,8 @@ import {
     bondingManager$,
     roundsManager$
 } from '../web3/ExternalContracts'
-import {range} from "rxjs";
-import {first, mergeMap, map, filter, toArray, zip} from "rxjs/operators"
+import {range, of} from "rxjs";
+import {first, mergeMap, map, filter, toArray, zip, merge} from "rxjs/operators"
 
 const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
 
@@ -114,13 +114,20 @@ const onNewEvent = async (state, event) => {
                 unbondingLockInfos: await unbondingLockInfos$().toPromise(),
                 appsLptBalance: await appLptBalance$().toPromise()
             }
+        case 'LivepeerAragonAppDeclareTranscoder':
+            console.log("DECLARE TRANSCODER")
+            return {
+                ...state,
+                transcoder: await transcoderDetails$().toPromise()
+            }
         case 'NewRound':
             console.log("NEW ROUND")
             return {
                 ...state,
                 currentRound: await currentRound$().toPromise(),
                 unbondingLockInfos: await unbondingLockInfos$().toPromise(),
-                disableUnbondTokens: await disableUnbondTokens$().toPromise()
+                disableUnbondTokens: await disableUnbondTokens$().toPromise(),
+                transcoder: await transcoderDetails$().toPromise()
             }
         case 'Reward':
             console.log("REWARD")
@@ -173,23 +180,32 @@ const currentRound$ = () =>
     roundsManager$(api).pipe(
         mergeMap(roundsManager => roundsManager.currentRound()))
 
-const pendingStake$ = () =>
-    bondingManager$(api).pipe(
-        zip(currentRound$()),
-        mergeMap(([bondingManager, currentRound]) => bondingManager.pendingStake(livepeerAppAddress, currentRound)))
+const pendingStakeFallback$ = (delegator) =>
+    currentRound$().pipe(
+        filter((currentRound) => currentRound <= delegator.lastClaimRound),
+        mergeMap(() => of(0)))
+
+const pendingStakeSuccess$ = (delegator) =>
+    currentRound$().pipe(
+        filter((currentRound) => currentRound > delegator.lastClaimRound),
+        zip(bondingManager$(api)),
+        mergeMap(([currentRound, bondingManager]) => bondingManager.pendingStake(livepeerAppAddress, currentRound)))
+
+const pendingStake$ = (delegator) =>
+    pendingStakeSuccess$(delegator).pipe(
+        merge(pendingStakeFallback$(delegator)))
 
 const delegatorInfo$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.getDelegator(livepeerAppAddress)),
-        zip(pendingStake$()),
-        map(([delegator, pendingStake]) => {
-            return {
-                bondedAmount: delegator.bondedAmount,
-                delegateAddress: delegator.delegateAddress,
-                lastClaimRound: delegator.lastClaimRound,
-                pendingStake: pendingStake
-            }
-        }))
+        mergeMap(delegator => pendingStake$(delegator).pipe(
+            map((pendingStake) => {
+                return {
+                    bondedAmount: delegator.bondedAmount,
+                    delegateAddress: delegator.delegateAddress,
+                    lastClaimRound: delegator.lastClaimRound,
+                    pendingStake: pendingStake}
+            }))))
 
 const mapBondingManagerToLockInfo = bondingManager =>
     bondingManager.getDelegator(livepeerAppAddress).pipe(
@@ -229,7 +245,7 @@ const transcoderDetails$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.getTranscoder(livepeerAppAddress)),
         zip(transcoderTotalStake$()),
-        map(([transcoderDetails, totalStake])=> {
+        map(([transcoderDetails, totalStake]) => {
             return {
                 lastRewardRound: transcoderDetails.lastRewardRound,
                 rewardCut: transcoderDetails.rewardCut,

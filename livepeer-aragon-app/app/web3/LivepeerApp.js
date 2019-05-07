@@ -64,6 +64,15 @@ const bondingManagerClaimEarnings = (api, upToRound) => {
         .subscribe()
 }
 
+const bondingManagerDeclareTranscoder = (api, rewardCut, feeShare, pricePerSegment) => {
+    const rewardCutContractFormat = percentageAsContractFormat(rewardCut)
+    const feeShareContractFormat = percentageAsContractFormat(feeShare)
+    api.declareTranscoder(rewardCutContractFormat, feeShareContractFormat, pricePerSegment)
+        .subscribe()
+}
+
+const percentageAsContractFormat = (percentage) => percentage * 1000
+
 export {
     setLivepeerController,
     livepeerTokenApprove,
@@ -73,5 +82,6 @@ export {
     approveAndBond,
     bondingManagerUnbond,
     bondingManagerWithdraw,
-    bondingManagerClaimEarnings
+    bondingManagerClaimEarnings,
+    bondingManagerDeclareTranscoder
 }

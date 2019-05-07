@@ -2,19 +2,9 @@ import React from 'react'
 import {Card, Text, Button} from "@aragon/ui"
 import styled from "styled-components";
 
-
-/**
- * @dev The sender is declaring themselves as a candidate for active transcoding.
- * @param _rewardCut % of reward paid to transcoder by a delegator
- * @param _feeShare % of fees paid to delegators by a transcoder
- * @param _pricePerSegment Price per segment (denominated in Wei) for a stream
- // */
-// function transcoder(uint256 _rewardCut, uint256 _feeShare, uint256 _pricePerSegment)
-
 const TranscoderContainer = styled.div`
     display: flex;
     flex-direction: column;
-   
 `
 const DetailsContainer = styled.div`
     display: flex;
@@ -39,11 +29,8 @@ const DetailCard = styled(Card)`
     margin-bottom: 10px;
     width: auto;
 `
-const DeclareTranscoderButton = styled(Button)`
 
-`
-
-const Transcoder = ({handleDeclareTranscoder, appState}) => {
+const Transcoder = ({openDeclareTranscoderSidePanel, appState}) => {
 
     const {lastRewardRound, rewardCut, feeShare, pricePerSegment, totalStake} = appState.transcoder
 
@@ -56,17 +43,17 @@ const Transcoder = ({handleDeclareTranscoder, appState}) => {
                     <Text.Block size="normal">{lastRewardRound}</Text.Block>
                 </DetailCard>
 
-                <Text.Block weight="bold" size="normal">Reward cut</Text.Block>
+                <Text.Block weight="bold" size="normal">Reward cut (%)</Text.Block>
                 <DetailCard>
                     <Text.Block size="normal">{rewardCut}</Text.Block>
                 </DetailCard>
 
-                <Text.Block weight="bold" size="normal">Fee share</Text.Block>
+                <Text.Block weight="bold" size="normal">Fee share (%)</Text.Block>
                 <DetailCard>
                     <Text.Block size="normal">{feeShare}</Text.Block>
                 </DetailCard>
 
-                <Text.Block weight="bold" size="normal">Price per segment</Text.Block>
+                <Text.Block weight="bold" size="normal">Price per segment (wei)</Text.Block>
                 <DetailCard>
                     <Text.Block size="normal">{pricePerSegment}</Text.Block>
                 </DetailCard>
@@ -79,8 +66,8 @@ const Transcoder = ({handleDeclareTranscoder, appState}) => {
             </DetailsContainer>
 
             <TranscoderFunctions>
-                <DeclareTranscoderButton mode="strong" onClick={() => handleDeclareTranscoder()}>Declare
-                    Transcoder</DeclareTranscoderButton>
+                <Button mode="strong" onClick={openDeclareTranscoderSidePanel}>Declare
+                    Transcoder</Button>
             </TranscoderFunctions>
 
         </TranscoderContainer>

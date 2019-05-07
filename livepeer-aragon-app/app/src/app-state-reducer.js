@@ -19,7 +19,8 @@ let defaultState = {
         feeShare: 0,
         pricePerSegment: 0,
         totalStake: 0
-    }
+    },
+    tabBarSelected: 0
 }
 
 const reducer = state => {

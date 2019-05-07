@@ -34,6 +34,7 @@ contract LivepeerAragonApp is Agent {
     bytes32 public constant CLAIM_EARNINGS_ROLE = keccak256("CLAIM_EARNINGS_ROLE");
     bytes32 public constant UNBOND_ROLE = keccak256("UNBOND_ROLE");
     bytes32 public constant WITHDRAW_STAKE_ROLE = keccak256("WITHDRAW_STAKE_ROLE");
+    bytes32 public constant DECLARE_TRANSCODER_ROLE = keccak256("DECLARE_TRANSCODER_ROLE");
 
     IController public livepeerController;
 
@@ -44,6 +45,7 @@ contract LivepeerAragonApp is Agent {
     event LivepeerAragonAppEarnings(uint256 upToRound);
     event LivepeerAragonAppUnbond(uint256 amount);
     event LivepeerAragonAppWithdrawStake(uint256 unbondingLockId);
+    event LivepeerAragonAppDeclareTranscoder(uint256 rewardCut, uint256 feeShare, uint256 pricePerSegment);
 
     /**
     * @notice Initialize the LivepeerHack contract
@@ -165,6 +167,24 @@ contract LivepeerAragonApp is Agent {
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _unbondingLockId);
 
         emit LivepeerAragonAppWithdrawStake(_unbondingLockId);
+
+        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+    }
+
+    /**
+    * @notice Declare the Livepeer App as a Transcoder with Reward Cut: `_rewardCut / 1000`%,
+              Fee Share: `_feeShare / 1000`%, Price Per Segment: `_pricePerSegment` wei
+    * @param _rewardCut Reward cut % in whole number format
+    * @param _feeShare Fee share % in whole number format
+    * @param _pricePerSegment Price per segment in wei
+    */
+    function declareTranscoder(uint256 _rewardCut, uint256 _feeShare, uint256 _pricePerSegment) external auth(DECLARE_TRANSCODER_ROLE) {
+        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+
+        string memory functionSignature = "transcoder(uint256,uint256,uint256)";
+        bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _rewardCut, _feeShare, _pricePerSegment);
+
+        emit LivepeerAragonAppDeclareTranscoder(_rewardCut, _feeShare, _pricePerSegment);
 
         _execute(bondingManagerAddress, 0, encodedFunctionCall);
     }

@@ -36,6 +36,11 @@
       "params": []
     },
     {
+      "name": "Declare transcoder",
+      "id": "DECLARE_TRANSCODER_ROLE",
+      "params": []
+    },
+    {
       "name": "Transfer tokens",
       "id": "TRANSFER_ROLE",
       "params": [

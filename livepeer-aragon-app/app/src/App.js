@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Main, AppView, TabBar} from '@aragon/ui'
+import {Main, AppView, TabBar, SidePanel} from '@aragon/ui'
 import styled from 'styled-components'
 import {useAragonApi} from '@aragon/api-react'
 
@@ -12,22 +12,25 @@ import {
     approveAndBond,
     bondingManagerUnbond,
     bondingManagerWithdraw,
-    bondingManagerClaimEarnings
+    bondingManagerClaimEarnings,
+    bondingManagerDeclareTranscoder
 } from "../web3/LivepeerApp"
 
 import Delegator from "./components/Delegator"
 import Transcoder from "./components/Transcoder";
+import DeclareTranscoder from "./components/side-panel/DeclareTranscoder";
 
 const AppContainer = styled(AppView)`
     display: flex;
     flex-direction: column;
 `
 
-// TODO: Add defaultProps and propTypes to components. Extract strings. Extract common spacing (px values).
+// TODO: Convert App() to a class. Add defaultProps and propTypes to components. Extract strings. Extract common spacing (px values).
 function App() {
 
     const {api, appState} = useAragonApi()
     const [tabBarSelected, setTabBarSelected] = useState(0)
+    const [sidePanel, setSidePanel] = useState(undefined)
 
     const setController = (address) => setLivepeerController(api, address)
 
@@ -47,6 +50,18 @@ function App() {
 
     const withdrawTokens = (unbondingLockId) => bondingManagerWithdraw(api, unbondingLockId)
 
+    const declareTranscoder = (rewardCut, feeShare, pricePerSegment) =>
+        bondingManagerDeclareTranscoder(api, rewardCut, feeShare, pricePerSegment)
+
+    const sidePanels = {
+        DECLARE_TRANSCODER: {
+            title: 'Declare Transcoder',
+            sidePanelComponent: (
+                <DeclareTranscoder handleDeclareTranscoder={declareTranscoder}/>
+            )
+        }
+    }
+
     const tabs = [
         {
             tabName: "Delegator",
@@ -58,11 +73,14 @@ function App() {
         },
         {
             tabName: "Transcoder",
-            tabComponent: (<Transcoder appState={appState}/>)
+            tabComponent: (
+                <Transcoder appState={appState}
+                            openDeclareTranscoderSidePanel={() => setSidePanel(sidePanels.DECLARE_TRANSCODER)}/>)
         }
     ]
     const tabsNames = tabs.map(tab => tab.tabName)
     const selectedTabComponent = tabs[tabBarSelected].tabComponent
+
 
     return (
         <Main>
@@ -73,10 +91,13 @@ function App() {
                               onChange={setTabBarSelected}
                           />}
             >
-
                 {selectedTabComponent}
-
             </AppContainer>
+
+            <SidePanel title={sidePanel ? sidePanel.title : ""} opened={sidePanel !== undefined}
+                       onClose={() => setSidePanel(undefined)}>
+                {sidePanel ? sidePanel.sidePanelComponent : <div/>}
+            </SidePanel>
         </Main>
     )
 }
