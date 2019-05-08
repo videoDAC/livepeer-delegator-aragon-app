@@ -20,6 +20,7 @@ import {
 import Delegator from "./components/tabs/delegator/Delegator"
 import Transcoder from "./components/tabs/transcoder/Transcoder";
 import DeclareTranscoder from "./components/side-panel/DeclareTranscoder";
+import SetServiceUri from "./components/side-panel/SetServiceUri";
 
 const AppContainer = styled(AppView)`
     display: flex;
@@ -58,11 +59,22 @@ function App() {
 
     const transcoderReward = () => bondingManagerTranscoderReward(api)
 
+    const setServiceUri = (serviceUri) => {
+        setSidePanel(undefined)
+        serviceRegistrySetServiceUri(api, serviceUri)
+    }
+
     const sidePanels = {
         DECLARE_TRANSCODER: {
             title: 'Declare Transcoder',
             sidePanelComponent: (
                 <DeclareTranscoder handleDeclareTranscoder={declareTranscoder}/>
+            )
+        },
+        SET_SERVICE_URI: {
+            title: 'Set Service URI',
+            sidePanelComponent: (
+                <SetServiceUri handleSetServiceUri={setServiceUri}/>
             )
         }
     }
@@ -87,8 +99,9 @@ function App() {
             tabName: "Transcoder",
             tabComponent: (
                 <Transcoder appState={appState}
-                            openDeclareTranscoderSidePanel={() => setSidePanel(sidePanels.DECLARE_TRANSCODER)}
+                            handleDeclareTranscoder={() => setSidePanel(sidePanels.DECLARE_TRANSCODER)}
                             handleTranscoderReward={transcoderReward}
+                            handleSetServiceUri={() => setSidePanel(sidePanels.SET_SERVICE_URI)}
                 />)
         }
     ]

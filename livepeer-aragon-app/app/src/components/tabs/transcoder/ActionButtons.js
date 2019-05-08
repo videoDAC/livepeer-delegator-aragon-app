@@ -6,22 +6,23 @@ const TranscoderFunctions = styled.div`
     display: flex;
     flex-direction: row;
 `
-const DeclareTranscoderButton = styled(Button)`
+const RightMarginButton = styled(Button)`
     margin-right: 20px;
 `
 
-const TranscoderActionButtons = ({openDeclareTranscoderSidePanel, handleTranscoderReward, appState}) => {
+const TranscoderActionButtons = ({handleDeclareTranscoder, handleTranscoderReward, handleSetServiceUri, appState}) => {
 
     const {disableReward} = appState.transcoder
 
-    console.log(disableReward)
-
     return (
         <TranscoderFunctions>
-            <DeclareTranscoderButton mode="strong" onClick={openDeclareTranscoderSidePanel}>Declare
-                Transcoder</DeclareTranscoderButton>
+            <RightMarginButton mode="strong" onClick={handleDeclareTranscoder}>Declare
+                Transcoder</RightMarginButton>
 
-            <Button mode="strong" disabled={disableReward} onClick={handleTranscoderReward}>Reward</Button>
+            <RightMarginButton mode="strong" disabled={disableReward} onClick={handleTranscoderReward}>Reward</RightMarginButton>
+
+            <Button mode="strong" onClick={handleSetServiceUri}>Set Service URI</Button>
+
         </TranscoderFunctions>
     )
 }

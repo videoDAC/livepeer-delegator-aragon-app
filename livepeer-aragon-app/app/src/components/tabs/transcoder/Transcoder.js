@@ -9,15 +9,18 @@ const TranscoderContainer = styled.div`
     align-items: center;
 `
 
-const Transcoder = ({openDeclareTranscoderSidePanel, handleTranscoderReward, appState}) => {
+const Transcoder = ({handleDeclareTranscoder, handleTranscoderReward, handleSetServiceUri, appState}) => {
 
     return (
         <TranscoderContainer>
+
             <TranscoderDetails appState={appState}/>
 
             <TranscoderActionButtons appState={appState}
-                                     openDeclareTranscoderSidePanel={openDeclareTranscoderSidePanel}
-                                     handleTranscoderReward={handleTranscoderReward}/>
+                                     handleDeclareTranscoder={handleDeclareTranscoder}
+                                     handleTranscoderReward={handleTranscoderReward}
+                                     handleSetServiceUri={handleSetServiceUri}/>
+
         </TranscoderContainer>
     )
 }

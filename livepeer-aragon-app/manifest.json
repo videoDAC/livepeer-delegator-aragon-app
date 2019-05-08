@@ -1,6 +1,7 @@
 {
   "name": "Livepeer",
   "description": "For interfacing with the Livepeer network as a delegator and or a transcoder",
+  "source_url": "https://github.com/videoDAC/livepeer-aragon",
   "icons": [{
     "src": "images/icon.svg",
     "sizes": "192x192"

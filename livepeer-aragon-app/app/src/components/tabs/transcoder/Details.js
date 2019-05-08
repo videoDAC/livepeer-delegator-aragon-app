@@ -67,7 +67,7 @@ const TranscoderDetails = ({appState}) => {
         <DetailsContainer>
 
             <DetailContainerRight>
-                <Text.Block weight="bold" size="normal">Total stake</Text.Block>
+                <Text.Block weight="bold" size="normal">Delegated amount</Text.Block>
                 <DetailCard>
                     <InnerText size="normal">{`${totalStake} eth`}</InnerText>
                 </DetailCard>

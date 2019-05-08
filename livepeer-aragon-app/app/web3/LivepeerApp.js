@@ -76,6 +76,11 @@ const bondingManagerTranscoderReward = (api) => {
         .subscribe()
 }
 
+const serviceRegistrySetServiceUri = (api, serviceUri) => {
+    api.setServiceUri(serviceUri)
+        .subscribe()
+}
+
 const percentageAsContractFormat = (percentage) => percentage * 1000
 
 export {
@@ -89,5 +94,6 @@ export {
     bondingManagerWithdraw,
     bondingManagerClaimEarnings,
     bondingManagerDeclareTranscoder,
-    bondingManagerTranscoderReward
+    bondingManagerTranscoderReward,
+    serviceRegistrySetServiceUri
 }

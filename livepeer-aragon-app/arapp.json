@@ -46,6 +46,11 @@
       "params": []
     },
     {
+      "name": "Set service URI",
+      "id": "SET_SERVICE_URI_ROLE",
+      "params": []
+    },
+    {
       "name": "Transfer tokens",
       "id": "TRANSFER_ROLE",
       "params": [
