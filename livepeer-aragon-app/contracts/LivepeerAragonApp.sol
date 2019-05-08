@@ -172,8 +172,8 @@ contract LivepeerAragonApp is Agent {
     }
 
     /**
-    * @notice Declare the Livepeer App as a Transcoder with Reward Cut: `_rewardCut / 1000`%,
-              Fee Share: `_feeShare / 1000`%, Price Per Segment: `_pricePerSegment` wei
+    * @notice Declare the Livepeer App as a Transcoder with Reward Cut: `_rewardCut / 1000``_rewardCut % 1000 > 0 ? '.' + _rewardCut % 1000 : ''`%
+              Fee Share: `_feeShare / 1000``_feeShare % 1000 > 0 ? '.' + _feeShare % 1000 : ''`% Price Per Segment: `_pricePerSegment` wei
     * @param _rewardCut Reward cut % in whole number format
     * @param _feeShare Fee share % in whole number format
     * @param _pricePerSegment Price per segment in wei

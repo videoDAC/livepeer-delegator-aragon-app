@@ -53,24 +53,66 @@ const InnerText = styled(Text.Block)`
 
 const Transcoder = ({openDeclareTranscoderSidePanel, appState}) => {
 
-    const {lastRewardRound, rewardCut, feeShare, pricePerSegment, totalStake} = appState.transcoder
+    const { currentRound } = appState
+
+    const {
+        status,
+        active,
+        totalStake,
+        lastRewardRound,
+        rewardCut,
+        feeShare,
+        pricePerSegment,
+        pendingRewardCut,
+        pendingFeeShare,
+        pendingPricePerSegment,
+    } = appState.transcoder
+
+    const rewardCutString = rewardCut === pendingRewardCut ? `${rewardCut}%` : `${rewardCut}% (${pendingRewardCut}% pending)`
+
+    const feeShareString = feeShare === pendingFeeShare ? `${feeShare}%` : `${feeShare}% (${pendingFeeShare}% pending)`
+
+    const pricePerSegmentString = pricePerSegment === pendingPricePerSegment ? `${pricePerSegment} wei` : `${pricePerSegment} wei (${pendingPricePerSegment} wei pending)`
 
     return (
         <TranscoderContainer>
             <DetailsContainer>
 
+                <DetailContainerRight>
+                    <Text.Block weight="bold" size="normal">Total stake</Text.Block>
+                    <DetailCard>
+                        <InnerText size="normal">{`${totalStake} eth`}</InnerText>
+                    </DetailCard>
+                </DetailContainerRight>
+
+                <DetailsRowContainer>
+                    <DetailContainerLeft>
+                        <Text.Block weight="bold" size="normal">Status</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{status}</InnerText>
+                        </DetailCard>
+                    </DetailContainerLeft>
+
+                    <DetailContainerRight>
+                        <Text.Block weight="bold" size="normal">Active</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal" style={{textTransform: 'capitalize'}}>{active.toString()}</InnerText>
+                        </DetailCard>
+                    </DetailContainerRight>
+                </DetailsRowContainer>
+
                 <DetailsRowContainer>
                     <DetailContainerLeft>
                         <Text.Block weight="bold" size="normal">Reward cut</Text.Block>
                         <DetailCard>
-                            <InnerText size="normal">{`${rewardCut}%`}</InnerText>
+                            <InnerText size="normal">{rewardCutString}</InnerText>
                         </DetailCard>
                     </DetailContainerLeft>
 
                     <DetailContainerRight>
                         <Text.Block weight="bold" size="normal">Fee share</Text.Block>
                         <DetailCard>
-                            <InnerText size="normal">{`${feeShare}%`}</InnerText>
+                            <InnerText size="normal">{feeShareString}</InnerText>
                         </DetailCard>
                     </DetailContainerRight>
                 </DetailsRowContainer>
@@ -79,24 +121,17 @@ const Transcoder = ({openDeclareTranscoderSidePanel, appState}) => {
                     <DetailContainerLeft>
                         <Text.Block weight="bold" size="normal">Price per segment</Text.Block>
                         <DetailCard>
-                            <InnerText size="normal">{`${pricePerSegment} wei`}</InnerText>
+                            <InnerText size="normal">{pricePerSegmentString}</InnerText>
                         </DetailCard>
                     </DetailContainerLeft>
 
                     <DetailContainerRight>
-                        <Text.Block weight="bold" size="normal">Last reward round</Text.Block>
+                        <Text.Block weight="bold" size="normal">Last reward round (current: {currentRound})</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{lastRewardRound}</InnerText>
                         </DetailCard>
                     </DetailContainerRight>
                 </DetailsRowContainer>
-
-                <DetailContainerRight>
-                    <Text.Block weight="bold" size="normal">Total stake</Text.Block>
-                    <DetailCard>
-                        <InnerText size="normal">{`${totalStake} eth`}</InnerText>
-                    </DetailCard>
-                </DetailContainerRight>
 
             </DetailsContainer>
 

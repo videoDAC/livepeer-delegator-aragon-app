@@ -3,22 +3,37 @@ import {BN} from "../../node_modules/bn.js/lib/bn";
 
 const TOKEN_DECIMALS = 18;
 
+const TRANSCODER_STATUS = {
+    0: "Not Registered",
+    1: "Registered"
+}
+
 let defaultState = {
     appAddress: "0x0000000000000000000000000000000000000000",
     livepeerTokenAddress: "0x0000000000000000000000000000000000000000",
     userLptBalance: 0,
     appsLptBalance: 0,
     appApprovedTokens: 0,
-    delegatorInfo: {bondedAmount: 0, delegateAddress: "", lastClaimRound: 0, pendingStake: 0},
+    delegatorInfo: {
+        bondedAmount: 0,
+        delegateAddress: "",
+        lastClaimRound: 0,
+        pendingStake: 0
+    },
     currentRound: 0,
     disableUnbondTokens: false,
     unbondingLockInfos: [],
     transcoder: {
+        status: TRANSCODER_STATUS[0],
+        active: false,
+        totalStake: 0,
         lastRewardRound: 0,
         rewardCut: 0,
         feeShare: 0,
         pricePerSegment: 0,
-        totalStake: 0
+        pendingRewardCut: 0,
+        pendingFeeShare: 0,
+        pendingPricePerSegment: 0
     },
     tabBarSelected: 0
 }
@@ -44,10 +59,12 @@ const reducer = state => {
                 }
             }),
             transcoder: {
-                lastRewardRound: state.transcoder.lastRewardRound,
+                ...state.transcoder,
+                status: TRANSCODER_STATUS[state.transcoder.status],
                 rewardCut: state.transcoder.rewardCut / 1000,
                 feeShare: state.transcoder.feeShare / 1000,
-                pricePerSegment: state.transcoder.pricePerSegment,
+                pendingRewardCut: state.transcoder.pendingRewardCut / 1000,
+                pendingFeeShare: state.transcoder.pendingFeeShare / 1000,
                 totalStake: fromDecimals(state.transcoder.totalStake, TOKEN_DECIMALS)
             }
         }

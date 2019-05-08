@@ -21,7 +21,8 @@ const DeclareTranscoder = ({handleDeclareTranscoder}) => {
 
             <Info.Action title="Livepeer action">
                 This action will declare the Livepeer App as a Transcoder. If it is already declared as a Transcoder it
-                will submit the new parameters which will be updated at the start of the next round.
+                will update its parameters. Registering as a transcoder and updates to parameters will be confirmed at
+                the start of the next round.
             </Info.Action>
 
             <RewardCut label="Reward cut (%)">

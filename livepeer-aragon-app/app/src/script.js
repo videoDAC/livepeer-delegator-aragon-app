@@ -93,7 +93,10 @@ const onNewEvent = async (state, event) => {
                 appsLptBalance: await appLptBalance$().toPromise(),
                 delegatorInfo: await delegatorInfo$().toPromise(),
                 disableUnbondTokens: await disableUnbondTokens$().toPromise(),
-                transcoder: await transcoderDetails$().toPromise()
+                transcoder: {
+                    ...state.transcoder,
+                    totalStake: await transcoderStake$().toPromise()
+                }
             }
         case 'LivepeerAragonAppClaimEarnings':
             console.log("CLAIM EARNINGS")
@@ -238,22 +241,35 @@ const disableUnbondTokens$ = () =>
         zip(currentRound$(), delegatorInfo$()),
         map(([maxRounds, currentRound, delegatorInfo]) => delegatorInfo.lastClaimRound <= currentRound - maxRounds))
 
-const transcoderTotalStake$ = () =>
+const transcoderStake$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.transcoderTotalStake(livepeerAppAddress)))
 
-// TODO: Split up transcoder detail fetching.
+const transcoderStatus$ = () =>
+    bondingManager$(api).pipe(
+        mergeMap(bondingManager => bondingManager.transcoderStatus(livepeerAppAddress)))
+
+const transcoderActive$ = () =>
+    bondingManager$(api).pipe(
+        zip(currentRound$()),
+        mergeMap(([bondingManager, currentRound]) => bondingManager.isActiveTranscoder(livepeerAppAddress, currentRound)))
+
 const transcoderDetails$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.getTranscoder(livepeerAppAddress)),
-        zip(transcoderTotalStake$()),
-        map(([transcoderDetails, totalStake]) => {
+        zip(transcoderStake$(), transcoderStatus$(), transcoderActive$()),
+        map(([transcoderDetails, totalStake, status, active]) => {
             return {
+                status: status,
+                active: active,
+                totalStake: totalStake,
                 lastRewardRound: transcoderDetails.lastRewardRound,
                 rewardCut: transcoderDetails.rewardCut,
                 feeShare: transcoderDetails.feeShare,
                 pricePerSegment: transcoderDetails.pricePerSegment,
-                totalStake: totalStake
+                pendingRewardCut: transcoderDetails.pendingRewardCut,
+                pendingFeeShare: transcoderDetails.pendingFeeShare,
+                pendingPricePerSegment: transcoderDetails.pendingPricePerSegment
             }
         })
     )
