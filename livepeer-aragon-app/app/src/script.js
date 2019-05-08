@@ -124,6 +124,12 @@ const onNewEvent = async (state, event) => {
                 ...state,
                 transcoder: await transcoderDetails$().toPromise()
             }
+        case 'LivepeerAragonAppReward':
+            console.log("REWARD")
+            return {
+                ...state,
+                transcoder: await transcoderDetails$().toPromise()
+            }
         case 'NewRound':
             console.log("NEW ROUND")
             return {

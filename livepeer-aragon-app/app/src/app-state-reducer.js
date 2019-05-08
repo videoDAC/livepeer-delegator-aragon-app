@@ -33,7 +33,8 @@ let defaultState = {
         pricePerSegment: 0,
         pendingRewardCut: 0,
         pendingFeeShare: 0,
-        pendingPricePerSegment: 0
+        pendingPricePerSegment: 0,
+        disableReward: false
     },
     tabBarSelected: 0
 }
@@ -65,7 +66,8 @@ const reducer = state => {
                 feeShare: state.transcoder.feeShare / 1000,
                 pendingRewardCut: state.transcoder.pendingRewardCut / 1000,
                 pendingFeeShare: state.transcoder.pendingFeeShare / 1000,
-                totalStake: fromDecimals(state.transcoder.totalStake, TOKEN_DECIMALS)
+                totalStake: fromDecimals(state.transcoder.totalStake, TOKEN_DECIMALS),
+                disableReward: state.transcoder.lastRewardRound === state.currentRound
             }
         }
     }

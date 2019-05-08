@@ -13,7 +13,8 @@ import {
     bondingManagerUnbond,
     bondingManagerWithdraw,
     bondingManagerClaimEarnings,
-    bondingManagerDeclareTranscoder
+    bondingManagerDeclareTranscoder,
+    bondingManagerTranscoderReward
 } from "../web3/LivepeerApp"
 
 import Delegator from "./components/Delegator"
@@ -50,8 +51,12 @@ function App() {
 
     const withdrawTokens = (unbondingLockId) => bondingManagerWithdraw(api, unbondingLockId)
 
-    const declareTranscoder = (rewardCut, feeShare, pricePerSegment) =>
+    const declareTranscoder = (rewardCut, feeShare, pricePerSegment) => {
+        setSidePanel(undefined)
         bondingManagerDeclareTranscoder(api, rewardCut, feeShare, pricePerSegment)
+    }
+
+    const transcoderReward = () => bondingManagerTranscoderReward(api)
 
     const sidePanels = {
         DECLARE_TRANSCODER: {
@@ -66,16 +71,25 @@ function App() {
         {
             tabName: "Delegator",
             tabComponent: (
-                <Delegator appState={appState} setController={setController} transferTokensIn={transferTokensIn}
-                           transferTokensOut={transferTokensOut} approveTokens={approveTokens} bondTokens={bondTokens}
-                           approveAndBondTokens={approveAndBondTokens} unbondTokens={unbondTokens}
-                           claimEarnings={claimEarnings} withdrawTokens={withdrawTokens}/>)
+                <Delegator appState={appState}
+                           setController={setController}
+                           transferTokensIn={transferTokensIn}
+                           transferTokensOut={transferTokensOut}
+                           approveTokens={approveTokens}
+                           bondTokens={bondTokens}
+                           approveAndBondTokens={approveAndBondTokens}
+                           unbondTokens={unbondTokens}
+                           claimEarnings={claimEarnings}
+                           withdrawTokens={withdrawTokens}
+                />)
         },
         {
             tabName: "Transcoder",
             tabComponent: (
                 <Transcoder appState={appState}
-                            openDeclareTranscoderSidePanel={() => setSidePanel(sidePanels.DECLARE_TRANSCODER)}/>)
+                            openDeclareTranscoderSidePanel={() => setSidePanel(sidePanels.DECLARE_TRANSCODER)}
+                            handleTranscoderReward={transcoderReward}
+                />)
         }
     ]
     const tabsNames = tabs.map(tab => tab.tabName)

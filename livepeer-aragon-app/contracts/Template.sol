@@ -102,6 +102,7 @@ contract Template is TemplateBase {
         acl.createPermission(ANY_ENTITY, app, app.UNBOND_ROLE(), root);
         acl.createPermission(ANY_ENTITY, app, app.WITHDRAW_STAKE_ROLE(), root);
         acl.createPermission(ANY_ENTITY, app, app.DECLARE_TRANSCODER_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, app, app.REWARD_ROLE(), root);
 
 
         // Clean up permissions

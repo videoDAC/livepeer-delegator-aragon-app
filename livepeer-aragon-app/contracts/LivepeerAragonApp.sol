@@ -35,6 +35,7 @@ contract LivepeerAragonApp is Agent {
     bytes32 public constant UNBOND_ROLE = keccak256("UNBOND_ROLE");
     bytes32 public constant WITHDRAW_STAKE_ROLE = keccak256("WITHDRAW_STAKE_ROLE");
     bytes32 public constant DECLARE_TRANSCODER_ROLE = keccak256("DECLARE_TRANSCODER_ROLE");
+    bytes32 public constant REWARD_ROLE = keccak256("REWARD_ROLE");
 
     IController public livepeerController;
 
@@ -46,6 +47,7 @@ contract LivepeerAragonApp is Agent {
     event LivepeerAragonAppUnbond(uint256 amount);
     event LivepeerAragonAppWithdrawStake(uint256 unbondingLockId);
     event LivepeerAragonAppDeclareTranscoder(uint256 rewardCut, uint256 feeShare, uint256 pricePerSegment);
+    event LivepeerAragonAppReward();
 
     /**
     * @notice Initialize the LivepeerHack contract
@@ -185,6 +187,20 @@ contract LivepeerAragonApp is Agent {
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _rewardCut, _feeShare, _pricePerSegment);
 
         emit LivepeerAragonAppDeclareTranscoder(_rewardCut, _feeShare, _pricePerSegment);
+
+        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+    }
+
+    /**
+    * @notice Claim reward for operating the transcoder and reward the transcoder's delegates
+    */
+    function transcoderReward() external auth(REWARD_ROLE) {
+        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+
+        string memory functionSignature = "reward()";
+        bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature);
+
+        emit LivepeerAragonAppReward();
 
         _execute(bondingManagerAddress, 0, encodedFunctionCall);
     }

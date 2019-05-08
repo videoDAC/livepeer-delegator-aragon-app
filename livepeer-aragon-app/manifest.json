@@ -1,6 +1,6 @@
 {
   "name": "Livepeer",
-  "description": "Aragon app for interfacing with the Livepeer network",
+  "description": "For interfacing with the Livepeer network as a delegator and or a transcoder",
   "icons": [{
     "src": "images/icon.svg",
     "sizes": "192x192"

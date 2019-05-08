@@ -71,6 +71,11 @@ const bondingManagerDeclareTranscoder = (api, rewardCut, feeShare, pricePerSegme
         .subscribe()
 }
 
+const bondingManagerTranscoderReward = (api) => {
+    api.transcoderReward()
+        .subscribe()
+}
+
 const percentageAsContractFormat = (percentage) => percentage * 1000
 
 export {
@@ -83,5 +88,6 @@ export {
     bondingManagerUnbond,
     bondingManagerWithdraw,
     bondingManagerClaimEarnings,
-    bondingManagerDeclareTranscoder
+    bondingManagerDeclareTranscoder,
+    bondingManagerTranscoderReward
 }

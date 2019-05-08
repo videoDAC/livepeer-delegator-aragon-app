@@ -41,6 +41,11 @@
       "params": []
     },
     {
+      "name": "Reward as transcoder",
+      "id": "REWARD_ROLE",
+      "params": []
+    },
+    {
       "name": "Transfer tokens",
       "id": "TRANSFER_ROLE",
       "params": [

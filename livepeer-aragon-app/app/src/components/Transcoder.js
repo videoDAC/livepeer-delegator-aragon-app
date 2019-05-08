@@ -50,8 +50,11 @@ const DetailCard = styled(Card)`
 const InnerText = styled(Text.Block)`
     text-align: center;
 `
+const DeclareTranscoderButton = styled(Button)`
+    margin-right: 20px;
+`
 
-const Transcoder = ({openDeclareTranscoderSidePanel, appState}) => {
+const Transcoder = ({openDeclareTranscoderSidePanel, handleTranscoderReward, appState}) => {
 
     const { currentRound } = appState
 
@@ -66,6 +69,7 @@ const Transcoder = ({openDeclareTranscoderSidePanel, appState}) => {
         pendingRewardCut,
         pendingFeeShare,
         pendingPricePerSegment,
+        disableReward
     } = appState.transcoder
 
     const rewardCutString = rewardCut === pendingRewardCut ? `${rewardCut}%` : `${rewardCut}% (${pendingRewardCut}% pending)`
@@ -136,8 +140,10 @@ const Transcoder = ({openDeclareTranscoderSidePanel, appState}) => {
             </DetailsContainer>
 
             <TranscoderFunctions>
-                <Button mode="strong" onClick={openDeclareTranscoderSidePanel}>Declare
-                    Transcoder</Button>
+                <DeclareTranscoderButton mode="strong" onClick={openDeclareTranscoderSidePanel}>Declare
+                    Transcoder</DeclareTranscoderButton>
+
+                <Button mode="strong" disabled={disableReward} onClick={handleTranscoderReward}>Reward</Button>
             </TranscoderFunctions>
 
         </TranscoderContainer>
