@@ -14,13 +14,13 @@ let defaultState = {
     userLptBalance: 0,
     appsLptBalance: 0,
     appApprovedTokens: 0,
+    currentRound: 0,
     delegatorInfo: {
         bondedAmount: 0,
         delegateAddress: "",
         lastClaimRound: 0,
         pendingStake: 0
     },
-    currentRound: 0,
     disableUnbondTokens: false,
     unbondingLockInfos: [],
     transcoder: {

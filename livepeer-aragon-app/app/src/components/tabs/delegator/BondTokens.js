@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import {Button, observe, TextInput, Text, Field, Card} from "@aragon/ui"
 import styled from 'styled-components'
-import {fromDecimals} from "../lib/math-utils";
+import {fromDecimals} from "../../../lib/math-utils";
 
 const BondTokensContainer = styled.div`
     display: flex;

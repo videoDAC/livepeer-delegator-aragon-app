@@ -32,8 +32,8 @@ const initialState = async (state) => {
         userLptBalance: await userLptBalance$().toPromise(),
         appsLptBalance: await appLptBalance$().toPromise(),
         appApprovedTokens: await appApprovedTokens$().toPromise(),
-        delegatorInfo: await delegatorInfo$().toPromise(),
         currentRound: await currentRound$().toPromise(),
+        delegatorInfo: await delegatorInfo$().toPromise(),
         disableUnbondTokens: await disableUnbondTokens$().toPromise(),
         unbondingLockInfos: await unbondingLockInfos$().toPromise(),
         transcoder: await transcoderDetails$().toPromise()

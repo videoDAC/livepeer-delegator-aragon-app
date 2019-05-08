@@ -17,8 +17,8 @@ import {
     bondingManagerTranscoderReward
 } from "../web3/LivepeerApp"
 
-import Delegator from "./components/Delegator"
-import Transcoder from "./components/Transcoder";
+import Delegator from "./components/tabs/delegator/Delegator"
+import Transcoder from "./components/tabs/transcoder/Transcoder";
 import DeclareTranscoder from "./components/side-panel/DeclareTranscoder";
 
 const AppContainer = styled(AppView)`
