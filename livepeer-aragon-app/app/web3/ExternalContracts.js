@@ -2,8 +2,9 @@ import BondingManagerAbi from '../abi/bondingManager-abi'
 import LivepeerTokenAbi from '../abi/livepeerToken-abi'
 import ControllerAbi from '../abi/controller-abi'
 import RoundsManagerAbi from '../abi/roundsManager-abi'
+import ServiceRegistryAbi from '../abi/serviceRegistry-abi'
 import {contractId} from './utils/livepeerHelpers'
-import {map, mergeMap} from 'rxjs/operators'
+import {map, mergeMap, tap} from 'rxjs/operators'
 
 //TODO: Convert to an object or use memoirzation and return const observables with shareReplay(1), could reduce load time.
 // Perhaps put this off until we get errors in api.store(). Had problems experimenting with accessing 2 observables from this object at the same time.
@@ -23,6 +24,8 @@ const bondingManagerAddress$ = (api) => livepeerAddressOf$(api, "BondingManager"
 
 const roundsManagerAddress$ = (api) => livepeerAddressOf$(api, "RoundsManager")
 
+const serviceRegistryAddress$ = (api) => livepeerAddressOf$(api, "ServiceRegistry")
+
 const livepeerToken$ = (api) =>
     livepeerTokenAddress$(api).pipe(
         // tap(address => console.log("LivepeerToken address: " + address)),
@@ -38,6 +41,11 @@ const roundsManager$ = (api) =>
         // tap(address => console.log("RoundsManager address: " + address)),
         map(address => api.external(address, RoundsManagerAbi)))
 
+const serviceRegistry$ = (api) =>
+    serviceRegistryAddress$(api).pipe(
+        // tap(address => console.log("ServiceRegistry address: " + address)),
+        map(address => api.external(address, ServiceRegistryAbi)))
+
 export {
     controllerAddress$,
     livepeerTokenAddress$,
@@ -45,5 +53,6 @@ export {
     roundsManagerAddress$,
     livepeerToken$,
     bondingManager$,
-    roundsManager$
+    roundsManager$,
+    serviceRegistry$
 }

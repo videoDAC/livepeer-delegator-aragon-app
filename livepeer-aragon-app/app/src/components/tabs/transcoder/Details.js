@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Text, } from "@aragon/ui"
+import {Card, Text,} from "@aragon/ui"
 import styled from "styled-components";
 
 const DetailsContainer = styled.div`
@@ -42,7 +42,7 @@ const InnerText = styled(Text.Block)`
 
 const TranscoderDetails = ({appState}) => {
 
-    const { currentRound } = appState
+    const {currentRound} = appState
 
     const {
         status,
@@ -54,7 +54,8 @@ const TranscoderDetails = ({appState}) => {
         pricePerSegment,
         pendingRewardCut,
         pendingFeeShare,
-        pendingPricePerSegment
+        pendingPricePerSegment,
+        serviceUri
     } = appState.transcoder
 
     const rewardCutString = rewardCut === pendingRewardCut ? `${rewardCut}%` : `${rewardCut}% (${pendingRewardCut}% pending)`
@@ -65,13 +66,6 @@ const TranscoderDetails = ({appState}) => {
 
     return (
         <DetailsContainer>
-
-            <DetailContainerRight>
-                <Text.Block weight="bold" size="normal">Delegated amount</Text.Block>
-                <DetailCard>
-                    <InnerText size="normal">{`${totalStake} eth`}</InnerText>
-                </DetailCard>
-            </DetailContainerRight>
 
             <DetailsRowContainer>
                 <DetailContainerLeft>
@@ -117,6 +111,22 @@ const TranscoderDetails = ({appState}) => {
                     <Text.Block weight="bold" size="normal">Last reward round (current: {currentRound})</Text.Block>
                     <DetailCard>
                         <InnerText size="normal">{lastRewardRound}</InnerText>
+                    </DetailCard>
+                </DetailContainerRight>
+            </DetailsRowContainer>
+
+            <DetailsRowContainer>
+                <DetailContainerLeft>
+                    <Text.Block weight="bold" size="normal">Delegated amount</Text.Block>
+                    <DetailCard>
+                        <InnerText size="normal">{`${totalStake} eth`}</InnerText>
+                    </DetailCard>
+                </DetailContainerLeft>
+
+                <DetailContainerRight>
+                    <Text.Block weight="bold" size="normal">Service URI</Text.Block>
+                    <DetailCard>
+                        <InnerText size="normal">{serviceUri}</InnerText>
                     </DetailCard>
                 </DetailContainerRight>
             </DetailsRowContainer>

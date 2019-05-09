@@ -34,7 +34,8 @@ let defaultState = {
         pendingRewardCut: 0,
         pendingFeeShare: 0,
         pendingPricePerSegment: 0,
-        disableReward: false
+        disableReward: false,
+        serviceUri: ""
     },
     tabBarSelected: 0
 }

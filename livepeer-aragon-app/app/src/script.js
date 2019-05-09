@@ -6,10 +6,11 @@ import {
     livepeerToken$,
     bondingManagerAddress$,
     bondingManager$,
-    roundsManager$
+    roundsManager$,
+    serviceRegistry$
 } from '../web3/ExternalContracts'
 import {range, of} from "rxjs";
-import {first, mergeMap, map, filter, toArray, zip, merge} from "rxjs/operators"
+import {first, mergeMap, map, filter, toArray, zip, tap, merge} from "rxjs/operators"
 
 const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
 
@@ -21,8 +22,6 @@ let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 //TODO: Rearrange UI, make actions appear in slide in menu.
 //TODO: More disabling of buttons/error handling when functions can't be called.
 //TODO: Add menu hamburger to smaller view.
-
-//TODO: Update dependencies
 
 const initialState = async (state) => {
     return {
@@ -36,7 +35,10 @@ const initialState = async (state) => {
         delegatorInfo: await delegatorInfo$().toPromise(),
         disableUnbondTokens: await disableUnbondTokens$().toPromise(),
         unbondingLockInfos: await unbondingLockInfos$().toPromise(),
-        transcoder: await transcoderDetails$().toPromise()
+        transcoder: {
+            ...await transcoderDetails$().toPromise(),
+            serviceUri: await transcoderServiceUri$().toPromise()
+        }
     }
 }
 
@@ -122,13 +124,28 @@ const onNewEvent = async (state, event) => {
             console.log("DECLARE TRANSCODER")
             return {
                 ...state,
-                transcoder: await transcoderDetails$().toPromise()
+                transcoder: {
+                    ...state.transcoder,
+                    ...await transcoderDetails$().toPromise()
+                }
             }
         case 'LivepeerAragonAppReward':
             console.log("REWARD")
             return {
                 ...state,
-                transcoder: await transcoderDetails$().toPromise()
+                transcoder: {
+                    ...state.transcoder,
+                    ...await transcoderDetails$().toPromise()
+                }
+            }
+        case 'LivepeerAragonAppSetServiceUri':
+            console.log("UPDATE SERVICE URI")
+            return {
+                ...state,
+                transcoder: {
+                    ...state.transcoder,
+                    serviceUri: await transcoderServiceUri$().toPromise()
+                }
             }
         case 'NewRound':
             console.log("NEW ROUND")
@@ -137,7 +154,10 @@ const onNewEvent = async (state, event) => {
                 currentRound: await currentRound$().toPromise(),
                 unbondingLockInfos: await unbondingLockInfos$().toPromise(),
                 disableUnbondTokens: await disableUnbondTokens$().toPromise(),
-                transcoder: await transcoderDetails$().toPromise()
+                transcoder: {
+                    ...state.transcoder,
+                    ...await transcoderDetails$().toPromise()
+                }
             }
         case 'Reward':
             console.log("REWARD")
@@ -259,6 +279,10 @@ const transcoderActive$ = () =>
     bondingManager$(api).pipe(
         zip(currentRound$()),
         mergeMap(([bondingManager, currentRound]) => bondingManager.isActiveTranscoder(livepeerAppAddress, currentRound)))
+
+const transcoderServiceUri$ = () =>
+    serviceRegistry$(api).pipe(
+        mergeMap(serviceRegistry => serviceRegistry.getServiceURI(livepeerAppAddress)))
 
 const transcoderDetails$ = () =>
     bondingManager$(api).pipe(

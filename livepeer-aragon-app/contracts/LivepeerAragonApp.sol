@@ -49,7 +49,7 @@ contract LivepeerAragonApp is Agent {
     event LivepeerAragonAppWithdrawStake(uint256 unbondingLockId);
     event LivepeerAragonAppDeclareTranscoder(uint256 rewardCut, uint256 feeShare, uint256 pricePerSegment);
     event LivepeerAragonAppReward();
-    event LivepeerAragonAppSetServiceURI(string serviceURI);
+    event LivepeerAragonAppSetServiceUri(string serviceURI);
 
     /**
     * @notice Initialize the LivepeerHack contract
@@ -208,16 +208,16 @@ contract LivepeerAragonApp is Agent {
     }
 
     /**
-    * @notice Set the transcoders service URI to `_serviceURI`
-    * @param _serviceURI New service URI
+    * @notice Set the transcoders service URI to `_serviceUri`
+    * @param _serviceUri New service URI
     */
     function setServiceUri(string _serviceUri) external auth(SET_SERVICE_URI_ROLE) {
         address serviceRegistryAddress = _getLivepeerContractAddress("ServiceRegistry");
 
         string memory functionSignature = "setServiceURI(string)";
-        bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _setServiceURI);
+        bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _serviceUri);
 
-        emit LivepeerAragonAppSetServiceURI(_serviceUri);
+        emit LivepeerAragonAppSetServiceUri(_serviceUri);
 
         _execute(serviceRegistryAddress, 0, encodedFunctionCall);
     }

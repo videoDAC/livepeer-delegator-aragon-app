@@ -14,7 +14,8 @@ import {
     bondingManagerWithdraw,
     bondingManagerClaimEarnings,
     bondingManagerDeclareTranscoder,
-    bondingManagerTranscoderReward
+    bondingManagerTranscoderReward,
+    serviceRegistrySetServiceUri
 } from "../web3/LivepeerApp"
 
 import Delegator from "./components/tabs/delegator/Delegator"
