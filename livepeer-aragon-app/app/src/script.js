@@ -11,11 +11,13 @@ import {
 } from '../web3/ExternalContracts'
 import {range, of} from "rxjs";
 import {first, mergeMap, map, filter, toArray, zip, tap, merge} from "rxjs/operators"
+import ExternalDataStreams from "./externalDataStreams";
 
 const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
 
 const api = new AragonApi()
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
+let externalDataStreams
 
 //TODO: Add rebond functions.
 //TODO: Add withdraw fees function.
@@ -28,7 +30,7 @@ const initialState = async (state) => {
         ...state,
         livepeerTokenAddress: await livepeerTokenAddress$(api).toPromise(),
         livepeerControllerAddress: await controllerAddress$(api).toPromise(),
-        userLptBalance: await userLptBalance$().toPromise(),
+        userLptBalance: await externalDataStreams.userLptBalance$().toPromise(),
         appsLptBalance: await appLptBalance$().toPromise(),
         appApprovedTokens: await appApprovedTokens$().toPromise(),
         currentRound: await currentRound$().toPromise(),
@@ -47,6 +49,8 @@ const onNewEvent = async (state, event) => {
     switch (event.event) {
         case 'AppInitialized':
             console.log("APP INITIALIZED")
+            externalDataStreams = new ExternalDataStreams(api, event.address)
+
             livepeerAppAddress = event.address
 
             const initState = await initialState(state)
