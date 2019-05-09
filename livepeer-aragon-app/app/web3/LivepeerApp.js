@@ -71,6 +71,8 @@ const bondingManagerDeclareTranscoder = (api, rewardCut, feeShare, pricePerSegme
         .subscribe()
 }
 
+const percentageAsContractFormat = (percentage) => percentage * 10000
+
 const bondingManagerTranscoderReward = (api) => {
     api.transcoderReward()
         .subscribe()
@@ -80,8 +82,6 @@ const serviceRegistrySetServiceUri = (api, serviceUri) => {
     api.setServiceUri(serviceUri)
         .subscribe()
 }
-
-const percentageAsContractFormat = (percentage) => percentage * 1000
 
 export {
     setLivepeerController,

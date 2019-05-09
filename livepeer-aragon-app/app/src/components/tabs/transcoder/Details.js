@@ -14,10 +14,21 @@ const DetailsContainer = styled.div`
     border-color: rgb(179,179,179);
     padding: 10px; 
 `
+const TopDetailsContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: rgb(179,179,179);
+    padding: 10px; 
+    margin-bottom: 20px;
+`
 const DetailsRowContainer = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly
+    justify-content: space-evenly;
 `
 const DetailContainerLeft = styled.div`
     display: flex;
@@ -65,61 +76,12 @@ const TranscoderDetails = ({appState}) => {
     const pricePerSegmentString = pricePerSegment === pendingPricePerSegment ? `${pricePerSegment} wei` : `${pricePerSegment} wei (${pendingPricePerSegment} wei pending)`
 
     return (
-        <DetailsContainer>
-
-            <DetailsRowContainer>
-                <DetailContainerLeft>
-                    <Text.Block weight="bold" size="normal">Status</Text.Block>
-                    <DetailCard>
-                        <InnerText size="normal">{status}</InnerText>
-                    </DetailCard>
-                </DetailContainerLeft>
-
-                <DetailContainerRight>
-                    <Text.Block weight="bold" size="normal">Active</Text.Block>
-                    <DetailCard>
-                        <InnerText size="normal" style={{textTransform: 'capitalize'}}>{active.toString()}</InnerText>
-                    </DetailCard>
-                </DetailContainerRight>
-            </DetailsRowContainer>
-
-            <DetailsRowContainer>
-                <DetailContainerLeft>
-                    <Text.Block weight="bold" size="normal">Reward cut</Text.Block>
-                    <DetailCard>
-                        <InnerText size="normal">{rewardCutString}</InnerText>
-                    </DetailCard>
-                </DetailContainerLeft>
-
-                <DetailContainerRight>
-                    <Text.Block weight="bold" size="normal">Fee share</Text.Block>
-                    <DetailCard>
-                        <InnerText size="normal">{feeShareString}</InnerText>
-                    </DetailCard>
-                </DetailContainerRight>
-            </DetailsRowContainer>
-
-            <DetailsRowContainer>
-                <DetailContainerLeft>
-                    <Text.Block weight="bold" size="normal">Price per segment</Text.Block>
-                    <DetailCard>
-                        <InnerText size="normal">{pricePerSegmentString}</InnerText>
-                    </DetailCard>
-                </DetailContainerLeft>
-
-                <DetailContainerRight>
-                    <Text.Block weight="bold" size="normal">Last reward round (current: {currentRound})</Text.Block>
-                    <DetailCard>
-                        <InnerText size="normal">{lastRewardRound}</InnerText>
-                    </DetailCard>
-                </DetailContainerRight>
-            </DetailsRowContainer>
-
-            <DetailsRowContainer>
+        <div>
+            <TopDetailsContainer>
                 <DetailContainerLeft>
                     <Text.Block weight="bold" size="normal">Delegated amount</Text.Block>
                     <DetailCard>
-                        <InnerText size="normal">{`${totalStake} eth`}</InnerText>
+                        <InnerText size="normal">{`${totalStake} LPT`}</InnerText>
                     </DetailCard>
                 </DetailContainerLeft>
 
@@ -129,9 +91,62 @@ const TranscoderDetails = ({appState}) => {
                         <InnerText size="normal">{serviceUri}</InnerText>
                     </DetailCard>
                 </DetailContainerRight>
-            </DetailsRowContainer>
+            </TopDetailsContainer>
 
-        </DetailsContainer>
+            <DetailsContainer>
+
+
+                <DetailsRowContainer>
+                    <DetailContainerLeft>
+                        <Text.Block weight="bold" size="normal">Status</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{status}</InnerText>
+                        </DetailCard>
+                    </DetailContainerLeft>
+
+                    <DetailContainerRight>
+                        <Text.Block weight="bold" size="normal">Active</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal"
+                                       style={{textTransform: 'capitalize'}}>{active.toString()}</InnerText>
+                        </DetailCard>
+                    </DetailContainerRight>
+                </DetailsRowContainer>
+
+                <DetailsRowContainer>
+                    <DetailContainerLeft>
+                        <Text.Block weight="bold" size="normal">Reward cut</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{rewardCutString}</InnerText>
+                        </DetailCard>
+                    </DetailContainerLeft>
+
+                    <DetailContainerRight>
+                        <Text.Block weight="bold" size="normal">Fee share</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{feeShareString}</InnerText>
+                        </DetailCard>
+                    </DetailContainerRight>
+                </DetailsRowContainer>
+
+                <DetailsRowContainer>
+                    <DetailContainerLeft>
+                        <Text.Block weight="bold" size="normal">Price per segment</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{pricePerSegmentString}</InnerText>
+                        </DetailCard>
+                    </DetailContainerLeft>
+
+                    <DetailContainerRight>
+                        <Text.Block weight="bold" size="normal">Last reward round (current: {currentRound})</Text.Block>
+                        <DetailCard>
+                            <InnerText size="normal">{lastRewardRound}</InnerText>
+                        </DetailCard>
+                    </DetailContainerRight>
+                </DetailsRowContainer>
+
+            </DetailsContainer>
+        </div>
     )
 }
 

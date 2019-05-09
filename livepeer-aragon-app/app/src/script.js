@@ -100,7 +100,7 @@ const onNewEvent = async (state, event) => {
                     totalStake: await transcoderStake$().toPromise()
                 }
             }
-        case 'LivepeerAragonAppClaimEarnings':
+        case 'LivepeerAragonAppEarnings':
             console.log("CLAIM EARNINGS")
             return {
                 ...state,

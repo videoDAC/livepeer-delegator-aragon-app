@@ -2,6 +2,7 @@ import {fromDecimals} from "./lib/math-utils";
 import {BN} from "../../node_modules/bn.js/lib/bn";
 
 const TOKEN_DECIMALS = 18;
+const PERCENTAGE_AS_FRACTION_DIVISOR = 10000;
 
 const TRANSCODER_STATUS = {
     0: "Not Registered",
@@ -63,10 +64,10 @@ const reducer = state => {
             transcoder: {
                 ...state.transcoder,
                 status: TRANSCODER_STATUS[state.transcoder.status],
-                rewardCut: state.transcoder.rewardCut / 1000,
-                feeShare: state.transcoder.feeShare / 1000,
-                pendingRewardCut: state.transcoder.pendingRewardCut / 1000,
-                pendingFeeShare: state.transcoder.pendingFeeShare / 1000,
+                rewardCut: state.transcoder.rewardCut / PERCENTAGE_AS_FRACTION_DIVISOR,
+                feeShare: state.transcoder.feeShare / PERCENTAGE_AS_FRACTION_DIVISOR,
+                pendingRewardCut: state.transcoder.pendingRewardCut / PERCENTAGE_AS_FRACTION_DIVISOR,
+                pendingFeeShare: state.transcoder.pendingFeeShare / PERCENTAGE_AS_FRACTION_DIVISOR,
                 totalStake: fromDecimals(state.transcoder.totalStake, TOKEN_DECIMALS),
                 disableReward: state.transcoder.lastRewardRound === state.currentRound
             }
