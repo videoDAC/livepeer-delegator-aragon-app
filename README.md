@@ -1,13 +1,15 @@
 # Livepeer Aragon App
-An example installation can be found here: https://rinkeby.aragon.org/#/livepeerdelegator.aragonid.eth/0x4a7335f3ecb43b685526c1b39043bf696c78c641
+An example installation can be found [here](https://rinkeby.aragon.org/#/livepeerdelegator.aragonid.eth/0x4a7335f3ecb43b685526c1b39043bf696c78c641).
 
-Livepeer Aragon app for managing Livepeer actions.
+Livepeer Aragon app for managing Livepeer interaction.
 
 This project uses a modified version of the Aragon Agent app (Agent.sol) for storing LPT and interacting with Livepeer contracts. 
 
-Initial development includes functions for Livepeer interaction as a typical bonder/delegator. These include the ability to call the functions: approve, bond, claimEarnings, unbond, rebond and withdrawStake.
+It currently includes the ability to call:  
+- Delegator functions: approve, bond, claimEarnings, unbond, rebond and withdrawStake.
+- Transcoder functions: transcoder, reward, setServiceURI
 
-Further investigation is being made into creating a Livepeer Transcoder app, some discussion here: https://github.com/livepeer/research/issues/13 
+Further investigation is being made into modifying [go-livepeer](https://github.com/livepeer/go-livepeer) to interact with the livepeer protocol via the Aragon app. Some discussion can be found here: https://github.com/livepeer/research/issues/13 
 
 ## Project contents
 ### aragon-livepeer-experiment
@@ -52,7 +54,6 @@ If installed without `--set-permissions open` then create a permission for the a
 dao acl create <DAO Address> <App Proxy Address> APPROVE_ROLE <Entity> <Manager> --environment staging
 ```
 
-
 After app installation the permissions can be modified through the UI or through the CLI. Roles available include:  
 - SET_CONTROLLER_ROLE
 - APPROVE_ROLE
@@ -62,6 +63,9 @@ After app installation the permissions can be modified through the UI or through
 - UNBOND_ROLE
 - WITHDRAW_STAKE_ROLE
 - TRANSFER_ROLE  
+- DECLARE_TRANSCODER_ROLE
+- REWARD_ROLE
+- SET_SERVICE_URI_ROLE
 
 Depending on your DAO's set up and intended usage, some permissions may require parameters to be set to restrict/allow access to certain functions. A preliminary script for modifying parameter permissions can be found at `/livepeer-aragon-app/scripts/grantPermissionWithParameters.js`
 
