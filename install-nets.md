@@ -98,14 +98,14 @@ The following roles can now be assigned using the same process as setting the fi
 - DECLARE_TRANSCODER_ROLE
 - SET_SERVICE_URI_ROLE
 - REWARD_ROLE
-- APPROVE_ROLE *
+- APPROVE_ROLE
 - BOND_ROLE
 - TRANSFER_ROLE  
 - SET_CONTROLLER_ROLE
 
-Depending on your DAO's set up and intended usage, some permissions may require parameters to be set to restrict/allow access to certain functions. A preliminary script for modifying parameter permissions can be found at `/livepeer-aragon-app/scripts/grantPermissionWithParameters.js`
+Depending on your DAO's set up and intended usage, some permissions may require parameters to be set to restrict/allow access to certain functions. [A sample set of permissions can be found in this DAO on Rinkeby](https://rinkeby.aragon.org/#/video.aragonid.eth/permissions?p=app.0x0069ee94a2c6964221c45a402d8b1ff0c45224b6).
 
-* You may wish to set the APPROVE_ROLE to `0xffffffffffffffffffffffffffffffffffffffff` instead of the `<Voting-App-Proxy-Address>` so that calling reward does not need to be voted on every round of Livepeer's protocol.
+A preliminary script for modifying parameter permissions can be found at `/livepeer-aragon-app/scripts/grantPermissionWithParameters.js`
 
 ### Installing to an Aragon DAO on Mainnet
 
