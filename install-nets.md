@@ -8,11 +8,22 @@ To see information about the published app, run `aragon apm info livepeer.open.a
 
 ### Pre-Requisites
 
-**Installing this application requires using aragonCLI (Command Line Interface).** [Here is an introduction to aragonCLI](https://hack.aragon.org/docs/cli-intro.html), which includes instructions on how to install aragonCLI.
+- **Installing this application requires using aragonCLI (Command Line Interface).**
 
-**These instructions also assume that there is an Aragon DAO already set up.** If you don't already have an Aragon DAO set up, I recommend following [these excellent instructions by @lkngtn from the AragonOne Team](https://forum.aragon.org/t/guide-custom-aragon-organization-deployment-using-the-cli/). Following these will also help you familiarise yourself with using the aragonCLI and the Aragon web interface, as well as introducing you to setting permissions in Aragon.
+  - [Here is an introduction to aragonCLI](https://hack.aragon.org/docs/cli-intro.html), which includes instructions on how to install aragonCLI.
 
-**The Ethereum account being used by aragonCLI must have the right permissions in the DAO**. The easiest way to do this is to assign this address the `Manage apps` permission on the `Kernel` and the `Create permissions` permission on the `ACL`. You can do this using the "Permissions" section of Aragon's browser-based UI. _This way, the aragonCLI can perform the actions without the DAO voting on it._ One alternative would be to provide a voting token to the account being used by aragonCLI. Another alternative is to grant "Any account" the permission to "Create new votes" on the "Voting" App.  _Using either of these alternative approaches will require every command run by the aragonCLI will need to be voted on by the DAO._
+- **These instructions also assume that there is an Aragon DAO already set up.**
+  - If you don't already have an Aragon DAO set up, I recommend following [these excellent instructions by @lkngtn from the AragonOne Team](https://forum.aragon.org/t/guide-custom-aragon-organization-deployment-using-the-cli/).
+  - Following these will also help you familiarise yourself with using the aragonCLI and the Aragon web interface, as well as introducing you to setting permissions in Aragon.
+
+- **The Ethereum account being used by aragonCLI must have the right permissions in the DAO**.
+  - The easiest way to do this is to assign this address the `Manage apps` permission on the `Kernel` and the `Create permissions` permission on the `ACL`.
+  - You can do this using the "Permissions" section of Aragon's browser-based UI.
+  - _This way, the aragonCLI can perform the actions without the DAO voting on it._
+  
+  - One alternative would be to provide a voting token to the account being used by aragonCLI.
+  - Another alternative is to grant "Any account" the permission to "Create new votes" on the "Voting" App.
+  - _Using either of these alternative approaches will require every command run by the aragonCLI will need to be voted on by the DAO._
 
 ### Installing to an Aragon DAO on Rinkeby
 
@@ -29,9 +40,9 @@ Where:
 - `<DAO-Address>` is the address of the Aragon DAO you are installing on. This can be the full address or the ENS name.
 - `<Livepeer-Controller>` address is `0x37dC71366Ec655093b9930bc816E16e6b587F968` for Rinkeby.
 
-_This will create a vote on the Aragon DAO proposing to install the app._
-
 **2. Pass the vote on the Aragon DAO to install the app.**
+
+_This step is only required if the aragonCLI does not have permission to Manage apps._
 
 There should be a vote in the DAO's Voting app entitled
 
@@ -66,9 +77,9 @@ Where:
 - `<Livepeer-App-Proxy-Address>` and `<Voting-App-Proxy-Address>` were noted in a previous step
 - `<Manager-Address>` is the address of whatever entity will manage this permission. You can set this to the Ethereum account being used by aragonCLI until you are ready to assign to another entity.
 
-***This will propose a vote to assign permissions such that any proposals for approving and bonding Livepeer Tokens must pass a vote.***
-
 **5. Pass the vote to set the first Permission**
+
+_This step is only required if the aragonCLI does not have permission to Create permissions._
 
 There should be a vote in the DAO's Voting app entitled
 
