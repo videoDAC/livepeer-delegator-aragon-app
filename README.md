@@ -21,7 +21,8 @@ It currently includes the ability to call the following smart contract functions
 - **Delegator** functions: `approve`, `bond`, `claimEarnings`, `unbond`, and `withdraw`.
 - **Transcoder** functions: `transcoder`, `reward`, `setServiceURI`
 
-![image](https://user-images.githubusercontent.com/2212651/57960970-d4966680-7903-11e9-9c7b-a92aed0461d8.png)
+![Screenshot from 2019-05-18 17-12-14](https://user-images.githubusercontent.com/2212651/57972471-086c9d00-7993-11e9-896d-ee7fa5f471aa.png)
+In the above example, `reward` was called without requiring a vote. [See here for more information]().
 
 ### Reference Implementation and Installation
 
