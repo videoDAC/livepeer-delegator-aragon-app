@@ -102,5 +102,8 @@ As far as we are aware, at the time of writing, this application has not been in
 
 ***It has not yet passed a security audit, so if you install on Mainnet, you do so at your own risk.***
 
-However, for those who like living on the edge, you can use the same instructions as for installing on Rinkeby, substituting `--environment aragon:rinkeby` with `--environment aragon:mainnet` for all the aragonCLI commands.
+However, for those who like living on the edge, you can use the same instructions as for installing on Rinkeby, with the following changes:
 
+1. Substitute `--environment aragon:rinkeby` with `--environment aragon:mainnet` for all the aragonCLI commands.
+
+2. Use `<Livepeer-Controller>` address as `0xf96d54e490317c557a967abfa5d6e33006be69b3` for Mainnet when you install the app.
