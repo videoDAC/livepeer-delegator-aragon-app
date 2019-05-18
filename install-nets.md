@@ -13,7 +13,7 @@ To see information about the published app, run `aragon apm info livepeer.open.a
   - [Here is an introduction to aragonCLI](https://hack.aragon.org/docs/cli-intro.html), which includes instructions on how to install aragonCLI.
 
 - **These instructions also assume that there is an Aragon DAO already set up.**
-  - If you don't already have an Aragon DAO set up, I recommend following [these excellent instructions by @lkngtn from the AragonOne Team](https://forum.aragon.org/t/guide-custom-aragon-organization-deployment-using-the-cli/).
+  - If you don't already have an Aragon DAO set up, I recommend following [these excellent instructions by @lkngtn from the AragonOne Team](https://hack.aragon.org/docs/guides-custom-deploy).
   - Following these will also help you familiarise yourself with using the aragonCLI and the Aragon web interface, as well as introducing you to setting permissions in Aragon.
 
 - **The Ethereum account being used by aragonCLI must have the right permissions in the DAO**.
