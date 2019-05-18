@@ -2,11 +2,13 @@
 
 # Livepeer Aragon App
 
+Follow these [instructions to install this app in any Aragon DAO.](https://github.com/videoDAC/livepeer-aragon/blob/master/install-nets.md).
+
 ## Overview
 
 [Livepeer](https://livepeer.org) is a delegated-proof-of-stake protocol which governs the operation of a network of Transcoder nodes. [Aragon](https://aragon.org) is a project to empower freedom by creating tools for decentralized organizations to thrive. Both projects run on [Ethereum](https://ethereum.org) blockchain.
 
-This app empowers a "Decentralized Autonomous Organisation" (DAO) on Aragon's platform to govern the roles of **Delegator** and **Transcoder** in Livepeer's protocol. Follow these [instructions to install this app in any Aragon DAO.](https://github.com/videoDAC/livepeer-aragon/blob/master/install-nets.md).
+This app empowers a "Decentralized Autonomous Organisation" (DAO) on Aragon's platform to govern the roles of **Delegator** and **Transcoder** in Livepeer's protocol.
 
 You can support this project by BONDING your Livepeer Tokens (LPT) using [the project's Transcoder page on Livepeer's Protocol Explorer](https://explorer.livepeer.org/accounts/0xDAC817294c0c87ca4fA1895eF4b972EAde99f2fd/overview).
 
