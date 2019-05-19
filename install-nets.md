@@ -93,9 +93,13 @@ The app will be visible through the Aragon Rinkeby web interface once this vote 
 
 Something you need to be aware of is that nothing will work on Livepeer Protocol unless the protocol is "running".
 
-You can tell if it's "running" by setting your browser's signer to use Rinkeby, and going to https://explorer.livepeer.org/transcoders#/protocol-status
+You can tell if it's "running" by **setting your browser's signer to use Rinkeby**, then going to [Livepeer's Procol Explorer](https://explorer.livepeer.org/transcoders) - if the icon in the top left is green, then the Protocol is "running".
 
-If it is NOT running, you can submit a transaction to "Initialise Round" - which will run for (currently) 50 blocks.
+![image](https://user-images.githubusercontent.com/2212651/57988140-6c21c380-7a82-11e9-96c3-7f9ac07fb175.png)
+
+If it is NOT running, you can click the orange panel in the top left and then "Initialise Round". This will allow you to submit a transaction to initialize the round, which will run for (currently) 50 blocks.
+
+![image](https://user-images.githubusercontent.com/2212651/57988132-4ac0d780-7a82-11e9-9e74-75bad8883897.png)
 
 So things might not work because the Livepeer Protocol isn't running, and therefore the protocol can't take requests.
 
