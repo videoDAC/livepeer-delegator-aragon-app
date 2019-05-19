@@ -89,6 +89,18 @@ The app will be visible through the Aragon Rinkeby web interface once this vote 
 
  🎉 🎉 🎉 🎉 ***The Livepeer App can now approve and bond Livepeer Tokens using Livepeer's Protocol.*** 🎉 🎉 🎉 🎉
 
+### IMPORTANT THING to know about operating this app on Rinkeby
+
+Something you need to be aware of is that nothing will work on Livepeer Protocol unless the protocol is "running".
+
+You can tell if it's "running" by setting your browser's signer to use Rinkeby, and going to https://explorer.livepeer.org/transcoders#/protocol-status
+
+If it is NOT running, you can submit a transaction to "Initialise Round" - which will run for (currently) 50 blocks.
+
+So things might not work because the Livepeer Protocol isn't running, and therefore the protocol can't take requests.
+
+### Granting permissions for roles on the app
+
 The following roles can now be assigned using the same process as setting the first permission:
 
 - APPROVE_AND_BOND_ROLE
@@ -103,7 +115,9 @@ The following roles can now be assigned using the same process as setting the fi
 - TRANSFER_ROLE  
 - SET_CONTROLLER_ROLE
 
-Depending on your DAO's set up and intended usage, some permissions may require parameters to be set to restrict/allow access to certain functions. [A sample set of permissions can be found in this DAO on Rinkeby](https://rinkeby.aragon.org/#/video.aragonid.eth/permissions?p=app.0x0069ee94a2c6964221c45a402d8b1ff0c45224b6).
+Depending on your DAO's set up and intended usage, some permissions may require parameters to be set to restrict/allow access to certain functions.
+
+[A sample set of permissions can be found in this DAO on Rinkeby](https://rinkeby.aragon.org/#/video.aragonid.eth/permissions?p=app.0x0069ee94a2c6964221c45a402d8b1ff0c45224b6). [Here is a list of CLI commands to run to set the permissions as per this example](https://github.com/videoDAC/livepeer-aragon/blob/master/recommended-permissions.md).
 
 A preliminary script for modifying parameter permissions can be found at `/livepeer-aragon-app/scripts/grantPermissionWithParameters.js`
 
