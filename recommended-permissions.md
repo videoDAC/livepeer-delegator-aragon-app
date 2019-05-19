@@ -13,14 +13,14 @@ If your DAO is on Mainnet, you must add `--environment aragon:mainnet` to each c
 The following commands set the roles to be managed fully by the Voting app.
 
 ```
-dao acl create <DAO-Address> <Livepeer-App-Address> APPROVE_AND_BOND_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Address> DECLARE_TRANSCODER_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Address> SET_SERVICE_URI_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Address> UNBOND_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Address> TRANSFER_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Address> APPROVE_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Address> BOND_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Address> SET_CONTROLLER_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> APPROVE_AND_BOND_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> DECLARE_TRANSCODER_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> SET_SERVICE_URI_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> UNBOND_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> TRANSFER_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> APPROVE_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> BOND_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> SET_CONTROLLER_ROLE <Voting-Address> <Voting-Address>
 ```
 
 #### Roles which control functions which could be performed by anyone
@@ -28,9 +28,9 @@ dao acl create <DAO-Address> <Livepeer-App-Address> SET_CONTROLLER_ROLE <Voting-
 The following commands set the roles which can be performed by "Any account", with any changes to role permissions managed by the Voting app:
 
 ```
-dao acl create <DAO-Address> <Livepeer-App-Address> REWARD_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Address> WITHDRAW_STAKE_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Address> CLAIM_EARNINGS_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> REWARD_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> WITHDRAW_STAKE_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> CLAIM_EARNINGS_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
 ```
 
 REWARD_ROLE allows the entity to call `reward` on behalf of app when it is acting as a Transcoder.
