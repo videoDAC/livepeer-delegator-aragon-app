@@ -4,6 +4,8 @@
 
 Follow these [instructions to install this app in any Aragon DAO.](https://github.com/videoDAC/livepeer-aragon/blob/master/install-nets.md).
 
+If you are already a power user of aragonCLI, you can [create a DAO-based Transcoder using this script](https://github.com/videoDAC/livepeer-aragon/blob/master/aragoncli-commands.md).
+
 ## Overview
 
 [Livepeer](https://livepeer.org) is a delegated-proof-of-stake protocol which governs the operation of a network of Transcoder nodes. [Aragon](https://aragon.org) is a project to empower freedom by creating tools for decentralized organizations to thrive. Both projects run on [Ethereum](https://ethereum.org) blockchain.
