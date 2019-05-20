@@ -24,6 +24,11 @@ To see information about the published app, run `aragon apm info livepeer.open.a
   - One alternative would be to provide a voting token to the account being used by aragonCLI.
   - Another alternative is to grant "Any account" the permission to "Create new votes" on the "Voting" App.
   - _Using either of these alternative approaches will require every command run by the aragonCLI will need to be voted on by the DAO._
+  
+- `aragon ipfs` is running in your environment.
+  - Open a new Terminal window
+  - Type `aragon ipfs` and press return
+  - Wait for it to start up, and then you are ready to go
 
 ### Installing to an Aragon DAO on Rinkeby
 
