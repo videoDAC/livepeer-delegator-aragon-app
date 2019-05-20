@@ -4,6 +4,8 @@ This script will use aragonCLI to:
 - Install the Livepeer Aragon App
 - Set the Livepeer Aragon App's permissions as recommended
 
+You must be running `aragon ipfs` in another window.
+
 The following parameter is required to start this:
 
 - `<Your-AragonCLI-Address>` = the address for the private key being used by your aragonCLI to sign transactions.
