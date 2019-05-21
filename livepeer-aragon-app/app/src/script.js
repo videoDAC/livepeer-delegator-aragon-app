@@ -42,12 +42,14 @@ const initialState = async (state) => {
     }
 }
 
-const onNewEvent = async (state, event) => {
+const onNewEvent = async (state, storeEvent) => {
 
-    switch (event.event) {
+    const { event, returnValues, address } = storeEvent
+
+    switch (event) {
         case 'AppInitialized':
             console.log("APP INITIALIZED")
-            livepeerAppAddress = event.address
+            livepeerAppAddress = address
 
             const initState = await initialState(state)
 
@@ -59,13 +61,13 @@ const onNewEvent = async (state, event) => {
             console.log("NEW CONTROLLER SET")
             return {
                 ...state,
-                livepeerControllerAddress: event.returnValues.livepeerController
+                livepeerControllerAddress: returnValues.livepeerController
             }
         case 'Transfer':
             console.log("LPT TRANSFER")
             const account = (await api.accounts().pipe(first()).toPromise())[0]
 
-            if (account === event.returnValues.from || account === event.returnValues.to) {
+            if (account === returnValues.from || account === returnValues.to) {
                 return {
                     ...state,
                     userLptBalance: await userLptBalance$().toPromise()
@@ -111,7 +113,11 @@ const onNewEvent = async (state, event) => {
             return {
                 ...state,
                 delegatorInfo: await delegatorInfo$().toPromise(),
-                unbondingLockInfos: await unbondingLockInfos$().toPromise()
+                unbondingLockInfos: await unbondingLockInfos$().toPromise(),
+                transcoder: {
+                    ...state.transcoder,
+                    ...await transcoderDetails$().toPromise()
+                }
             }
         case 'LivepeerAragonAppWithdrawStake':
             console.log("WITHDRAW STAKE")
@@ -130,9 +136,10 @@ const onNewEvent = async (state, event) => {
                 }
             }
         case 'LivepeerAragonAppReward':
-            console.log("REWARD")
+            console.log("APP REWARD")
             return {
                 ...state,
+                delegatorInfo: await delegatorInfo$().toPromise(),
                 transcoder: {
                     ...state.transcoder,
                     ...await transcoderDetails$().toPromise()
@@ -160,7 +167,7 @@ const onNewEvent = async (state, event) => {
                 }
             }
         case 'Reward':
-            console.log("REWARD")
+            console.log("LIVEPEER REWARD")
             return {
                 ...state,
                 delegatorInfo: await delegatorInfo$().toPromise()
@@ -176,13 +183,21 @@ const onNewEvent = async (state, event) => {
     }
 }
 
+const onNewEventCatchError = async (state, event) => {
+    try {
+        return await onNewEvent(state, event)
+    } catch (error) {
+        console.error(`Caught error: ${error}`)
+    }
+}
+
 const accountChangedEvent$ = () =>
     api.accounts().pipe(
         map(account => {
             return {event: ACCOUNT_CHANGED_EVENT, account: account}
         }))
 
-api.store(onNewEvent,
+api.store(onNewEventCatchError,
     [
         accountChangedEvent$(),
         livepeerToken$(api).pipe(mergeMap(livepeerToken => livepeerToken.events())),
