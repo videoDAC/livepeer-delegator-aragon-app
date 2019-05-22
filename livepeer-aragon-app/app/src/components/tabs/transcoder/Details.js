@@ -79,7 +79,7 @@ const TranscoderDetails = ({appState}) => {
         <div>
             <TopDetailsContainer>
                 <DetailContainerLeft>
-                    <Text.Block weight="bold" size="normal">Delegated amount</Text.Block>
+                    <Text.Block weight="bold" size="normal">Total stake</Text.Block>
                     <DetailCard>
                         <InnerText size="normal">{`${totalStake} LPT`}</InnerText>
                     </DetailCard>
