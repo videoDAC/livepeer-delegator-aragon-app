@@ -73,13 +73,13 @@ contract LivepeerAragonApp is Agent {
     }
 
     /**
-    * @notice Approve the Bonding Manager to spend
-              `_value / 10^18``_value % 10^18 > 0 ? '.' + _value % 10^18 : ''` LPT tokens from the Livepeer App.
+    * @notice Approve the Bonding Manager to spend `@tokenAmount(self.getLivepeerContractAddress("LivepeerToken"): address, _value, true, 18)`
+              `self.getLivepeerContractAddress("LivepeerToken"): address` from the Livepeer App.
     * @param _value The amount of tokens to approve
     */
     function livepeerTokenApprove(uint256 _value) external auth(APPROVE_ROLE) {
-        address livepeerTokenAddress = _getLivepeerContractAddress("LivepeerToken");
-        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+        address livepeerTokenAddress = getLivepeerContractAddress("LivepeerToken");
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
 
         string memory functionSignature = "approve(address,uint256)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, bondingManagerAddress, _value);
@@ -90,12 +90,13 @@ contract LivepeerAragonApp is Agent {
     }
 
     /**
-    * @notice Bond `_amount / 10^18``_amount % 10^18 > 0 ? '.' + _amount % 10^18 : ''` LPT tokens to `_to`
+    * @notice Bond `@tokenAmount(self.getLivepeerContractAddress("LivepeerToken"): address, _amount, true, 18)`
+              `self.getLivepeerContractAddress("LivepeerToken"): address` to `_to`
     * @param _amount The amount of tokens to bond
     * @param _to The address to bond to
     */
     function bond(uint256 _amount, address _to) external auth(BOND_ROLE) {
-        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
 
         string memory functionSignature = "bond(uint256,address)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _amount, _to);
@@ -106,14 +107,15 @@ contract LivepeerAragonApp is Agent {
     }
 
     /**
-    * @notice Approve and Bond `_amount / 10^18``_amount % 10^18 > 0 ? '.' + _amount % 10^18 : ''` LPT tokens to `_to`
+    * @notice Approve and Bond `@tokenAmount(self.getLivepeerContractAddress("LivepeerToken"): address, _amount, true, 18)`
+              `self.getLivepeerContractAddress("LivepeerToken"): address` to `_to`
     * @param _amount The amount of tokens to approve and bond
     * @param _to The address to bond to
     */
     function approveAndBond(uint256 _amount, address _to) external auth(APPROVE_AND_BOND_ROLE) {
         bytes memory spec1 = hex"00000001";
-        address livepeerTokenAddress = _getLivepeerContractAddress("LivepeerToken");
-        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+        address livepeerTokenAddress = getLivepeerContractAddress("LivepeerToken");
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
 
         bytes memory approveEncoded = abi.encodeWithSignature("approve(address,uint256)", bondingManagerAddress, _amount);
         bytes memory bondEncoded = abi.encodeWithSignature("bond(uint256,address)", _amount, _to);
@@ -135,7 +137,7 @@ contract LivepeerAragonApp is Agent {
     * @param _endRound Last round to claim earnings up to
     */
     function claimEarnings(uint256 _endRound) external auth(CLAIM_EARNINGS_ROLE) {
-        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
 
         string memory functionSignature = "claimEarnings(uint256)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _endRound);
@@ -146,11 +148,12 @@ contract LivepeerAragonApp is Agent {
     }
 
     /**
-    * @notice Unbond `_amount / 10^18``_amount % 10^18 > 0 ? '.' + _amount % 10^18 : ''` LPT tokens
+    * @notice Unbond `@tokenAmount(self.getLivepeerContractAddress("LivepeerToken"): address, _amount, true, 18)`
+              `self.getLivepeerContractAddress("LivepeerToken"): address`
     * @param _amount The amount of tokens to unbond
     */
     function unbond(uint256 _amount) external auth(UNBOND_ROLE) {
-        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
 
         string memory functionSignature = "unbond(uint256)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _amount);
@@ -165,7 +168,7 @@ contract LivepeerAragonApp is Agent {
     * @param _unbondingLockId The unbonding lock ID
     */
     function withdrawStake(uint256 _unbondingLockId) external auth(WITHDRAW_STAKE_ROLE) {
-        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
 
         string memory functionSignature = "withdrawStake(uint256)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _unbondingLockId);
@@ -176,14 +179,13 @@ contract LivepeerAragonApp is Agent {
     }
 
     /**
-    * @notice Declare the Livepeer App as a Transcoder with Reward Cut: `_rewardCut / 10000``_rewardCut % 10000 > 0 ? '.' + _rewardCut % 10000 : ''`%
-              Fee Share: `_feeShare / 10000``_feeShare % 10000 > 0 ? '.' + _feeShare % 10000 : ''`% Price Per Segment: `_pricePerSegment` wei
+    * @notice Declare the Livepeer App as a Transcoder with Reward Cut: `@formatPct(_rewardCut, 1000000, 4)`% Fee Share: `@formatPct(_feeShare, 1000000, 4)`% Price Per Segment: `_pricePerSegment` wei
     * @param _rewardCut Reward cut % in whole number format
     * @param _feeShare Fee share % in whole number format
     * @param _pricePerSegment Price per segment in wei
     */
     function declareTranscoder(uint256 _rewardCut, uint256 _feeShare, uint256 _pricePerSegment) external auth(DECLARE_TRANSCODER_ROLE) {
-        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
 
         string memory functionSignature = "transcoder(uint256,uint256,uint256)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _rewardCut, _feeShare, _pricePerSegment);
@@ -197,7 +199,7 @@ contract LivepeerAragonApp is Agent {
     * @notice Claim reward for operating the transcoder and reward the transcoder's delegates
     */
     function transcoderReward() external auth(REWARD_ROLE) {
-        address bondingManagerAddress = _getLivepeerContractAddress("BondingManager");
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
 
         string memory functionSignature = "reward()";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature);
@@ -212,7 +214,7 @@ contract LivepeerAragonApp is Agent {
     * @param _serviceUri New service URI
     */
     function setServiceUri(string _serviceUri) external auth(SET_SERVICE_URI_ROLE) {
-        address serviceRegistryAddress = _getLivepeerContractAddress("ServiceRegistry");
+        address serviceRegistryAddress = getLivepeerContractAddress("ServiceRegistry");
 
         string memory functionSignature = "setServiceURI(string)";
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _serviceUri);
@@ -223,7 +225,7 @@ contract LivepeerAragonApp is Agent {
     }
 
     /**
-    * @notice Transfer `_value / 10^18``_value % 10^18 > 0 ? '.' + _value % 10^18 : ''` `_token` tokens from the Livepeer App to `_to`
+    * @notice Transfer `@tokenAmount(_token, _value, true, 18)` `_token` from the Livepeer App to `_to`
     * @param _token Address of the token being transferred
     * @param _to Address of the recipient of tokens
     * @param _value Amount of tokens being transferred
@@ -234,7 +236,7 @@ contract LivepeerAragonApp is Agent {
     }
 
     /**
-    * @notice Deposit `_value / 10^18``_value % 10^18 > 0 ? '.' + _value % 10^18 : ''` `_token` tokens to the Livepeer App
+    * @notice Deposit `@tokenAmount(_token, _value, true, 18)` `_token` tokens to the Livepeer App
     * @param _token Address of the token being transferred
     * @param _value Amount of tokens being transferred
     */
@@ -242,17 +244,21 @@ contract LivepeerAragonApp is Agent {
         _deposit(_token, _value);
     }
 
-    function _getLivepeerContractAddress(string memory livepeerContract) internal view returns (address) {
-        bytes32 contractId = keccak256(livepeerContract);
+    /**
+    * @notice Get the address of the specified livepeer contract. It is public to enable use in radspec.
+    * @param _livepeerContract Keccack256() of the name of the contract
+    */
+    function getLivepeerContractAddress(string memory _livepeerContract) public view returns (address) {
+        bytes32 contractId = keccak256(_livepeerContract);
         return livepeerController.getContract(contractId);
     }
 
-    function _createForwarderScript(address toAddress, bytes memory functionCall) internal pure returns (bytes) {
-        bytes memory toAddressBytes = abi.encodePacked(toAddress);
-        bytes memory functionCallLength = abi.encodePacked(bytes4(functionCall.length));
+    function _createForwarderScript(address _toAddress, bytes memory _functionCall) internal pure returns (bytes) {
+        bytes memory toAddressBytes = abi.encodePacked(_toAddress);
+        bytes memory functionCallLength = abi.encodePacked(bytes4(_functionCall.length));
 
         bytes memory addressAndLength = BytesLib.concat(toAddressBytes, functionCallLength);
-        bytes memory addressAndLengthAndCall = BytesLib.concat(addressAndLength, functionCall);
+        bytes memory addressAndLengthAndCall = BytesLib.concat(addressAndLength, _functionCall);
 
         return addressAndLengthAndCall;
     }

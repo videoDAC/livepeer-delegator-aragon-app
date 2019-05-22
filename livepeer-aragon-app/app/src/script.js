@@ -17,6 +17,7 @@ const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
 const api = new AragonApi()
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
+//TODO: Add retryEvery function
 //TODO: Add rebond functions.
 //TODO: Add withdraw fees function.
 //TODO: Rearrange UI, make actions appear in slide in menu.
