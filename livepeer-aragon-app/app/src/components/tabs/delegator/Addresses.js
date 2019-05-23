@@ -32,8 +32,6 @@ const ChangeControllerButton = styled(Button)`
 const Addresses = ({handleNewController, appState}) => {
     const {appAddress, livepeerTokenAddress, livepeerControllerAddress} = appState
 
-    const [newController, setNewController] = useState(0)
-
     return (
         <AddressContainer>
 
@@ -52,13 +50,8 @@ const Addresses = ({handleNewController, appState}) => {
                 <Text.Block size="normal">{livepeerControllerAddress}</Text.Block>
             </AddressCard>
 
-            {/*<NewController label="New Controller:">*/}
-                {/*<TextInput type="text" wide*/}
-                           {/*onChange={event => setNewController(event.target.value)}/>*/}
-            {/*</NewController>*/}
-
-            {/*<ChangeControllerButton mode="strong" onClick={() => handleNewController(newController)}>Set Livepeer*/}
-                {/*Controller</ChangeControllerButton>*/}
+            <ChangeControllerButton mode="strong" onClick={() => handleNewController()}>Set Livepeer
+                Controller</ChangeControllerButton>
 
         </AddressContainer>
     )

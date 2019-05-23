@@ -15,12 +15,6 @@ const TextDetails = styled.div`
     width: 600px;
     margin-bottom: 20px;
 `
-const TextLabel = styled(Text)`
-
-`
-const TextData = styled(Text)`
-
-`
 
 const Account = ({appState, handleTransferIn, handleTransferOut}) => {
 

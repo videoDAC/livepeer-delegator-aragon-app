@@ -25,6 +25,7 @@ const InputField = ({inputFieldLabel, onChange}) => {
     )
 }
 
+// inputFieldList must represent the arguments to handleSubmit and be specified in the same order.
 const GenericInputPanel = ({actionTitle, actionDescription, inputFieldList, submitLabel, handleSubmit}) => {
 
     const [inputFieldData, setInputFieldData] = useState({})

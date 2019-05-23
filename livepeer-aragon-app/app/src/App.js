@@ -24,6 +24,7 @@ import DeclareTranscoder from "./components/side-panel-input/transcoder/DeclareT
 import SetServiceUri from "./components/side-panel-input/transcoder/SetServiceUri";
 import Account from "./components/tabs/account/Account";
 import GenericInputPanel from "./components/side-panel-input/GenericInputPanel";
+import Settings from "./components/tabs/settings/Settings";
 
 const AppContainer = styled(AppView)`
     display: flex;
@@ -37,7 +38,10 @@ function App() {
     const [tabBarSelected, setTabBarSelected] = useState(0)
     const [sidePanel, setSidePanel] = useState(undefined)
 
-    const setController = (address) => setLivepeerController(api, address)
+    const setController = (address) => {
+        setSidePanel(undefined)
+        setLivepeerController(api, address)
+    }
 
     const transferTokensIn = (amount) => {
         setSidePanel(undefined)
@@ -96,7 +100,7 @@ function App() {
                                    handleSubmit={transferTokensIn}/>
             )
         },
-        TRANSFER_OUT:{
+        TRANSFER_OUT: {
             title: 'Transfer Livepeer Tokens Out',
             sidePanelComponent: (
                 <GenericInputPanel actionTitle={'Transfer Action'}
@@ -104,6 +108,16 @@ function App() {
                                    inputFieldList={[{label: "address"}, {label: "amount"}]}
                                    submitLabel={'Transfer Out'}
                                    handleSubmit={transferTokensOut}/>
+            )
+        },
+        CHANGE_CONTROLLER: {
+            title: 'Change the Livepeer Controller',
+            sidePanelComponent: (
+                <GenericInputPanel actionTitle={'Set Controller Action'}
+                                   actionDescription={'This action will change the Livepeer Controller which is responsible for defining the addresses of the Livepeer Contracts'}
+                                   inputFieldList={[{label: "address"}]}
+                                   submitLabel={'Change controller'}
+                                   handleSubmit={setController}/>
             )
         }
     }
@@ -143,7 +157,10 @@ function App() {
         },
         {
             tabName: "Settings",
-            tabComponent: (<div/>)
+            tabComponent: (
+                <Settings appState={appState}
+                          handleNewController={() => setSidePanel(sidePanels.CHANGE_CONTROLLER)}
+                />)
         }
     ]
     const tabsNames = tabs.map(tab => tab.tabName)
