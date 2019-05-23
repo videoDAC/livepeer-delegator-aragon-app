@@ -20,8 +20,10 @@ import {
 
 import Delegator from "./components/tabs/delegator/Delegator"
 import Transcoder from "./components/tabs/transcoder/Transcoder";
-import DeclareTranscoder from "./components/side-panel/DeclareTranscoder";
-import SetServiceUri from "./components/side-panel/SetServiceUri";
+import DeclareTranscoder from "./components/side-panel-input/transcoder/DeclareTranscoder";
+import SetServiceUri from "./components/side-panel-input/transcoder/SetServiceUri";
+import Account from "./components/tabs/account/Account";
+import GenericInputPanel from "./components/side-panel-input/GenericInputPanel";
 
 const AppContainer = styled(AppView)`
     display: flex;
@@ -37,9 +39,15 @@ function App() {
 
     const setController = (address) => setLivepeerController(api, address)
 
-    const transferTokensIn = (amount) => transferToApp(api, amount)
+    const transferTokensIn = (amount) => {
+        setSidePanel(undefined)
+        transferToApp(api, amount)
+    }
 
-    const transferTokensOut = (toAddress, amount) => transferFromApp(api, toAddress, amount)
+    const transferTokensOut = (toAddress, amount) => {
+        setSidePanel(undefined)
+        transferFromApp(api, toAddress, amount)
+    }
 
     const approveTokens = (approveTokenCount) => livepeerTokenApprove(api, approveTokenCount)
 
@@ -77,6 +85,26 @@ function App() {
             sidePanelComponent: (
                 <SetServiceUri handleSetServiceUri={setServiceUri}/>
             )
+        },
+        TRANSFER_IN: {
+            title: 'Transfer Livepeer Tokens In',
+            sidePanelComponent: (
+                <GenericInputPanel actionTitle={'Transfer Action'}
+                                   actionDescription={'This action will transfer the specified amount of Livepeer Tokens (LPT) from your wallet to the Livepeer App.'}
+                                   inputFieldList={[{label: "amount"}]}
+                                   submitLabel={'Transfer In'}
+                                   handleSubmit={transferTokensIn}/>
+            )
+        },
+        TRANSFER_OUT:{
+            title: 'Transfer Livepeer Tokens Out',
+            sidePanelComponent: (
+                <GenericInputPanel actionTitle={'Transfer Action'}
+                                   actionDescription={'This action will transfer the specified amount of Livepeer Tokens (LPT) from the Livepeer App to the address specified.'}
+                                   inputFieldList={[{label: "address"}, {label: "amount"}]}
+                                   submitLabel={'Transfer Out'}
+                                   handleSubmit={transferTokensOut}/>
+            )
         }
     }
 
@@ -104,6 +132,18 @@ function App() {
                             handleTranscoderReward={transcoderReward}
                             handleSetServiceUri={() => setSidePanel(sidePanels.SET_SERVICE_URI)}
                 />)
+        },
+        {
+            tabName: "Account",
+            tabComponent: (
+                <Account appState={appState}
+                         handleTransferIn={() => setSidePanel(sidePanels.TRANSFER_IN)}
+                         handleTransferOut={() => setSidePanel(sidePanels.TRANSFER_OUT)}
+                />)
+        },
+        {
+            tabName: "Settings",
+            tabComponent: (<div/>)
         }
     ]
     const tabsNames = tabs.map(tab => tab.tabName)

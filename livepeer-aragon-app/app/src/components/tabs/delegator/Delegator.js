@@ -1,5 +1,5 @@
 import Addresses from "./Addresses";
-import LivepeerBalance from "./LivepeerTokenBalance";
+import LivepeerBalance from "../account/LivepeerTokenBalance";
 import ApproveTokens from "./ApproveTokens";
 import BondTokens from "./BondTokens";
 import UnbondTokens from "./UnbondTokens";
