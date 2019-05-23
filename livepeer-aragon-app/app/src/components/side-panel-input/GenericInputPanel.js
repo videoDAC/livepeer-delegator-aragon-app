@@ -10,11 +10,11 @@ const InfoContainer = styled(Info.Action)`
     margin-bottom: 20px;
 `
 
-const InputField = ({inputFieldLabel, onChange}) => {
+const InputField = ({id, inputFieldLabel, onChange}) => {
 
     const handleChange = event => {
         const text = event.target.value;
-        onChange(inputFieldLabel, text);
+        onChange(id, text);
     }
 
     return (
@@ -25,7 +25,7 @@ const InputField = ({inputFieldLabel, onChange}) => {
     )
 }
 
-// inputFieldList must represent the arguments to handleSubmit and be specified in the same order.
+// inputFieldList must represent the arguments to handleSubmit and id's must be in the order of the arguments
 const GenericInputPanel = ({actionTitle, actionDescription, inputFieldList, submitLabel, handleSubmit}) => {
 
     const [inputFieldData, setInputFieldData] = useState({})
@@ -35,11 +35,18 @@ const GenericInputPanel = ({actionTitle, actionDescription, inputFieldList, subm
     }
 
     const inputFields = inputFieldList.map(inputField => (
-        <InputField key={inputField.label}
+        <InputField key={inputField.id}
+                    id={inputField.id}
                     inputFieldLabel={inputField.label}
+                    inputFieldType={inputField.type}
                     onChange={handleFieldChange}
         />
     ));
+
+
+    const sortedInputFieldData = () => Object.fromEntries(
+        Object.entries(inputFieldData).sort( (a,b) => a[0] - b[0] )
+    )
 
     return (
         <PanelContainer>
@@ -50,7 +57,10 @@ const GenericInputPanel = ({actionTitle, actionDescription, inputFieldList, subm
 
             {inputFields}
 
-            <Button mode="strong" onClick={() => handleSubmit(...Object.values(inputFieldData))}>
+            <Button mode="strong" onClick={() => {
+                console.log(sortedInputFieldData())
+                handleSubmit(...Object.values(sortedInputFieldData()))
+            }}>
                 {submitLabel}
             </Button>
         </PanelContainer>

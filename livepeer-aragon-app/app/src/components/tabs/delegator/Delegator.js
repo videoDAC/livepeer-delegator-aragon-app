@@ -1,4 +1,4 @@
-import BondTokens from "./BondTokens";
+import DelegatedStake from "./DelegatedStake";
 import UnbondTokens from "./UnbondTokens";
 import React from "react";
 import styled from "styled-components";
@@ -15,8 +15,9 @@ const Delegator = ({appState, bondTokens, approveAndBondTokens, unbondTokens, cl
         <div>
             <BondBalanceApprovalContainer>
 
-                <BondTokens appState={appState} handleBondTokens={bondTokens}
-                            handleApproveAndBond={approveAndBondTokens}/>
+                <DelegatedStake appState={appState} handleBondTokens={bondTokens}
+                                handleApproveAndBond={approveAndBondTokens}
+                                handleUnbondTokens={unbondTokens}/>
 
             </BondBalanceApprovalContainer>
 

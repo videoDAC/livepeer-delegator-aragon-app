@@ -5,10 +5,8 @@ import {useAragonApi} from '@aragon/api-react'
 
 import {
     setLivepeerController,
-    livepeerTokenApprove,
     transferFromApp,
     transferToApp,
-    bondingManagerBond,
     approveAndBond,
     bondingManagerUnbond,
     bondingManagerWithdraw,
@@ -16,15 +14,15 @@ import {
     bondingManagerDeclareTranscoder,
     bondingManagerTranscoderReward,
     serviceRegistrySetServiceUri
-} from "../web3/LivepeerApp"
+} from '../web3/LivepeerApp'
 
-import Delegator from "./components/tabs/delegator/Delegator"
-import Transcoder from "./components/tabs/transcoder/Transcoder";
-import DeclareTranscoder from "./components/side-panel-input/transcoder/DeclareTranscoder";
-import SetServiceUri from "./components/side-panel-input/transcoder/SetServiceUri";
-import Account from "./components/tabs/account/Account";
-import GenericInputPanel from "./components/side-panel-input/GenericInputPanel";
-import Settings from "./components/tabs/settings/Settings";
+import Delegator from './components/tabs/delegator/Delegator'
+import Transcoder from './components/tabs/transcoder/Transcoder';
+import DeclareTranscoder from './components/side-panel-input/transcoder/DeclareTranscoder';
+import SetServiceUri from './components/side-panel-input/transcoder/SetServiceUri';
+import Account from './components/tabs/account/Account';
+import GenericInputPanel from './components/side-panel-input/GenericInputPanel';
+import Settings from './components/tabs/settings/Settings';
 
 const AppContainer = styled(AppView)`
     display: flex;
@@ -53,13 +51,15 @@ function App() {
         transferFromApp(api, toAddress, amount)
     }
 
-    const approveTokens = (approveTokenCount) => livepeerTokenApprove(api, approveTokenCount)
+    const approveAndBondTokens = (tokenCount, bondToAddress) => {
+        setSidePanel(undefined)
+        approveAndBond(api, tokenCount, bondToAddress)
+    }
 
-    const bondTokens = (tokenCount, bondToAddress) => bondingManagerBond(api, tokenCount, bondToAddress)
-
-    const approveAndBondTokens = (tokenCount, bondToAddress) => approveAndBond(api, tokenCount, bondToAddress)
-
-    const unbondTokens = (tokenCount) => bondingManagerUnbond(api, tokenCount)
+    const unbondTokens = (tokenCount) => {
+        setSidePanel(undefined)
+        bondingManagerUnbond(api, tokenCount)
+    }
 
     const claimEarnings = (upToRound) => bondingManagerClaimEarnings(api, upToRound)
 
@@ -78,6 +78,32 @@ function App() {
     }
 
     const sidePanels = {
+        APPROVE_AND_BOND: {
+            title: 'Approve and Bond',
+            sidePanelComponent: (
+                <GenericInputPanel actionTitle={'Approve And Bond Action'}
+                                   actionDescription={`This action will approve the specified number of Livepeer tokens on
+                                    the Livepeer Token contract then bond them to the specified address. To change the address
+                                    bonded too, set the amount to 0 and specify the new address.`}
+                                   inputFieldList={[
+                                       {id: 1, label: 'token amount', type: 'number'},
+                                       {id: 2, label: 'bond to address', type: 'text'}]}
+                                   submitLabel={'Approve and Bond'}
+                                   handleSubmit={approveAndBondTokens}/>
+            )
+        },
+        UNBOND: {
+            title: 'Unbond Tokens',
+            sidePanelComponent: (
+                <GenericInputPanel actionTitle={'Unbond Action'}
+                                   actionDescription={`This action will unbond the specified number of tokens, creating an
+                                    unbonding lock which can be withdrawn at a later time.`}
+                                   inputFieldList={[
+                                       {id: 1, label: 'token amount', type: 'number'}]}
+                                   submitLabel={'Unbond'}
+                                   handleSubmit={unbondTokens}/>
+            )
+        },
         DECLARE_TRANSCODER: {
             title: 'Declare Transcoder',
             sidePanelComponent: (
@@ -91,21 +117,26 @@ function App() {
             )
         },
         TRANSFER_IN: {
-            title: 'Transfer Livepeer Tokens In',
+            title: 'Transfer Livepeer Tokens To App',
             sidePanelComponent: (
                 <GenericInputPanel actionTitle={'Transfer Action'}
-                                   actionDescription={'This action will transfer the specified amount of Livepeer Tokens (LPT) from your wallet to the Livepeer App.'}
-                                   inputFieldList={[{label: "amount"}]}
+                                   actionDescription={`This action will transfer the specified amount of Livepeer Tokens
+                                                       (LPT) from your wallet to the Livepeer App.`}
+                                   inputFieldList={[
+                                       {id: 1, label: 'amount', type: 'number'}]}
                                    submitLabel={'Transfer In'}
                                    handleSubmit={transferTokensIn}/>
             )
         },
         TRANSFER_OUT: {
-            title: 'Transfer Livepeer Tokens Out',
+            title: 'Transfer Livepeer Tokens From App',
             sidePanelComponent: (
                 <GenericInputPanel actionTitle={'Transfer Action'}
-                                   actionDescription={'This action will transfer the specified amount of Livepeer Tokens (LPT) from the Livepeer App to the address specified.'}
-                                   inputFieldList={[{label: "address"}, {label: "amount"}]}
+                                   actionDescription={`This action will transfer the specified amount of Livepeer Tokens
+                                    (LPT) from the Livepeer App to the address specified.`}
+                                   inputFieldList={[
+                                       {id: 1, label: 'address', type: 'text'},
+                                       {id: 2, label: 'amount', type: 'number'}]}
                                    submitLabel={'Transfer Out'}
                                    handleSubmit={transferTokensOut}/>
             )
@@ -114,8 +145,10 @@ function App() {
             title: 'Change the Livepeer Controller',
             sidePanelComponent: (
                 <GenericInputPanel actionTitle={'Set Controller Action'}
-                                   actionDescription={'This action will change the Livepeer Controller which is responsible for defining the addresses of the Livepeer Contracts'}
-                                   inputFieldList={[{label: "address"}]}
+                                   actionDescription={`This action will change the Livepeer Controller which is responsible
+                                    for defining the addresses of the Livepeer Contracts`}
+                                   inputFieldList={[
+                                       {id: 1, label: 'address', type: 'text'}]}
                                    submitLabel={'Change controller'}
                                    handleSubmit={setController}/>
             )
@@ -124,17 +157,17 @@ function App() {
 
     const tabs = [
         {
-            tabName: "Delegator",
+            tabName: 'Delegator',
             tabComponent: (
                 <Delegator appState={appState}
-                           approveAndBondTokens={approveAndBondTokens}
-                           unbondTokens={unbondTokens}
+                           approveAndBondTokens={() => setSidePanel(sidePanels.APPROVE_AND_BOND)}
+                           unbondTokens={() => setSidePanel(sidePanels.UNBOND)}
                            claimEarnings={claimEarnings}
                            withdrawTokens={withdrawTokens}
                 />)
         },
         {
-            tabName: "Transcoder",
+            tabName: 'Transcoder',
             tabComponent: (
                 <Transcoder appState={appState}
                             handleDeclareTranscoder={() => setSidePanel(sidePanels.DECLARE_TRANSCODER)}
@@ -143,7 +176,7 @@ function App() {
                 />)
         },
         {
-            tabName: "Account",
+            tabName: 'Account',
             tabComponent: (
                 <Account appState={appState}
                          handleTransferIn={() => setSidePanel(sidePanels.TRANSFER_IN)}
@@ -151,7 +184,7 @@ function App() {
                 />)
         },
         {
-            tabName: "Settings",
+            tabName: 'Settings',
             tabComponent: (
                 <Settings appState={appState}
                           handleNewController={() => setSidePanel(sidePanels.CHANGE_CONTROLLER)}
@@ -164,7 +197,7 @@ function App() {
 
     return (
         <Main>
-            <AppContainer title="Livepeer"
+            <AppContainer title='Livepeer'
                           tabs={<TabBar
                               items={tabsNames}
                               selected={tabBarSelected}
@@ -174,7 +207,7 @@ function App() {
                 {selectedTabComponent}
             </AppContainer>
 
-            <SidePanel title={sidePanel ? sidePanel.title : ""} opened={sidePanel !== undefined}
+            <SidePanel title={sidePanel ? sidePanel.title : ''} opened={sidePanel !== undefined}
                        onClose={() => setSidePanel(undefined)}>
                 {sidePanel ? sidePanel.sidePanelComponent : <div/>}
             </SidePanel>

@@ -79,14 +79,14 @@ const TranscoderDetails = ({appState}) => {
         <div>
             <TopDetailsContainer>
                 <DetailContainerLeft>
-                    <Text.Block weight="bold" size="normal">Total stake</Text.Block>
+                    <Text.Block size="normal">Total stake</Text.Block>
                     <DetailCard>
                         <InnerText size="normal">{`${totalStake} LPT`}</InnerText>
                     </DetailCard>
                 </DetailContainerLeft>
 
                 <DetailContainerRight>
-                    <Text.Block weight="bold" size="normal">Service URI</Text.Block>
+                    <Text.Block size="normal">Service URI</Text.Block>
                     <DetailCard>
                         <InnerText size="normal">{serviceUri}</InnerText>
                     </DetailCard>
@@ -98,14 +98,14 @@ const TranscoderDetails = ({appState}) => {
 
                 <DetailsRowContainer>
                     <DetailContainerLeft>
-                        <Text.Block weight="bold" size="normal">Status</Text.Block>
+                        <Text.Block size="normal">Status</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{status}</InnerText>
                         </DetailCard>
                     </DetailContainerLeft>
 
                     <DetailContainerRight>
-                        <Text.Block weight="bold" size="normal">Active</Text.Block>
+                        <Text.Block size="normal">Active</Text.Block>
                         <DetailCard>
                             <InnerText size="normal"
                                        style={{textTransform: 'capitalize'}}>{active.toString()}</InnerText>
@@ -115,14 +115,14 @@ const TranscoderDetails = ({appState}) => {
 
                 <DetailsRowContainer>
                     <DetailContainerLeft>
-                        <Text.Block weight="bold" size="normal">Reward cut</Text.Block>
+                        <Text.Block size="normal">Reward cut</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{rewardCutString}</InnerText>
                         </DetailCard>
                     </DetailContainerLeft>
 
                     <DetailContainerRight>
-                        <Text.Block weight="bold" size="normal">Fee share</Text.Block>
+                        <Text.Block size="normal">Fee share</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{feeShareString}</InnerText>
                         </DetailCard>
@@ -131,14 +131,14 @@ const TranscoderDetails = ({appState}) => {
 
                 <DetailsRowContainer>
                     <DetailContainerLeft>
-                        <Text.Block weight="bold" size="normal">Price per segment</Text.Block>
+                        <Text.Block size="normal">Price per segment</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{pricePerSegmentString}</InnerText>
                         </DetailCard>
                     </DetailContainerLeft>
 
                     <DetailContainerRight>
-                        <Text.Block weight="bold" size="normal">Last reward round (current: {currentRound})</Text.Block>
+                        <Text.Block size="normal">Last reward round (current: {currentRound})</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{lastRewardRound}</InnerText>
                         </DetailCard>
