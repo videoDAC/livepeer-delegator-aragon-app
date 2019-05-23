@@ -6,11 +6,6 @@ const TokenTransferContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-bottom: 30px;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    border-color: rgb(179,179,179);
-    padding: 10px; 
 `
 const TextContainer = styled(Text.Block)`
     margin-bottom: 10px;

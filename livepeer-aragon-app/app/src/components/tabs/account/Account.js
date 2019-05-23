@@ -1,45 +1,63 @@
 import React from 'react'
 import styled from "styled-components";
-import {Text} from "@aragon/ui"
+import {Text, Card, Button} from "@aragon/ui"
 import TokenTransfer from "./TokenTransfer";
 
 const AccountContainer = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 `
-const TextDetails = styled.div`
+const AccountInnerContainer = styled.div`
+    display:flex;
+    flex-direction: column;
+`
+const DetailsCard = styled(Card)`
+    padding: 10px;
+    height: auto;
+    margin-top: 10px;
+    margin-bottom: 35px;
+    width: auto;
+`
+const AppBalanceDetailsCard = styled(Card)`
+    padding: 10px;
+    height: auto;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    width: auto;
+`
+const ButtonsContainer = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    width: 600px;
-    margin-bottom: 20px;
+`
+const TransferButton = styled(Button)`
+    margin-right: 20px;
 `
 
 const Account = ({appState, handleTransferIn, handleTransferOut}) => {
 
-    const { appAddress, appsLptBalance, userLptBalance } = appState
+    const {appAddress, appsLptBalance, userLptBalance} = appState
 
     return (
         <AccountContainer>
+            <AccountInnerContainer>
 
-            <TextDetails>
-                <Text>Livepeer App Address: </Text>
-                <Text>{appAddress}</Text>
-            </TextDetails>
+                <Text.Block size="normal">Livepeer App Address</Text.Block>
+                <DetailsCard>
+                    <Text.Block size="normal">{appAddress}</Text.Block>
+                </DetailsCard>
 
-            <TextDetails>
-                <Text>Livepeer App Balance: </Text>
-                <Text>{appsLptBalance}</Text>
-            </TextDetails>
+                <Text.Block size="normal">Livepeer App Balance</Text.Block>
+                <AppBalanceDetailsCard>
+                    <Text.Block size="normal">{`${appsLptBalance} LPT`}</Text.Block>
+                </AppBalanceDetailsCard>
 
-            <TextDetails>
-                <Text>Your Balance: </Text>
-                <Text>{userLptBalance}</Text>
-            </TextDetails>
+                <ButtonsContainer>
+                    <TransferButton mode="strong" onClick={() => handleTransferIn()}>Transfer To App</TransferButton>
+                    <Button mode="strong" onClick={() => handleTransferOut()}>Transfer From App</Button>
+                </ButtonsContainer>
 
-            <TokenTransfer appState={appState} handleTransferIn={handleTransferIn}
-                           handleTransferOut={handleTransferOut}/>
+            </AccountInnerContainer>
 
         </AccountContainer>
     )

@@ -127,11 +127,6 @@ function App() {
             tabName: "Delegator",
             tabComponent: (
                 <Delegator appState={appState}
-                           setController={setController}
-                           transferTokensIn={transferTokensIn}
-                           transferTokensOut={transferTokensOut}
-                           approveTokens={approveTokens}
-                           bondTokens={bondTokens}
                            approveAndBondTokens={approveAndBondTokens}
                            unbondTokens={unbondTokens}
                            claimEarnings={claimEarnings}

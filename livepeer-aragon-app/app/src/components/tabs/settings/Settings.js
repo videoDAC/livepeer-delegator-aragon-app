@@ -5,27 +5,28 @@ import styled from 'styled-components'
 const SettingsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 `
-const SettingsBorder = styled.div`
+const SettingsInnerContainer = styled.div`
     display: flex;
     flex-direction: column;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    border-color: rgb(179,179,179);
-    padding: 10px; 
 `
 const AddressCard = styled(Card)`
     padding: 10px;
     height: auto;
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 35px;
     width: auto;
 `
-const ChangeControllerButton = styled(Button)`
+const ControllerAddressCard = styled(Card)`
+    padding: 10px;
+    height: auto;
     margin-top: 10px;
-    margin-bottom: 4px;
+    margin-bottom: 15px;
+    width: auto;
+`
+const ButtonContainer = styled.div`
+    display: flex;
 `
 
 const Settings = ({handleNewController, appState}) => {
@@ -33,7 +34,7 @@ const Settings = ({handleNewController, appState}) => {
 
     return (
         <SettingsContainer>
-            <SettingsBorder>
+            <SettingsInnerContainer>
 
                 <Text.Block size="normal">Livepeer App Address</Text.Block>
                 <AddressCard>
@@ -46,15 +47,18 @@ const Settings = ({handleNewController, appState}) => {
                 </AddressCard>
 
                 <Text.Block size="normal">Livepeer Controller Address</Text.Block>
-                <AddressCard>
+                <ControllerAddressCard>
                     <Text.Block size="normal">{livepeerControllerAddress}</Text.Block>
-                </AddressCard>
+                </ControllerAddressCard>
 
-                <ChangeControllerButton mode="strong" onClick={() => handleNewController()}>
-                    Change Livepeer Controller
-                </ChangeControllerButton>
+                <ButtonContainer>
+                    <Button mode="strong" onClick={() => handleNewController()}>
+                        Change Livepeer Controller
+                    </Button>
+                </ButtonContainer>
 
-            </SettingsBorder>
+            </SettingsInnerContainer>
+
         </SettingsContainer>
     )
 }
