@@ -104,6 +104,18 @@ function App() {
                                    handleSubmit={unbondTokens}/>
             )
         },
+        CLAIM_EARNINGS: {
+            title: 'Claim Earnings',
+            sidePanelComponent: (
+                <GenericInputPanel actionTitle={'Claim Earnings'}
+                                   actionDescription={`This action will claim earnings up to the specified round. This is necessary
+                                   when unbonding is not possible due to not having called claim earnings for some time.`}
+                                   inputFieldList={[
+                                       {id: 1, label: 'up to round', type: 'number'}]}
+                                   submitLabel={'Claim Earnings'}
+                                   handleSubmit={claimEarnings}/>
+            )
+        },
         DECLARE_TRANSCODER: {
             title: 'Declare Transcoder',
             sidePanelComponent: (
@@ -162,7 +174,7 @@ function App() {
                 <Delegator appState={appState}
                            approveAndBondTokens={() => setSidePanel(sidePanels.APPROVE_AND_BOND)}
                            unbondTokens={() => setSidePanel(sidePanels.UNBOND)}
-                           claimEarnings={claimEarnings}
+                           claimEarnings={() => setSidePanel(sidePanels.CLAIM_EARNINGS)}
                            withdrawTokens={withdrawTokens}
                 />)
         },

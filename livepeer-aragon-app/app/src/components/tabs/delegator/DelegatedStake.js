@@ -4,6 +4,9 @@ import styled from 'styled-components'
 
 const BondTokensContainer = styled.div`
     display: flex;
+`
+const BondTokensInnerContainer = styled.div`
+    display: flex;
     flex-direction: column;
     border-style: solid;
     border-width: 1px;
@@ -20,7 +23,7 @@ const BondedTokensCard = styled(Card)`
     padding: 10px;
     margin-top: 10px;
 `
-const BondButtonContainer = styled.div`
+const BondButtonsContainer = styled.div`
     display: flex;
     flex-direction: row;
     margin-top: 15px;
@@ -36,24 +39,26 @@ const DelegatedStake = ({handleApproveAndBond, handleUnbondTokens, appState}) =>
 
     return (
         <BondTokensContainer>
+            <BondTokensInnerContainer>
 
-            <Text.Block size="normal">Delegated Stake</Text.Block>
+                <Text.Block size="normal">Delegated Stake</Text.Block>
 
-            <BondedTokensCard>
-                <Text.Block>{totalStake} LPT bonded to {delegateAddress}</Text.Block>
-            </BondedTokensCard>
+                <BondedTokensCard>
+                    <Text.Block>{totalStake} LPT bonded to {delegateAddress}</Text.Block>
+                </BondedTokensCard>
 
-            <BondButtonContainer>
-                <ApproveAndBondButton mode="strong" onClick={() => handleApproveAndBond()}>
-                    Approve and bond to address
-                </ApproveAndBondButton>
+                <BondButtonsContainer>
+                    <ApproveAndBondButton mode="strong" onClick={() => handleApproveAndBond()}>
+                        Approve And Bond To Address
+                    </ApproveAndBondButton>
 
-                <Button mode="strong" disabled={disableUnbondTokens} onClick={() => handleUnbondTokens()}>
-                    Unbond tokens
-                </Button>
+                    <Button mode="strong" disabled={disableUnbondTokens} onClick={() => handleUnbondTokens()}>
+                        Unbond Tokens
+                    </Button>
 
-            </BondButtonContainer>
+                </BondButtonsContainer>
 
+            </BondTokensInnerContainer>
         </BondTokensContainer>
     )
 }

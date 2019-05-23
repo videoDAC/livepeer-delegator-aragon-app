@@ -1,30 +1,22 @@
 import DelegatedStake from "./DelegatedStake";
 import UnbondTokens from "./UnbondTokens";
 import React from "react";
-import styled from "styled-components";
-
-const BondBalanceApprovalContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-`
+import ClaimedEarnings from "./ClaimedEarnings";
 
 const Delegator = ({appState, bondTokens, approveAndBondTokens, unbondTokens, claimEarnings, withdrawTokens}) => {
     return (
-        <div>
-            <BondBalanceApprovalContainer>
+        <>
+            <DelegatedStake appState={appState} handleBondTokens={bondTokens}
+                            handleApproveAndBond={approveAndBondTokens}
+                            handleUnbondTokens={unbondTokens}/>
 
-                <DelegatedStake appState={appState} handleBondTokens={bondTokens}
-                                handleApproveAndBond={approveAndBondTokens}
-                                handleUnbondTokens={unbondTokens}/>
-
-            </BondBalanceApprovalContainer>
+            <ClaimedEarnings appState={appState}
+                             handleClaimEarnings={claimEarnings}/>
 
             <UnbondTokens appState={appState} handleUnbondTokens={unbondTokens}
                           handleClaimEarnings={claimEarnings}
                           handleWithdrawTokens={withdrawTokens}/>
-        </div>
+        </>
     )
 }
 
