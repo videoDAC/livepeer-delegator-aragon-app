@@ -33,6 +33,7 @@ contract LivepeerAragonApp is Agent {
     bytes32 public constant APPROVE_AND_BOND_ROLE = keccak256("APPROVE_AND_BOND_ROLE");
     bytes32 public constant CLAIM_EARNINGS_ROLE = keccak256("CLAIM_EARNINGS_ROLE");
     bytes32 public constant UNBOND_ROLE = keccak256("UNBOND_ROLE");
+    bytes32 public constant REBOND_ROLE = keccak256("REBOND_ROLE");
     bytes32 public constant WITHDRAW_STAKE_ROLE = keccak256("WITHDRAW_STAKE_ROLE");
     bytes32 public constant DECLARE_TRANSCODER_ROLE = keccak256("DECLARE_TRANSCODER_ROLE");
     bytes32 public constant REWARD_ROLE = keccak256("REWARD_ROLE");
@@ -46,6 +47,8 @@ contract LivepeerAragonApp is Agent {
     event LivepeerAragonAppBond(uint256 amount, address to);
     event LivepeerAragonAppEarnings(uint256 upToRound);
     event LivepeerAragonAppUnbond(uint256 amount);
+    event LivepeerAragonAppRebond(uint256 unbondingLockId);
+    event LivepeerAragonAppRebondFromUnbonded(address to, uint256 unbondingLockId);
     event LivepeerAragonAppWithdrawStake(uint256 unbondingLockId);
     event LivepeerAragonAppDeclareTranscoder(uint256 rewardCut, uint256 feeShare, uint256 pricePerSegment);
     event LivepeerAragonAppReward();
@@ -159,6 +162,36 @@ contract LivepeerAragonApp is Agent {
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _amount);
 
         emit LivepeerAragonAppUnbond(_amount);
+
+        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+    }
+
+    /**
+    * @notice Rebond unbonding lock with ID `_unbondingLockId`
+    * @param _unbondingLockId The unbonding lock Id
+    */
+    function rebond(uint256 _unbondingLockId) external auth(REBOND_ROLE) {
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
+
+        string memory functionSignature = "rebond(uint256)";
+        bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _unbondingLockId);
+
+        emit LivepeerAragonAppRebond(_unbondingLockId);
+
+        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+    }
+
+    /**
+    * @notice Rebond unbonding lock with ID `_unbondingLockId` to `_to`
+    * @param _unbondingLockId The unbonding lock Id
+    */
+    function rebondFromUnbonded(address _to, uint256 _unbondingLockId) external auth(REBOND_ROLE) {
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
+
+        string memory functionSignature = "rebondFromUnbonded(address,uint256)";
+        bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _to, _unbondingLockId);
+
+        emit LivepeerAragonAppRebondFromUnbonded(_to, _unbondingLockId);
 
         _execute(bondingManagerAddress, 0, encodedFunctionCall);
     }

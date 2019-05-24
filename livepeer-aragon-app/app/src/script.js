@@ -33,7 +33,10 @@ const initialState = async (state) => {
         appsLptBalance: await appLptBalance$().toPromise(),
         appApprovedTokens: await appApprovedTokens$().toPromise(),
         currentRound: await currentRound$().toPromise(),
-        delegatorInfo: await delegatorInfo$().toPromise(),
+        delegatorInfo: {
+            ...await delegatorInfo$().toPromise(),
+            delegatorStatus: await delegatorStatus$().toPromise()
+        },
         disableUnbondTokens: await disableUnbondTokens$().toPromise(),
         unbondingLockInfos: await unbondingLockInfos$().toPromise(),
         transcoder: {
@@ -96,7 +99,10 @@ const onNewEvent = async (state, storeEvent) => {
                 ...state,
                 appApprovedTokens: await appApprovedTokens$().toPromise(),
                 appsLptBalance: await appLptBalance$().toPromise(),
-                delegatorInfo: await delegatorInfo$().toPromise(),
+                delegatorInfo: {
+                    ...await delegatorInfo$().toPromise(),
+                    delegatorStatus: await delegatorStatus$().toPromise()
+                },
                 disableUnbondTokens: await disableUnbondTokens$().toPromise(),
                 transcoder: {
                     ...state.transcoder,
@@ -113,7 +119,25 @@ const onNewEvent = async (state, storeEvent) => {
             console.log("UNBOND")
             return {
                 ...state,
-                delegatorInfo: await delegatorInfo$().toPromise(),
+                delegatorInfo: {
+                    ...await delegatorInfo$().toPromise(),
+                    delegatorStatus: await delegatorStatus$().toPromise()
+                },
+                unbondingLockInfos: await unbondingLockInfos$().toPromise(),
+                transcoder: {
+                    ...state.transcoder,
+                    ...await transcoderDetails$().toPromise()
+                }
+            }
+        case 'LivepeerAragonAppRebond':
+        case 'LivepeerAragonAppRebondFromUnbonded':
+            console.log("REBOND")
+            return {
+                ...state,
+                delegatorInfo: {
+                    ...await delegatorInfo$().toPromise(),
+                    delegatorStatus: await delegatorStatus$().toPromise()
+                },
                 unbondingLockInfos: await unbondingLockInfos$().toPromise(),
                 transcoder: {
                     ...state.transcoder,
@@ -252,6 +276,11 @@ const delegatorInfo$ = () =>
                     lastClaimRound: delegator.lastClaimRound,
                     pendingStake: pendingStake}
             }))))
+
+const delegatorStatus$ = () =>
+    bondingManager$(api).pipe(
+        mergeMap(bondingManager => bondingManager.delegatorStatus(livepeerAppAddress)))
+
 
 const mapBondingManagerToLockInfo = bondingManager =>
     bondingManager.getDelegator(livepeerAppAddress).pipe(

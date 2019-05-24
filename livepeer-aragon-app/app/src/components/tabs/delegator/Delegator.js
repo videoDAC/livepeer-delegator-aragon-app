@@ -3,18 +3,18 @@ import UnbondTokens from "./UnbondTokens";
 import React from "react";
 import ClaimedEarnings from "./ClaimedEarnings";
 
-const Delegator = ({appState, bondTokens, approveAndBondTokens, unbondTokens, claimEarnings, withdrawTokens}) => {
+const Delegator = ({appState, approveAndBondTokens, unbondTokens, rebondTokens, claimEarnings, withdrawTokens}) => {
     return (
         <>
-            <DelegatedStake appState={appState} handleBondTokens={bondTokens}
+            <DelegatedStake appState={appState}
                             handleApproveAndBond={approveAndBondTokens}
                             handleUnbondTokens={unbondTokens}/>
 
             <ClaimedEarnings appState={appState}
                              handleClaimEarnings={claimEarnings}/>
 
-            <UnbondTokens appState={appState} handleUnbondTokens={unbondTokens}
-                          handleClaimEarnings={claimEarnings}
+            <UnbondTokens appState={appState}
+                          handleRebondTokens={rebondTokens}
                           handleWithdrawTokens={withdrawTokens}/>
         </>
     )

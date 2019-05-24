@@ -6,16 +6,6 @@
       "params": []
     },
     {
-      "name": "Approve tokens",
-      "id": "APPROVE_ROLE",
-      "params": []
-    },
-    {
-      "name": "Bond to address",
-      "id": "BOND_ROLE",
-      "params": []
-    },
-    {
       "name": "Approve and Bond to address",
       "id": "APPROVE_AND_BOND_ROLE",
       "params": []
@@ -28,6 +18,11 @@
     {
       "name": "Unbond",
       "id": "UNBOND_ROLE",
+      "params": []
+    },
+    {
+      "name": "Rebond",
+      "id": "REBOND_ROLE",
       "params": []
     },
     {

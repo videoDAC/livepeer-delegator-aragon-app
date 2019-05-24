@@ -10,7 +10,7 @@ const InfoContainer = styled(Info.Action)`
     margin-bottom: 20px;
 `
 
-const InputField = ({id, inputFieldLabel, onChange}) => {
+const InputField = ({id, inputFieldLabel, inputFieldType, onChange}) => {
 
     const handleChange = event => {
         const text = event.target.value;
@@ -19,7 +19,7 @@ const InputField = ({id, inputFieldLabel, onChange}) => {
 
     return (
         <Field label={inputFieldLabel}>
-            <TextInput type="text" wide
+            <TextInput type={inputFieldType} wide
                        onChange={handleChange}/>
         </Field>
     )

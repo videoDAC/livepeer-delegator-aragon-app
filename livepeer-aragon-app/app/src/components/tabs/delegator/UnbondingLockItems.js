@@ -6,43 +6,53 @@ const StyledTableCell = styled(TableCell)`
     width: 25%;
 `
 
-const UnbondingLockItem = props => {
-    return (
+const UnbondingLockItem = ({handleRebondTokens, handleWithdrawTokens, unbondingLockInfo}) => {
 
+    const {id, amount, withdrawRound, disableWithdraw} = unbondingLockInfo
+
+    const withdrawRoundCell = disableWithdraw ? withdrawRound :
+        (
+            <Button onClick={() => handleWithdrawTokens(id)}
+                    disabled={disableWithdraw} mode="strong">Withdraw tokens</Button>
+        )
+
+    return (
         <TableRow>
 
             <StyledTableCell>
-                {props.unbondingLockInfo.id}
+                {id}
             </StyledTableCell>
 
             <StyledTableCell>
-                {props.unbondingLockInfo.amount} LPT
+                {amount} LPT
             </StyledTableCell>
 
             <StyledTableCell>
-                {props.unbondingLockInfo.withdrawRound}
+                {withdrawRoundCell}
             </StyledTableCell>
 
             <StyledTableCell>
-                <Button onClick={() => props.handleWithdrawTokens(props.unbondingLockInfo.id)}
-                        disabled={props.unbondingLockInfo.disableWithdraw} mode="strong">Withdraw tokens</Button>
+                <Button onClick={() => handleRebondTokens(id)}
+                        mode="strong">Rebond Tokens</Button>
             </StyledTableCell>
 
         </TableRow>
     )
 }
 
-export default function UnbondingLockItems({unbondingLockInfos, handleWithdrawTokens, currentRound}) {
+export default function UnbondingLockItems({unbondingLockInfos, handleRebondTokens, handleWithdrawTokens, currentRound}) {
     return (
         <Table header={
             <TableRow>
-                <TableHeader title="Unbonding Lock ID"/>
+                <TableHeader title="Lock ID"/>
                 <TableHeader title="Livepeer Token Value"/>
                 <TableHeader title={`Withdraw Round (current: ${currentRound})`}/>
             </TableRow>
         }>
             {unbondingLockInfos.map(unbondingLockInfo =>
-                <UnbondingLockItem key={unbondingLockInfo.id} handleWithdrawTokens={handleWithdrawTokens}
+                <UnbondingLockItem key={unbondingLockInfo.id}
+                                   handleRebondTokens={handleRebondTokens}
+                                   handleWithdrawTokens={handleWithdrawTokens}
                                    unbondingLockInfo={unbondingLockInfo}/>)}
         </Table>
     )

@@ -9,6 +9,8 @@ import {
     transferToApp,
     approveAndBond,
     bondingManagerUnbond,
+    bondingManagerRebond,
+    bondingManagerRebondFromUnbonded,
     bondingManagerWithdraw,
     bondingManagerClaimEarnings,
     bondingManagerDeclareTranscoder,
@@ -23,6 +25,8 @@ import SetServiceUri from './components/side-panel-input/transcoder/SetServiceUr
 import Account from './components/tabs/account/Account';
 import GenericInputPanel from './components/side-panel-input/GenericInputPanel';
 import Settings from './components/tabs/settings/Settings';
+import RebondFromUnbonded from "./components/side-panel-input/RebondFromUnbonded";
+import {DELEGATOR_STATUS} from "./app-state-reducer";
 
 const AppContainer = styled(AppView)`
     display: flex;
@@ -61,6 +65,19 @@ function App() {
         bondingManagerUnbond(api, tokenCount)
     }
 
+    const rebondTokens = (unbondingLockId) => {
+        if (appState.delegatorInfo.delegatorStatus === DELEGATOR_STATUS.UNBONDED) {
+            setSidePanel(sidePanels.REBOND_FROM_UNBONDED(unbondingLockId))
+        } else {
+            bondingManagerRebond(api, unbondingLockId)
+        }
+    }
+
+    const rebondFromUnbonded = (to, unbondingLockId) => {
+        setSidePanel(undefined)
+        bondingManagerRebondFromUnbonded(api, to, unbondingLockId)
+    }
+
     const claimEarnings = (upToRound) => bondingManagerClaimEarnings(api, upToRound)
 
     const withdrawTokens = (unbondingLockId) => bondingManagerWithdraw(api, unbondingLockId)
@@ -81,7 +98,7 @@ function App() {
         APPROVE_AND_BOND: {
             title: 'Approve and Bond',
             sidePanelComponent: (
-                <GenericInputPanel actionTitle={'Approve And Bond Action'}
+                <GenericInputPanel actionTitle={'Livepeer Action'}
                                    actionDescription={`This action will approve the specified number of Livepeer tokens on
                                     the Livepeer Token contract then bond them to the specified address. To change the address
                                     bonded too, set the amount to 0 and specify the new address.`}
@@ -95,7 +112,7 @@ function App() {
         UNBOND: {
             title: 'Unbond Tokens',
             sidePanelComponent: (
-                <GenericInputPanel actionTitle={'Unbond Action'}
+                <GenericInputPanel actionTitle={'Livepeer Action'}
                                    actionDescription={`This action will unbond the specified number of tokens, creating an
                                     unbonding lock which can be withdrawn at a later time.`}
                                    inputFieldList={[
@@ -104,10 +121,19 @@ function App() {
                                    handleSubmit={unbondTokens}/>
             )
         },
+        REBOND_FROM_UNBONDED: (unbondingLockId) => {
+            return {
+                title: 'Rebond Tokens',
+                sidePanelComponent: (
+                    <RebondFromUnbonded unbondingLockId={unbondingLockId}
+                                        handleRebondFromUnbonded={rebondFromUnbonded}/>
+                )
+            }
+        },
         CLAIM_EARNINGS: {
             title: 'Claim Earnings',
             sidePanelComponent: (
-                <GenericInputPanel actionTitle={'Claim Earnings'}
+                <GenericInputPanel actionTitle={'Livepeer Action'}
                                    actionDescription={`This action will claim earnings up to the specified round. This is necessary
                                    when unbonding is not possible due to not having called claim earnings for some time.`}
                                    inputFieldList={[
@@ -156,7 +182,7 @@ function App() {
         CHANGE_CONTROLLER: {
             title: 'Change the Livepeer Controller',
             sidePanelComponent: (
-                <GenericInputPanel actionTitle={'Set Controller Action'}
+                <GenericInputPanel actionTitle={'Livepeer Action'}
                                    actionDescription={`This action will change the Livepeer Controller which is responsible
                                     for defining the addresses of the Livepeer Contracts`}
                                    inputFieldList={[
@@ -175,6 +201,7 @@ function App() {
                            approveAndBondTokens={() => setSidePanel(sidePanels.APPROVE_AND_BOND)}
                            unbondTokens={() => setSidePanel(sidePanels.UNBOND)}
                            claimEarnings={() => setSidePanel(sidePanels.CLAIM_EARNINGS)}
+                           rebondTokens={rebondTokens}
                            withdrawTokens={withdrawTokens}
                 />)
         },

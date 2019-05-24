@@ -9,6 +9,12 @@ const TRANSCODER_STATUS = {
     1: "Registered"
 }
 
+const DELEGATOR_STATUS = {
+    'PENDING': 0,
+    'BONDED': 1,
+    'UNBONDED': 2
+}
+
 let defaultState = {
     appAddress: "0x0000000000000000000000000000000000000000",
     livepeerTokenAddress: "0x0000000000000000000000000000000000000000",
@@ -20,7 +26,8 @@ let defaultState = {
         bondedAmount: 0,
         delegateAddress: "",
         lastClaimRound: 0,
-        pendingStake: 0
+        pendingStake: 0,
+        delegatorStatus: 0
     },
     disableUnbondTokens: false,
     unbondingLockInfos: [],
@@ -53,7 +60,8 @@ const reducer = state => {
             appApprovedTokens: fromDecimals(state.appApprovedTokens.toString(), TOKEN_DECIMALS),
             delegatorInfo: {
                 ...state.delegatorInfo,
-                totalStake: calculateTotalStake(state.delegatorInfo)
+                totalStake: calculateTotalStake(state.delegatorInfo),
+                delegatorStatus: parseInt(state.delegatorInfo.delegatorStatus)
             },
             unbondingLockInfos: state.unbondingLockInfos.map(unbondingLockInfo => {
                 return {
@@ -83,3 +91,6 @@ const calculateTotalStake = (delegatorInfo) => {
 }
 
 export default reducer
+export {
+    DELEGATOR_STATUS
+}

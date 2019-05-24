@@ -54,6 +54,16 @@ const bondingManagerUnbond = (api, numberOfTokens) => {
         .subscribe()
 }
 
+const bondingManagerRebond = (api, unbondingLockId) => {
+    api.rebond(unbondingLockId)
+        .subscribe()
+}
+
+const bondingManagerRebondFromUnbonded = (api, to, unbondingLockId) => {
+    api.rebondFromUnbonded(to, unbondingLockId)
+        .subscribe()
+}
+
 const bondingManagerWithdraw = (api, unbondingLockId) => {
     api.withdrawStake(unbondingLockId)
         .subscribe()
@@ -91,6 +101,8 @@ export {
     bondingManagerBond,
     approveAndBond,
     bondingManagerUnbond,
+    bondingManagerRebond,
+    bondingManagerRebondFromUnbonded,
     bondingManagerWithdraw,
     bondingManagerClaimEarnings,
     bondingManagerDeclareTranscoder,

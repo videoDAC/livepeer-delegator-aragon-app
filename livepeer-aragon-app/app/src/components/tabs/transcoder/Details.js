@@ -79,7 +79,7 @@ const TranscoderDetails = ({appState}) => {
         <div>
             <TopDetailsContainer>
                 <DetailContainerLeft>
-                    <Text.Block size="normal">Total stake</Text.Block>
+                    <Text.Block size="normal">Total Stake</Text.Block>
                     <DetailCard>
                         <InnerText size="normal">{`${totalStake} LPT`}</InnerText>
                     </DetailCard>
@@ -115,14 +115,14 @@ const TranscoderDetails = ({appState}) => {
 
                 <DetailsRowContainer>
                     <DetailContainerLeft>
-                        <Text.Block size="normal">Reward cut</Text.Block>
+                        <Text.Block size="normal">Reward Cut</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{rewardCutString}</InnerText>
                         </DetailCard>
                     </DetailContainerLeft>
 
                     <DetailContainerRight>
-                        <Text.Block size="normal">Fee share</Text.Block>
+                        <Text.Block size="normal">Fee Share</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{feeShareString}</InnerText>
                         </DetailCard>
@@ -131,14 +131,14 @@ const TranscoderDetails = ({appState}) => {
 
                 <DetailsRowContainer>
                     <DetailContainerLeft>
-                        <Text.Block size="normal">Price per segment</Text.Block>
+                        <Text.Block size="normal">Price Per Segment</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{pricePerSegmentString}</InnerText>
                         </DetailCard>
                     </DetailContainerLeft>
 
                     <DetailContainerRight>
-                        <Text.Block size="normal">Last reward round (current: {currentRound})</Text.Block>
+                        <Text.Block size="normal">Last Reward Round (current: {currentRound})</Text.Block>
                         <DetailCard>
                             <InnerText size="normal">{lastRewardRound}</InnerText>
                         </DetailCard>
