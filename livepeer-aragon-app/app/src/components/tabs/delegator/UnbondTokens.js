@@ -28,7 +28,7 @@ const UnbondTokens = ({handleRebondTokens, handleWithdrawTokens, appState}) => {
 
             <UnbondInnerContainer>
 
-                <Text.Block weight="bold" size="normal">Unbonding Locks</Text.Block>
+                <Text.Block size="normal">Unbonding Locks</Text.Block>
 
             </UnbondInnerContainer>
 
