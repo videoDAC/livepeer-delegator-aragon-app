@@ -5,30 +5,19 @@ import {Button, Text, Card} from "@aragon/ui";
 const ClaimedEarningsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 30px;
-`
-const ClaimedEarningsInner = styled.div`
-    display: flex;
-    flex-direction: column;
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
     border-color: rgb(179,179,179);
     padding: 10px;
+    margin-bottom: 30px;
 `
 const ClaimedEarningsRoundCard = styled(Card)`
-    display: flex;
-    white-space: nowrap;
     height: auto;
-    width: auto;
     padding: 10px;
     margin-top: 10px;
-`
-const ClaimEarningsButtonContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin-top: 15px;
+    margin-bottom: 15px;
+    width: auto;
 `
 
 const ClaimedEarnings = ({appState, handleClaimEarnings}) => {
@@ -39,22 +28,19 @@ const ClaimedEarnings = ({appState, handleClaimEarnings}) => {
     return (
 
         <ClaimedEarningsContainer>
-            <ClaimedEarningsInner>
 
-                <Text.Block size="normal">Last Round Claimed (current round: {currentRound})</Text.Block>
+            <Text.Block size="normal">Last Round Claimed (current round: {currentRound})</Text.Block>
 
-                <ClaimedEarningsRoundCard>
-                    <Text.Block>{lastClaimRound}</Text.Block>
-                </ClaimedEarningsRoundCard>
-
-                <ClaimEarningsButtonContainer>
-                    <Button mode="strong" onClick={() => handleClaimEarnings()}>
-                        Claim Earnings
-                    </Button>
-                </ClaimEarningsButtonContainer>
-            </ClaimedEarningsInner>
-
+            <ClaimedEarningsRoundCard>
+                <Text.Block>{lastClaimRound}</Text.Block>
+            </ClaimedEarningsRoundCard>
+            <div>
+                <Button mode="strong" onClick={() => handleClaimEarnings()}>
+                    Claim Earnings
+                </Button>
+            </div>
         </ClaimedEarningsContainer>
+
     )
 }
 

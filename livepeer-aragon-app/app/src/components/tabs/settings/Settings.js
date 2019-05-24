@@ -5,11 +5,7 @@ import styled from 'styled-components'
 const SettingsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-`
-const SettingsInnerContainer = styled.div`
-    display: flex;
-    flex-direction: column;
+    align-items: start;
 `
 const AddressCard = styled(Card)`
     padding: 10px;
@@ -34,7 +30,7 @@ const Settings = ({handleNewController, appState}) => {
 
     return (
         <SettingsContainer>
-            <SettingsInnerContainer>
+            <div>
 
                 <Text.Block size="normal">Livepeer App Address</Text.Block>
                 <AddressCard>
@@ -57,7 +53,7 @@ const Settings = ({handleNewController, appState}) => {
                     </Button>
                 </ButtonContainer>
 
-            </SettingsInnerContainer>
+            </div>
 
         </SettingsContainer>
     )

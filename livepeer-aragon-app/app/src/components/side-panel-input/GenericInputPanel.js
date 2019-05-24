@@ -58,7 +58,6 @@ const GenericInputPanel = ({actionTitle, actionDescription, inputFieldList, subm
             {inputFields}
 
             <Button mode="strong" onClick={() => {
-                console.log(sortedInputFieldData())
                 handleSubmit(...Object.values(sortedInputFieldData()))
             }}>
                 {submitLabel}

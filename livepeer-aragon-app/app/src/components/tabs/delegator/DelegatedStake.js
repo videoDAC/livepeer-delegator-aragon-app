@@ -4,9 +4,6 @@ import styled from 'styled-components'
 
 const BondTokensContainer = styled.div`
     display: flex;
-`
-const BondTokensInnerContainer = styled.div`
-    display: flex;
     flex-direction: column;
     border-style: solid;
     border-width: 1px;
@@ -38,8 +35,8 @@ const DelegatedStake = ({handleApproveAndBond, handleUnbondTokens, appState}) =>
     const {totalStake, delegateAddress} = appState.delegatorInfo
 
     return (
-        <BondTokensContainer>
-            <BondTokensInnerContainer>
+
+            <BondTokensContainer>
 
                 <Text.Block size="normal">Delegated Stake</Text.Block>
 
@@ -58,8 +55,8 @@ const DelegatedStake = ({handleApproveAndBond, handleUnbondTokens, appState}) =>
 
                 </BondButtonsContainer>
 
-            </BondTokensInnerContainer>
-        </BondTokensContainer>
+            </BondTokensContainer>
+
     )
 }
 

@@ -1,30 +1,25 @@
 import React from 'react'
 import styled from "styled-components";
 import {Text, Card, Button} from "@aragon/ui"
-import TokenTransfer from "./TokenTransfer";
 
 const AccountContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 `
-const AccountInnerContainer = styled.div`
-    display:flex;
-    flex-direction: column;
-`
 const DetailsCard = styled(Card)`
     padding: 10px;
     height: auto;
+    width: auto;
     margin-top: 10px;
     margin-bottom: 35px;
-    width: auto;
 `
 const AppBalanceDetailsCard = styled(Card)`
     padding: 10px;
     height: auto;
+    width: auto;
     margin-top: 10px;
     margin-bottom: 15px;
-    width: auto;
 `
 const ButtonsContainer = styled.div`
     display: flex;
@@ -36,11 +31,11 @@ const TransferButton = styled(Button)`
 
 const Account = ({appState, handleTransferIn, handleTransferOut}) => {
 
-    const {appAddress, appsLptBalance, userLptBalance} = appState
+    const {appAddress, appsLptBalance} = appState
 
     return (
         <AccountContainer>
-            <AccountInnerContainer>
+            <div>
 
                 <Text.Block size="normal">Livepeer App Address</Text.Block>
                 <DetailsCard>
@@ -57,7 +52,7 @@ const Account = ({appState, handleTransferIn, handleTransferOut}) => {
                     <Button mode="strong" onClick={() => handleTransferOut()}>Transfer From App</Button>
                 </ButtonsContainer>
 
-            </AccountInnerContainer>
+            </div>
 
         </AccountContainer>
     )

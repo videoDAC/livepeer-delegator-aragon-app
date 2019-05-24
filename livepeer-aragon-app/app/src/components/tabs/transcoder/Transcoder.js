@@ -6,7 +6,7 @@ import TranscoderActionButtons from "./ActionButtons";
 const TranscoderContainer = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 `
 
 const Transcoder = ({handleDeclareTranscoder, handleTranscoderReward, handleSetServiceUri, appState}) => {
