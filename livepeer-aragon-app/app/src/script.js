@@ -285,6 +285,7 @@ const delegatorInfo$ = () =>
             map((pendingStake) => {
                 return {
                     bondedAmount: delegator.bondedAmount,
+                    fees: delegator.fees,
                     delegateAddress: delegator.delegateAddress,
                     lastClaimRound: delegator.lastClaimRound,
                     pendingStake: pendingStake}
