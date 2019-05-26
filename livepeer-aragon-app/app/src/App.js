@@ -13,6 +13,7 @@ import {
     bondingManagerRebondFromUnbonded,
     bondingManagerWithdraw,
     bondingManagerClaimEarnings,
+    bondingManagerWithdrawFees,
     bondingManagerDeclareTranscoder,
     bondingManagerTranscoderReward,
     serviceRegistrySetServiceUri
@@ -79,6 +80,8 @@ function App() {
     }
 
     const claimEarnings = (upToRound) => bondingManagerClaimEarnings(api, upToRound)
+
+    const withdrawFees = () => bondingManagerWithdrawFees(api)
 
     const withdrawTokens = (unbondingLockId) => bondingManagerWithdraw(api, unbondingLockId)
 
@@ -202,6 +205,7 @@ function App() {
                            unbondTokens={() => setSidePanel(sidePanels.UNBOND)}
                            claimEarnings={() => setSidePanel(sidePanels.CLAIM_EARNINGS)}
                            rebondTokens={rebondTokens}
+                           withdrawFees={withdrawFees}
                            withdrawTokens={withdrawTokens}
                 />)
         },

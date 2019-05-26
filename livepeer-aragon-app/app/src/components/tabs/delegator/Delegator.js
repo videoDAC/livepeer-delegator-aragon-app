@@ -3,6 +3,7 @@ import DelegatedStake from "./DelegatedStake";
 import UnbondTokens from "./UnbondTokens";
 import ClaimedEarnings from "./ClaimedEarnings";
 import styled from 'styled-components'
+import WithdrawFees from "./WithdrawFees";
 
 const TopContainer = styled.div`
     display: flex;
@@ -10,7 +11,7 @@ const TopContainer = styled.div`
     align-items: flex-start;
 `
 
-const Delegator = ({appState, approveAndBondTokens, unbondTokens, rebondTokens, claimEarnings, withdrawTokens}) => {
+const Delegator = ({appState, approveAndBondTokens, unbondTokens, rebondTokens, claimEarnings, withdrawFees, withdrawTokens}) => {
     return (
         <TopContainer>
 
@@ -23,6 +24,8 @@ const Delegator = ({appState, approveAndBondTokens, unbondTokens, rebondTokens, 
                 <ClaimedEarnings appState={appState}
                                  handleClaimEarnings={claimEarnings}/>
 
+                <WithdrawFees appState={appState}
+                              handleWithdrawFees={withdrawFees}/>
 
                 <UnbondTokens appState={appState}
                               handleRebondTokens={rebondTokens}

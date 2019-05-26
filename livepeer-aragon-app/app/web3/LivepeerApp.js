@@ -74,6 +74,11 @@ const bondingManagerClaimEarnings = (api, upToRound) => {
         .subscribe()
 }
 
+const bondingManagerWithdrawFees = (api) => {
+    api.withdrawFees()
+        .subscribe()
+}
+
 const bondingManagerDeclareTranscoder = (api, rewardCut, feeShare, pricePerSegment) => {
     const rewardCutContractFormat = percentageAsContractFormat(rewardCut)
     const feeShareContractFormat = percentageAsContractFormat(feeShare)
@@ -105,6 +110,7 @@ export {
     bondingManagerRebondFromUnbonded,
     bondingManagerWithdraw,
     bondingManagerClaimEarnings,
+    bondingManagerWithdrawFees,
     bondingManagerDeclareTranscoder,
     bondingManagerTranscoderReward,
     serviceRegistrySetServiceUri

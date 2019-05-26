@@ -31,7 +31,7 @@ const TransferButton = styled(Button)`
 
 const Account = ({appState, handleTransferIn, handleTransferOut}) => {
 
-    const {appAddress, appsLptBalance} = appState
+    const {appAddress, appEthBalance, appsLptBalance} = appState
 
     return (
         <AccountContainer>
@@ -42,9 +42,14 @@ const Account = ({appState, handleTransferIn, handleTransferOut}) => {
                     <Text.Block size="normal">{appAddress}</Text.Block>
                 </DetailsCard>
 
-                <Text.Block size="normal">Livepeer App Balance</Text.Block>
+                <Text.Block size="normal">ETH Balance</Text.Block>
+                <DetailsCard>
+                    <Text.Block size="normal">{`${appEthBalance}`}</Text.Block>
+                </DetailsCard>
+
+                <Text.Block size="normal">LPT Balance</Text.Block>
                 <AppBalanceDetailsCard>
-                    <Text.Block size="normal">{`${appsLptBalance} LPT`}</Text.Block>
+                    <Text.Block size="normal">{`${appsLptBalance}`}</Text.Block>
                 </AppBalanceDetailsCard>
 
                 <ButtonsContainer>

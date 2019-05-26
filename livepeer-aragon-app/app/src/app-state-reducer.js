@@ -18,6 +18,7 @@ const DELEGATOR_STATUS = {
 let defaultState = {
     appAddress: "0x0000000000000000000000000000000000000000",
     livepeerTokenAddress: "0x0000000000000000000000000000000000000000",
+    appEthBalance: 0,
     userLptBalance: 0,
     appsLptBalance: 0,
     appApprovedTokens: 0,
@@ -55,6 +56,7 @@ const reducer = state => {
         return {
             ...defaultState,
             ...state,
+            appEthBalance: fromDecimals(state.appEthBalance.toString(), TOKEN_DECIMALS),
             userLptBalance: fromDecimals(state.userLptBalance.toString(), TOKEN_DECIMALS),
             appsLptBalance: fromDecimals(state.appsLptBalance.toString(), TOKEN_DECIMALS),
             appApprovedTokens: fromDecimals(state.appApprovedTokens.toString(), TOKEN_DECIMALS),

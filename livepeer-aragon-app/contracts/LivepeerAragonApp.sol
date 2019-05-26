@@ -32,6 +32,7 @@ contract LivepeerAragonApp is Agent {
     bytes32 public constant BOND_ROLE = keccak256("BOND_ROLE");
     bytes32 public constant APPROVE_AND_BOND_ROLE = keccak256("APPROVE_AND_BOND_ROLE");
     bytes32 public constant CLAIM_EARNINGS_ROLE = keccak256("CLAIM_EARNINGS_ROLE");
+    bytes32 public constant WITHDRAW_FEES_ROLE = keccak256("WITHDRAW_FEES_ROLE");
     bytes32 public constant UNBOND_ROLE = keccak256("UNBOND_ROLE");
     bytes32 public constant REBOND_ROLE = keccak256("REBOND_ROLE");
     bytes32 public constant WITHDRAW_STAKE_ROLE = keccak256("WITHDRAW_STAKE_ROLE");
@@ -46,6 +47,7 @@ contract LivepeerAragonApp is Agent {
     event LivepeerAragonAppApproval(uint256 value);
     event LivepeerAragonAppBond(uint256 amount, address to);
     event LivepeerAragonAppEarnings(uint256 upToRound);
+    event LivepeerAragonAppFees();
     event LivepeerAragonAppUnbond(uint256 amount);
     event LivepeerAragonAppRebond(uint256 unbondingLockId);
     event LivepeerAragonAppRebondFromUnbonded(address to, uint256 unbondingLockId);
@@ -146,6 +148,20 @@ contract LivepeerAragonApp is Agent {
         bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature, _endRound);
 
         emit LivepeerAragonAppEarnings(_endRound);
+
+        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+    }
+
+    /**
+    * @notice Withdraw transcoder fees to the Livepeer app
+    */
+    function withdrawFees() external auth(WITHDRAW_FEES_ROLE) {
+        address bondingManagerAddress = getLivepeerContractAddress("BondingManager");
+
+        string memory functionSignature = "withdrawFees()";
+        bytes memory encodedFunctionCall = abi.encodeWithSignature(functionSignature);
+
+        emit LivepeerAragonAppFees();
 
         _execute(bondingManagerAddress, 0, encodedFunctionCall);
     }

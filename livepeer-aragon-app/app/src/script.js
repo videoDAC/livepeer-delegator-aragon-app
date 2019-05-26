@@ -3,6 +3,7 @@ import AragonApi from '@aragon/api'
 import {
     controllerAddress$,
     livepeerTokenAddress$,
+    livepeerAragonApp$,
     livepeerToken$,
     bondingManagerAddress$,
     bondingManager$,
@@ -13,12 +14,13 @@ import {range, of} from "rxjs";
 import {first, mergeMap, map, filter, toArray, zip, tap, merge} from "rxjs/operators"
 
 const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
+const ETHER_TOKEN_FAKE_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 const api = new AragonApi()
+api.identify('Livepeer App')
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
 //TODO: Add retryEvery function
-//TODO: Add rebond functions.
 //TODO: Add withdraw fees function.
 //TODO: Rearrange UI, make actions appear in slide in menu.
 //TODO: More disabling of buttons/error handling when functions can't be called.
@@ -29,6 +31,7 @@ const initialState = async (state) => {
         ...state,
         livepeerTokenAddress: await livepeerTokenAddress$(api).toPromise(),
         livepeerControllerAddress: await controllerAddress$(api).toPromise(),
+        appEthBalance: await appEthBalance$().toPromise(),
         userLptBalance: await userLptBalance$().toPromise(),
         appsLptBalance: await appLptBalance$().toPromise(),
         appApprovedTokens: await appApprovedTokens$().toPromise(),
@@ -84,8 +87,9 @@ const onNewEvent = async (state, storeEvent) => {
             console.log("TRANSFER IN/OUT")
             return {
                 ...state,
+                appEthBalance: await appEthBalance$().toPromise(),
                 userLptBalance: await userLptBalance$().toPromise(),
-                appsLptBalance: await appLptBalance$().toPromise()
+                appsLptBalance: await appLptBalance$().toPromise(),
             }
         case 'LivepeerAragonAppApproval':
             console.log("APPROVAL")
@@ -114,6 +118,12 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 delegatorInfo: await delegatorInfo$().toPromise()
+            }
+        case 'LivepeerAragonAppFees':
+            console.log('WITHDRAW FEES')
+            return {
+                ...state,
+                appEthBalance: await appEthBalance$().toPromise()
             }
         case 'LivepeerAragonAppUnbond':
             console.log("UNBOND")
@@ -230,6 +240,9 @@ api.store(onNewEventCatchError,
         roundsManager$(api).pipe(mergeMap(roundsManager => roundsManager.events()))
     ]
 )
+
+const appEthBalance$ = () =>
+    livepeerAragonApp$(api, livepeerAppAddress).balance(ETHER_TOKEN_FAKE_ADDRESS)
 
 const userLptBalance$ = () =>
     api.accounts().pipe(

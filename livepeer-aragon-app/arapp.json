@@ -16,6 +16,11 @@
       "params": []
     },
     {
+      "name": "Withdraw fees",
+      "id": "WITHDRAW_FEES_ROLE",
+      "params": []
+    },
+    {
       "name": "Unbond",
       "id": "UNBOND_ROLE",
       "params": []
