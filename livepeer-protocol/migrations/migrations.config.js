@@ -7,7 +7,7 @@ module.exports = {
         numTranscoders: 20,
         numActiveTranscoders: 10,
         unbondingPeriod: 7,
-        maxEarningsClaimsRounds: 20
+        maxEarningsClaimsRounds: 100
     },
     jobsManager: {
         verificationRate: 1000,

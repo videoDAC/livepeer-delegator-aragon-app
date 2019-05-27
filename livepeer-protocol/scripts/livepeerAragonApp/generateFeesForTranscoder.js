@@ -7,13 +7,12 @@ const {contractId} = require("../../utils/helpers")
 const {createTranscodingOptions} = require("../../utils/videoProfile");
 const BigNumber = require("BigNumber.js")
 
-const JOB_ID = 0 // Needs to change with each new job.
 const STREAM_ID = 'foo'
-const BOND_AMOUNT = 100000000000000000000 // 100 LPT
+const BOND_AMOUNT = 10000000000000000000 // 10 LPT
 const MAX_PRICE_PER_SEGMENT = 10000
 const REWARD_CUT = 15000 // 1.5%
 const FEE_SHARE = 500000 // 50%
-const WEI_VALUE = 100
+const WEI_VALUE = 5000
 
 module.exports = async () => {
 
@@ -37,7 +36,6 @@ module.exports = async () => {
         console.log("Generating fees for transcoder...")
 
 
-
         controller = await Controller.deployed()
 
         const livepeerTokenAddress = await controller.getContract(contractId("LivepeerToken"))
@@ -53,30 +51,50 @@ module.exports = async () => {
         roundsManager = await AdjustableRoundsManager.at(roundsManagerAddr)
 
 
-        const setBlockNumReceipt = await roundsManager.setBlockNum(await web3.eth.getBlockNumber())
-        console.log(`Set block number: ${setBlockNumReceipt.tx}`)
+        const skipBlocksAndInitialise = async (numBlocks) => {
+            const currentBlock = await roundsManager.blockNum()
 
-        const approveReceipt = await livepeerToken.approve(bondingManagerAddress, bondAmountBn, {from: transcoder})
-        console.log(`Approved ${BOND_AMOUNT} LPT for bonding manager to spend: ${approveReceipt.tx}`)
+            const setBlockNumReceipt = await roundsManager.setBlockNum(parseInt(currentBlock) + parseInt(numBlocks))
+            console.log(`Set block number: ${setBlockNumReceipt.tx}`)
 
-        const bondToTranscoder = await bondingManager.bond(bondAmountBn, transcoder, {from: transcoder})
-        console.log(`Bonded ${BOND_AMOUNT} LPT to transcoder: ${bondToTranscoder.tx}`)
+            const initializeRoundTxHash = await roundsManager.initializeRound()
+            console.log("Round initialized: " + initializeRoundTxHash.tx)
+        }
 
-        const transcoderReceipt = await bondingManager.transcoder(REWARD_CUT, FEE_SHARE, weiValueBn, {from: transcoder}) // (1.5%, 50%, 150 Gwei)
-        console.log(`Declare ${transcoder} as transcoder: ${transcoderReceipt.tx}`)
 
-        const depositReceipt = await jobsManager.deposit({from: broadcaster, value: 1000})
+        // Bond and declare transcoder
+        if (!(await bondingManager.isRegisteredTranscoder(transcoder))) {
+            const approveReceipt = await livepeerToken.approve(bondingManagerAddress, bondAmountBn, {from: transcoder})
+            console.log(`Approved ${BOND_AMOUNT} LPT for bonding manager to spend: ${approveReceipt.tx}`)
+
+            const bondToTranscoder = await bondingManager.bond(bondAmountBn, transcoder, {from: transcoder})
+            console.log(`Bonded ${BOND_AMOUNT} LPT to transcoder: ${bondToTranscoder.tx}`)
+
+            const transcoderReceipt = await bondingManager.transcoder(REWARD_CUT, FEE_SHARE, weiValueBn, {from: transcoder}) // (1.5%, 50%, 50 wei)
+            console.log(`Declare ${transcoder} as transcoder: ${transcoderReceipt.tx}`)
+
+            await skipBlocksAndInitialise(256) // Skip forward by max number of block hashes available
+        }
+
+
+        // Broadcaster deposit and create job
+        const depositReceipt = await jobsManager.deposit({from: broadcaster, value: 10000000})
         console.log(`Deposit completed: ${depositReceipt.tx}`)
 
-        const jobReceipt = await jobsManager.job(STREAM_ID, transcodingOptions, MAX_PRICE_PER_SEGMENT, await web3.eth.getBlockNumber() + 20, {from: broadcaster})
+        const currentBlock = await roundsManager.blockNum()
+        const jobReceipt = await jobsManager.job(STREAM_ID, transcodingOptions, MAX_PRICE_PER_SEGMENT, currentBlock + 20, {from: broadcaster})
         console.log(`Job created: ${jobReceipt.tx}`)
 
-        // const claimWorkReceipt = await jobsManager.claimWork(JOB_ID, segmentRange, claimRoot, {from: transcoder})
-        // console.log(`Worked claimed: ${claimWorkReceipt.tx}`)
-        //
-        // const distributeFeesReceipt = await jobsManager.distributeFees(JOB_ID, 0, {from: transcoder})
-        // console.log(`Fees distributed: ${distributeFeesReceipt.tx}`)
 
+        // Claim work, skip forward slashing period and distribute funds
+        const jobId = await jobsManager.numJobs() - 1
+        const claimWorkReceipt = await jobsManager.claimWork(jobId, segmentRange, claimRoot, {from: transcoder})
+        console.log(`Worked claimed for job: ${jobId} Transaction: ${claimWorkReceipt.tx}`)
+
+        await skipBlocksAndInitialise(250) // Skip slashing period
+
+        const distributeFeesReceipt = await jobsManager.distributeFees(jobId, 0, {from: transcoder})
+        console.log(`Fees distributed: ${distributeFeesReceipt.tx}`)
 
 
         process.exit()

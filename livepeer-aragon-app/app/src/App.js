@@ -79,7 +79,10 @@ function App() {
         bondingManagerRebondFromUnbonded(api, to, unbondingLockId)
     }
 
-    const claimEarnings = (upToRound) => bondingManagerClaimEarnings(api, upToRound)
+    const claimEarnings = (upToRound) => {
+        setSidePanel(undefined)
+        bondingManagerClaimEarnings(api, upToRound)
+    }
 
     const withdrawFees = () => bondingManagerWithdrawFees(api)
 

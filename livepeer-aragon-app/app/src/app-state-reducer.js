@@ -25,6 +25,8 @@ let defaultState = {
     currentRound: 0,
     delegatorInfo: {
         bondedAmount: 0,
+        pendingFees: 0,
+        fees: 0,
         delegateAddress: "",
         lastClaimRound: 0,
         pendingStake: 0,
@@ -62,6 +64,8 @@ const reducer = state => {
             appApprovedTokens: fromDecimals(state.appApprovedTokens.toString(), TOKEN_DECIMALS),
             delegatorInfo: {
                 ...state.delegatorInfo,
+                pendingFees: fromDecimals(state.delegatorInfo.pendingFees.toString(), TOKEN_DECIMALS),
+                fees: fromDecimals(state.delegatorInfo.fees.toString(), TOKEN_DECIMALS),
                 totalStake: calculateTotalStake(state.delegatorInfo),
                 delegatorStatus: parseInt(state.delegatorInfo.delegatorStatus)
             },

@@ -3,6 +3,7 @@ import BondingManagerAbi from '../abi/bondingManager-abi'
 import LivepeerTokenAbi from '../abi/livepeerToken-abi'
 import ControllerAbi from '../abi/controller-abi'
 import RoundsManagerAbi from '../abi/roundsManager-abi'
+import JobsManagerAbi from '../abi/jobsManager-abi'
 import ServiceRegistryAbi from '../abi/serviceRegistry-abi'
 import {contractId} from './utils/livepeerHelpers'
 import {map, mergeMap, tap} from 'rxjs/operators'
@@ -24,6 +25,8 @@ const bondingManagerAddress$ = (api) => livepeerAddressOf$(api, "BondingManager"
 
 const roundsManagerAddress$ = (api) => livepeerAddressOf$(api, "RoundsManager")
 
+const jobsManagerAddress$ = api => livepeerAddressOf$(api, "JobsManager")
+
 const serviceRegistryAddress$ = (api) => livepeerAddressOf$(api, "ServiceRegistry")
 
 const livepeerAragonApp$ = (api, livepeerAppAddress) =>
@@ -44,6 +47,10 @@ const roundsManager$ = (api) =>
         // tap(address => console.log("RoundsManager address: " + address)),
         map(address => api.external(address, RoundsManagerAbi)))
 
+const jobsManager$ = (api) =>
+    jobsManagerAddress$(api).pipe(
+        map(address => api.external(address, JobsManagerAbi)))
+
 const serviceRegistry$ = (api) =>
     serviceRegistryAddress$(api).pipe(
         // tap(address => console.log("ServiceRegistry address: " + address)),
@@ -58,5 +65,6 @@ export {
     livepeerToken$,
     bondingManager$,
     roundsManager$,
+    jobsManager$,
     serviceRegistry$
 }

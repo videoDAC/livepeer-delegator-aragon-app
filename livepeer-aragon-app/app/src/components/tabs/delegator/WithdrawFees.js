@@ -23,13 +23,20 @@ const WithdrawFeesCard = styled(Card)`
 const WithdrawFees = ({appState, handleWithdrawFees}) => {
 
     const { appEthBalance } = appState
+    const { pendingFees, fees } = appState.delegatorInfo
+
+    const feesString = pendingFees === fees ? `${fees}` : `${fees} (${pendingFees} pending)`
 
     return (
 
         <WithdrawFeesContainer>
 
-            <Text.Block size="normal">App ETH Balance</Text.Block>
+            <Text.Block size="normal">Fees available (ETH)</Text.Block>
+            <WithdrawFeesCard>
+                <Text.Block>{feesString}</Text.Block>
+            </WithdrawFeesCard>
 
+            <Text.Block size="normal">App ETH Balance</Text.Block>
             <WithdrawFeesCard>
                 <Text.Block>{appEthBalance}</Text.Block>
             </WithdrawFeesCard>
