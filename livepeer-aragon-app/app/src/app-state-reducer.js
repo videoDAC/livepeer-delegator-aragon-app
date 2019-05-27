@@ -26,6 +26,7 @@ let defaultState = {
     delegatorInfo: {
         bondedAmount: 0,
         pendingFees: 0,
+        showPendingFees: false,
         fees: 0,
         delegateAddress: "",
         lastClaimRound: 0,
@@ -65,6 +66,7 @@ const reducer = state => {
             delegatorInfo: {
                 ...state.delegatorInfo,
                 pendingFees: fromDecimals(state.delegatorInfo.pendingFees.toString(), TOKEN_DECIMALS),
+                showPendingFees: showPendingFees(state),
                 fees: fromDecimals(state.delegatorInfo.fees.toString(), TOKEN_DECIMALS),
                 totalStake: calculateTotalStake(state.delegatorInfo),
                 delegatorStatus: parseInt(state.delegatorInfo.delegatorStatus)
@@ -87,6 +89,11 @@ const reducer = state => {
             }
         }
     }
+}
+
+const showPendingFees = state => {
+    return !(new BN(state.delegatorInfo.pendingFees).eq(new BN(0)))
+        && state.delegatorInfo.pendingFees !== state.delegatorInfo.fees
 }
 
 const calculateTotalStake = (delegatorInfo) => {

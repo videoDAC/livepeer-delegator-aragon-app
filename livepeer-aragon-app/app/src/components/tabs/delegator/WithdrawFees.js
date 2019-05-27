@@ -23,9 +23,9 @@ const WithdrawFeesCard = styled(Card)`
 const WithdrawFees = ({appState, handleWithdrawFees}) => {
 
     const { appEthBalance } = appState
-    const { pendingFees, fees } = appState.delegatorInfo
+    const { showPendingFees, pendingFees, fees } = appState.delegatorInfo
 
-    const feesString = pendingFees === fees ? `${fees}` : `${fees} (${pendingFees} pending)`
+    const feesString = showPendingFees ? `${fees} (${pendingFees} pending)` : `${fees}`
 
     return (
 
