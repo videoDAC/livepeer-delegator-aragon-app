@@ -22,10 +22,9 @@ api.identify('Livepeer App')
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
 //TODO: Add retryEvery function
-//TODO: Rearrange Transcoder UI, add boxes to other tabs.
 //TODO: More disabling of buttons/error handling when functions can't be called.
 //TODO: Add menu hamburger to smaller view.
-//TODO: Add withdraw eth function.
+//TODO: Remove unused transcoder total stake fetching.
 
 const initialState = async (state) => {
     return {

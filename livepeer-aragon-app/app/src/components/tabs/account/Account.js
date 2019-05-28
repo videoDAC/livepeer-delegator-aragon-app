@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
-import {Text, Card, Button} from "@aragon/ui"
+import {Text, Card, Button, SafeLink} from "@aragon/ui"
+import {LivepeerAccountLink} from "../../../LivepeerExplorerLinks";
 
 const AccountContainer = styled.div`
     display: flex;
@@ -49,6 +50,8 @@ const Account = ({appState, handleTransferIn, handleTransferOut, handleTransferE
 
     const {appAddress, appEthBalance, appsLptBalance} = appState
 
+    const livepeerAccountLink = LivepeerAccountLink(appAddress)
+
     return (
         <AccountContainer>
             <div>
@@ -85,6 +88,12 @@ const Account = ({appState, handleTransferIn, handleTransferOut, handleTransferE
                         <Button mode="strong" onClick={() => handleTransferOut()}>Transfer From App</Button>
                     </ButtonsContainer>
                 </DetailContainer>
+
+                <SafeLink href={livepeerAccountLink} target="_blank">
+                    <Button mode="secondary">
+                        View on Livepeer Explorer
+                    </Button>
+                </SafeLink>
 
             </div>
 

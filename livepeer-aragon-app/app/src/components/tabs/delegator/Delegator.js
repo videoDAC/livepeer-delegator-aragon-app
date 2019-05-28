@@ -4,14 +4,24 @@ import UnbondTokens from "./UnbondTokens";
 import ClaimedEarnings from "./ClaimedEarnings";
 import styled from 'styled-components'
 import WithdrawFees from "./WithdrawFees";
+import {Button, SafeLink} from "@aragon/ui";
+import {LivepeerDelegatorLink} from "../../../LivepeerExplorerLinks";
 
 const TopContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 `
+const ExplorerLink = styled(Button)`
+    margin-top: 30px;
+`
 
 const Delegator = ({appState, approveAndBondTokens, unbondTokens, rebondTokens, claimEarnings, withdrawFees, withdrawTokens}) => {
+
+    const {appAddress} = appState
+
+    const livepeerDelegatorLink = LivepeerDelegatorLink(appAddress)
+
     return (
         <TopContainer>
 
@@ -30,6 +40,12 @@ const Delegator = ({appState, approveAndBondTokens, unbondTokens, rebondTokens, 
                 <UnbondTokens appState={appState}
                               handleRebondTokens={rebondTokens}
                               handleWithdrawTokens={withdrawTokens}/>
+
+                <SafeLink href={livepeerDelegatorLink} target="_blank">
+                    <ExplorerLink mode="secondary">
+                        View on Livepeer Explorer
+                    </ExplorerLink>
+                </SafeLink>
 
             </div>
         </TopContainer>
