@@ -1,8 +1,7 @@
 import {toDecimals} from "../src/lib/math-utils";
 import {livepeerTokenAddress$} from "./ExternalContracts";
 import {mergeMap} from "rxjs/operators";
-
-const TOKEN_DECIMALS = 18;
+import {ETHER_TOKEN_FAKE_ADDRESS, TOKEN_DECIMALS} from "../SharedConstants";
 
 const setLivepeerController = (api, address) => {
     api.setLivepeerController(address)
@@ -15,7 +14,13 @@ const livepeerTokenApprove = (api, tokenCount) => {
         .subscribe()
 }
 
-const transferFromApp = (api, sendToAddress, amount) => {
+const transferEthFromApp = (api, sendToAddress, amount) => {
+    const adjustedAmount = toDecimals(amount, TOKEN_DECIMALS)
+    api.transfer(ETHER_TOKEN_FAKE_ADDRESS, sendToAddress, adjustedAmount)
+        .subscribe()
+}
+
+const transferLptFromApp = (api, sendToAddress, amount) => {
     const adjustedAmount = toDecimals(amount, TOKEN_DECIMALS)
 
     livepeerTokenAddress$(api).pipe(
@@ -23,7 +28,7 @@ const transferFromApp = (api, sendToAddress, amount) => {
     ).subscribe()
 }
 
-const transferToApp = (api, amount) => {
+const transferLptToApp = (api, amount) => {
     const adjustedAmount = toDecimals(amount, TOKEN_DECIMALS)
 
     livepeerTokenAddress$(api).pipe(
@@ -101,8 +106,9 @@ const serviceRegistrySetServiceUri = (api, serviceUri) => {
 export {
     setLivepeerController,
     livepeerTokenApprove,
-    transferFromApp,
-    transferToApp,
+    transferEthFromApp,
+    transferLptFromApp,
+    transferLptToApp,
     bondingManagerBond,
     approveAndBond,
     bondingManagerUnbond,

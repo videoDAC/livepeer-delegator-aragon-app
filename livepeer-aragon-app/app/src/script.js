@@ -13,9 +13,9 @@ import {
 } from '../web3/ExternalContracts'
 import {range, of} from "rxjs";
 import {first, mergeMap, map, filter, toArray, zip, tap, merge, catchError} from "rxjs/operators"
+import {ETHER_TOKEN_FAKE_ADDRESS} from "../SharedConstants";
 
 const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
-const ETHER_TOKEN_FAKE_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 const api = new AragonApi()
 api.identify('Livepeer App')

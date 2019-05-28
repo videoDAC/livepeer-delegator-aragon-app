@@ -1,7 +1,7 @@
 import {fromDecimals} from "./lib/math-utils";
 import {BN} from "../../node_modules/bn.js/lib/bn";
+import {TOKEN_DECIMALS} from "../SharedConstants";
 
-const TOKEN_DECIMALS = 18;
 const PERCENTAGE_AS_FRACTION_DIVISOR = 10000;
 
 const TRANSCODER_STATUS = {

@@ -5,8 +5,8 @@ import {useAragonApi} from '@aragon/api-react'
 
 import {
     setLivepeerController,
-    transferFromApp,
-    transferToApp,
+    transferLptFromApp,
+    transferLptToApp,
     approveAndBond,
     bondingManagerUnbond,
     bondingManagerRebond,
@@ -16,7 +16,7 @@ import {
     bondingManagerWithdrawFees,
     bondingManagerDeclareTranscoder,
     bondingManagerTranscoderReward,
-    serviceRegistrySetServiceUri
+    serviceRegistrySetServiceUri, transferEthFromApp
 } from '../web3/LivepeerApp'
 
 import Delegator from './components/tabs/delegator/Delegator'
@@ -46,14 +46,19 @@ function App() {
         setLivepeerController(api, address)
     }
 
+    const transferEthOut = (toAddress, amount) => {
+        setSidePanel(undefined)
+        transferEthFromApp(api, toAddress, amount)
+    }
+
     const transferTokensIn = (amount) => {
         setSidePanel(undefined)
-        transferToApp(api, amount)
+        transferLptToApp(api, amount)
     }
 
     const transferTokensOut = (toAddress, amount) => {
         setSidePanel(undefined)
-        transferFromApp(api, toAddress, amount)
+        transferLptFromApp(api, toAddress, amount)
     }
 
     const approveAndBondTokens = (tokenCount, bondToAddress) => {
@@ -160,6 +165,19 @@ function App() {
                 <SetServiceUri handleSetServiceUri={setServiceUri}/>
             )
         },
+        TRANSFER_ETH_OUT: {
+            title: 'Transfer Ethereum From App',
+            sidePanelComponent: (
+                <GenericInputPanel actionTitle={'Transfer Action'}
+                                   actionDescription={`This action will transfer the specified amount of Ethereum (ETH)
+                                   from the Livepeer App to the address specified`}
+                                   inputFieldList={[
+                                       {id: 1, label: 'address', type: 'text'},
+                                       {id: 2, label: 'amount', type: 'number'}]}
+                                   submitLabel={'Transfer Out'}
+                                   handleSubmit={transferEthOut}/>
+            )
+        },
         TRANSFER_IN: {
             title: 'Transfer Livepeer Tokens To App',
             sidePanelComponent: (
@@ -227,6 +245,7 @@ function App() {
                 <Account appState={appState}
                          handleTransferIn={() => setSidePanel(sidePanels.TRANSFER_IN)}
                          handleTransferOut={() => setSidePanel(sidePanels.TRANSFER_OUT)}
+                         handleTransferEthOut={() => setSidePanel(sidePanels.TRANSFER_ETH_OUT)}
                 />)
         },
         {

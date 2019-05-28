@@ -22,6 +22,7 @@ const DetailsCard = styled(Card)`
     height: auto;
     width: auto;
     margin-top: 10px;
+    margin-bottom: 15px;
 `
 const AppBalanceDetailsCard = styled(Card)`
     padding: 10px;
@@ -38,7 +39,7 @@ const TransferButton = styled(Button)`
     margin-right: 20px;
 `
 
-const Account = ({appState, handleTransferIn, handleTransferOut}) => {
+const Account = ({appState, handleTransferIn, handleTransferOut, handleTransferEthOut}) => {
 
     const {appAddress, appEthBalance, appsLptBalance} = appState
 
@@ -58,6 +59,12 @@ const Account = ({appState, handleTransferIn, handleTransferOut}) => {
                     <DetailsCard>
                         <Text.Block size="normal">{`${appEthBalance}`}</Text.Block>
                     </DetailsCard>
+
+                    <div>
+                        <TransferButton mode="strong" onClick={() => handleTransferEthOut()}>
+                            Transfer From App
+                        </TransferButton>
+                    </div>
                 </DetailContainer>
 
                 <DetailContainer>
