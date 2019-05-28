@@ -1,6 +1,7 @@
 import React from 'react'
 import {Card, Text,} from "@aragon/ui"
 import styled from "styled-components";
+import TranscoderActionButtons from "./ActionButtons";
 
 const DetailsContainer = styled.div`
     display: flex;
@@ -13,17 +14,6 @@ const DetailsContainer = styled.div`
     border-radius: 5px;
     border-color: rgb(179,179,179);
     padding: 10px; 
-`
-const TopDetailsContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    border-color: rgb(179,179,179);
-    padding: 10px; 
-    margin-bottom: 20px;
 `
 const DetailsRowContainer = styled.div`
     display: flex;
@@ -45,20 +35,19 @@ const DetailCard = styled(Card)`
     padding: 10px;
     height: auto;
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 `
 const InnerText = styled(Text.Block)`
     text-align: center;
 `
 
-const TranscoderDetails = ({appState}) => {
+const TranscoderDetails = ({appState, handleDeclareTranscoder, handleTranscoderReward}) => {
 
     const {currentRound} = appState
 
     const {
         status,
         active,
-        totalStake,
         lastRewardRound,
         rewardCut,
         feeShare,
@@ -66,7 +55,6 @@ const TranscoderDetails = ({appState}) => {
         pendingRewardCut,
         pendingFeeShare,
         pendingPricePerSegment,
-        serviceUri
     } = appState.transcoder
 
     const rewardCutString = rewardCut === pendingRewardCut ? `${rewardCut}%` : `${rewardCut}% (${pendingRewardCut}% pending)`
@@ -77,21 +65,6 @@ const TranscoderDetails = ({appState}) => {
 
     return (
         <div>
-            <TopDetailsContainer>
-                <DetailContainerLeft>
-                    <Text.Block size="normal">Total Stake</Text.Block>
-                    <DetailCard>
-                        <InnerText size="normal">{`${totalStake} LPT`}</InnerText>
-                    </DetailCard>
-                </DetailContainerLeft>
-
-                <DetailContainerRight>
-                    <Text.Block size="normal">Service URI</Text.Block>
-                    <DetailCard>
-                        <InnerText size="normal">{serviceUri}</InnerText>
-                    </DetailCard>
-                </DetailContainerRight>
-            </TopDetailsContainer>
 
             <DetailsContainer>
 
@@ -144,6 +117,10 @@ const TranscoderDetails = ({appState}) => {
                         </DetailCard>
                     </DetailContainerRight>
                 </DetailsRowContainer>
+
+                <TranscoderActionButtons appState={appState}
+                                         handleDeclareTranscoder={handleDeclareTranscoder}
+                                         handleTranscoderReward={handleTranscoderReward}/>
 
             </DetailsContainer>
         </div>

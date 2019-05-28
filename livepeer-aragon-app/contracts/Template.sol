@@ -95,8 +95,8 @@ contract Template is TemplateBase {
         // Agent Permissions
         acl.createPermission(ANY_ENTITY, app, app.SET_CONTROLLER_ROLE(), root);
         acl.createPermission(ANY_ENTITY, app, app.TRANSFER_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.APPROVE_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.BOND_ROLE(), root);
+//        acl.createPermission(ANY_ENTITY, app, app.APPROVE_ROLE(), root);
+//        acl.createPermission(ANY_ENTITY, app, app.BOND_ROLE(), root);
         acl.createPermission(ANY_ENTITY, app, app.APPROVE_AND_BOND_ROLE(), root);
         acl.createPermission(ANY_ENTITY, app, app.CLAIM_EARNINGS_ROLE(), root);
         acl.createPermission(ANY_ENTITY, app, app.WITHDRAW_FEES_ROLE(), root);

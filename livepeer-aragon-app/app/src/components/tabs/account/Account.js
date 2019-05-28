@@ -7,12 +7,21 @@ const AccountContainer = styled.div`
     flex-direction: column;
     align-items: flex-start;
 `
+const DetailContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: rgb(179,179,179);
+    padding: 10px;
+    margin-bottom: 30px;
+`
 const DetailsCard = styled(Card)`
     padding: 10px;
     height: auto;
     width: auto;
     margin-top: 10px;
-    margin-bottom: 35px;
 `
 const AppBalanceDetailsCard = styled(Card)`
     padding: 10px;
@@ -37,25 +46,32 @@ const Account = ({appState, handleTransferIn, handleTransferOut}) => {
         <AccountContainer>
             <div>
 
-                <Text.Block size="normal">Livepeer App Address</Text.Block>
-                <DetailsCard>
-                    <Text.Block size="normal">{appAddress}</Text.Block>
-                </DetailsCard>
+                <DetailContainer>
+                    <Text.Block size="normal">Livepeer App Address</Text.Block>
+                    <DetailsCard>
+                        <Text.Block size="normal">{appAddress}</Text.Block>
+                    </DetailsCard>
+                </DetailContainer>
 
-                <Text.Block size="normal">ETH Balance</Text.Block>
-                <DetailsCard>
-                    <Text.Block size="normal">{`${appEthBalance}`}</Text.Block>
-                </DetailsCard>
+                <DetailContainer>
+                    <Text.Block size="normal">ETH Balance</Text.Block>
+                    <DetailsCard>
+                        <Text.Block size="normal">{`${appEthBalance}`}</Text.Block>
+                    </DetailsCard>
+                </DetailContainer>
 
-                <Text.Block size="normal">LPT Balance</Text.Block>
-                <AppBalanceDetailsCard>
-                    <Text.Block size="normal">{`${appsLptBalance}`}</Text.Block>
-                </AppBalanceDetailsCard>
+                <DetailContainer>
+                    <Text.Block size="normal">LPT Balance</Text.Block>
+                    <AppBalanceDetailsCard>
+                        <Text.Block size="normal">{`${appsLptBalance}`}</Text.Block>
+                    </AppBalanceDetailsCard>
 
-                <ButtonsContainer>
-                    <TransferButton mode="strong" onClick={() => handleTransferIn()}>Transfer To App</TransferButton>
-                    <Button mode="strong" onClick={() => handleTransferOut()}>Transfer From App</Button>
-                </ButtonsContainer>
+                    <ButtonsContainer>
+                        <TransferButton mode="strong" onClick={() => handleTransferIn()}>Transfer To
+                            App</TransferButton>
+                        <Button mode="strong" onClick={() => handleTransferOut()}>Transfer From App</Button>
+                    </ButtonsContainer>
+                </DetailContainer>
 
             </div>
 

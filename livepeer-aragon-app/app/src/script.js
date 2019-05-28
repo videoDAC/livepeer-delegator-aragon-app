@@ -13,7 +13,6 @@ import {
 } from '../web3/ExternalContracts'
 import {range, of} from "rxjs";
 import {first, mergeMap, map, filter, toArray, zip, tap, merge, catchError} from "rxjs/operators"
-import BN from 'bn.js'
 
 const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
 const ETHER_TOKEN_FAKE_ADDRESS = '0x0000000000000000000000000000000000000000'
@@ -23,10 +22,10 @@ api.identify('Livepeer App')
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
 //TODO: Add retryEvery function
-//TODO: Test withdraw fees function.
 //TODO: Rearrange Transcoder UI, add boxes to other tabs.
 //TODO: More disabling of buttons/error handling when functions can't be called.
 //TODO: Add menu hamburger to smaller view.
+//TODO: Add withdraw eth function.
 
 const initialState = async (state) => {
     return {

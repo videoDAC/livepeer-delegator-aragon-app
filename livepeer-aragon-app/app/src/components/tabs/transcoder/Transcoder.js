@@ -2,6 +2,8 @@ import React from 'react'
 import styled from "styled-components";
 import TranscoderDetails from "./Details";
 import TranscoderActionButtons from "./ActionButtons";
+import ServiceUri from "./ServiceUri";
+import TotalStake from "./TotalStake";
 
 const TranscoderContainer = styled.div`
     display: flex;
@@ -14,12 +16,17 @@ const Transcoder = ({handleDeclareTranscoder, handleTranscoderReward, handleSetS
     return (
         <TranscoderContainer>
 
-            <TranscoderDetails appState={appState}/>
+            <div>
 
-            <TranscoderActionButtons appState={appState}
-                                     handleDeclareTranscoder={handleDeclareTranscoder}
-                                     handleTranscoderReward={handleTranscoderReward}
-                                     handleSetServiceUri={handleSetServiceUri}/>
+                <TotalStake appState={appState}/>
+
+                <TranscoderDetails appState={appState}
+                                   handleDeclareTranscoder={handleDeclareTranscoder}
+                                   handleTranscoderReward={handleTranscoderReward}/>
+
+                <ServiceUri appState={appState}
+                            handleSetServiceUri={handleSetServiceUri}/>
+            </div>
 
         </TranscoderContainer>
     )
