@@ -116,6 +116,15 @@ const onNewEvent = async (state, storeEvent) => {
                     totalStake: await transcoderStake$().toPromise()
                 }
             }
+        case 'Bond':
+            console.log("BONDING MANAGER BOND")
+            return {
+                ...state,
+                delegatorInfo: {
+                    ...state.delegatorInfo,
+                    ...await delegatorInfo$().toPromise()
+                },
+            }
         case 'LivepeerAragonAppUnbond':
             console.log("UNBOND")
             return {
@@ -129,6 +138,15 @@ const onNewEvent = async (state, storeEvent) => {
                 transcoder: {
                     ...state.transcoder,
                     ...await transcoderDetails$().toPromise()
+                }
+            }
+        case 'Unbond':
+            console.log("BONDING MANAGER UNBOND")
+            return {
+                ...state,
+                delegatorInfo: {
+                    ...state.delegatorInfo,
+                    ...await delegatorInfo$().toPromise()
                 }
             }
         case 'LivepeerAragonAppRebond':
@@ -321,6 +339,7 @@ const delegatorInfo$ = () =>
                     bondedAmount: delegator.bondedAmount,
                     fees: delegator.fees,
                     delegateAddress: delegator.delegateAddress,
+                    delegatedAmount: delegator.delegatedAmount,
                     lastClaimRound: delegator.lastClaimRound,
                     pendingStake: pendingStake
                 }
@@ -329,6 +348,7 @@ const delegatorInfo$ = () =>
             bondedAmount: 0,
             fees: 0,
             delegateAddress: 0x00,
+            delegatedAmount: 0,
             lastClaimRound: 0,
             pendingStake: 0
         }))

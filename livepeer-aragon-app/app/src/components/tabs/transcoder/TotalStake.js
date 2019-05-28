@@ -21,21 +21,20 @@ const DetailCard = styled(Card)`
     height: auto;
     width: auto;
     margin-top: 10px;
-    margin-bottom: 10px;
 `
 
 const TotalStake = ({appState}) => {
 
-    const {totalStake} = appState.transcoder
+    const {delegatedAmount} = appState.delegatorInfo
 
     return (
         <TotalStakeContainer>
 
             <DetailContainer>
 
-                <Text.Block size="normal">Total Stake</Text.Block>
+                <Text.Block size="normal">Delegated To The Livepeer App</Text.Block>
                 <DetailCard>
-                    <Text.Block size="normal">{totalStake} LPT</Text.Block>
+                    <Text.Block size="normal">{delegatedAmount} LPT</Text.Block>
                 </DetailCard>
 
             </DetailContainer>

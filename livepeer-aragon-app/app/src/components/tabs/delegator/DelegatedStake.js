@@ -38,7 +38,7 @@ const DelegatedStake = ({handleApproveAndBond, handleUnbondTokens, appState}) =>
 
             <BondTokensContainer>
 
-                <Text.Block size="normal">Delegated Stake</Text.Block>
+                <Text.Block size="normal">Delegated From The Livepeer App</Text.Block>
 
                 <BondedTokensCard>
                     <Text.Block>{totalStake} LPT bonded to {delegateAddress}</Text.Block>

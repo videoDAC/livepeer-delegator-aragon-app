@@ -2,6 +2,8 @@ import {fromDecimals} from "./lib/math-utils";
 import {BN} from "../../node_modules/bn.js/lib/bn";
 import {TOKEN_DECIMALS} from "../SharedConstants";
 
+//TODO: Break reducer up into smaller groups of state transformations
+
 const PERCENTAGE_AS_FRACTION_DIVISOR = 10000;
 
 const TRANSCODER_STATUS = {
@@ -29,6 +31,7 @@ let defaultState = {
         showPendingFees: false,
         fees: 0,
         delegateAddress: "",
+        delegatedAmount: 0,
         lastClaimRound: 0,
         pendingStake: 0,
         delegatorStatus: 0
@@ -68,6 +71,7 @@ const reducer = state => {
                 pendingFees: fromDecimals(state.delegatorInfo.pendingFees.toString(), TOKEN_DECIMALS),
                 showPendingFees: showPendingFees(state),
                 fees: fromDecimals(state.delegatorInfo.fees.toString(), TOKEN_DECIMALS),
+                delegatedAmount: fromDecimals(state.delegatorInfo.delegatedAmount.toString(), TOKEN_DECIMALS),
                 totalStake: calculateTotalStake(state.delegatorInfo),
                 delegatorStatus: parseInt(state.delegatorInfo.delegatorStatus)
             },

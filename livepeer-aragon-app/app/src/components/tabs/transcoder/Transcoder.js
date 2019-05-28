@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from "styled-components";
 import TranscoderDetails from "./Details";
-import TranscoderActionButtons from "./ActionButtons";
 import ServiceUri from "./ServiceUri";
 import TotalStake from "./TotalStake";
 
