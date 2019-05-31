@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
-import {Main, AppView, TabBar, SidePanel} from '@aragon/ui'
-import styled from 'styled-components'
+import {Main, TabBar, SidePanel} from '@aragon/ui'
 import {useAragonApi} from '@aragon/api-react'
 
 import {
@@ -28,11 +27,7 @@ import GenericInputPanel from './components/side-panel-input/GenericInputPanel';
 import Settings from './components/tabs/settings/Settings';
 import RebondFromUnbonded from "./components/side-panel-input/RebondFromUnbonded";
 import {DELEGATOR_STATUS} from "./app-state-reducer";
-
-const AppContainer = styled(AppView)`
-    display: flex;
-    flex-direction: column;
-`
+import AppLayout from "./components/AppLayout";
 
 // TODO: Convert App() to a class. Add defaultProps and propTypes to components. Extract strings. Extract common spacing (px values).
 function App() {
@@ -264,15 +259,16 @@ function App() {
 
     return (
         <Main>
-            <AppContainer title='Livepeer'
-                          tabs={<TabBar
-                              items={tabsNames}
-                              selected={tabBarSelected}
-                              onChange={setTabBarSelected}
-                          />}
-            >
+
+            <AppLayout title='Livepeer'
+                       tabs={(<TabBar
+                           items={tabsNames}
+                           selected={tabBarSelected}
+                           onChange={setTabBarSelected}/>)}>
+                
                 {selectedTabComponent}
-            </AppContainer>
+
+            </AppLayout>
 
             <SidePanel title={sidePanel ? sidePanel.title : ''} opened={sidePanel !== undefined}
                        onClose={() => closeSidePanel()}>

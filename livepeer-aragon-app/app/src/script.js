@@ -18,12 +18,11 @@ import {ETHER_TOKEN_FAKE_ADDRESS} from "../SharedConstants";
 const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
 
 const api = new AragonApi()
-api.identify('Livepeer App')
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
-//TODO: Add retryEvery function
+//TODO: Add retryEvery function (perhaps no need as we don't have any identifying info in the contract to fetch
+// before declaring store and store presumably won't emit until connected)
 //TODO: More disabling of buttons/error handling when functions can't be called.
-//TODO: Add menu hamburger to smaller view.
 //TODO: Remove unused transcoder total stake fetching.
 
 const initialState = async (state) => {
@@ -58,6 +57,7 @@ const onNewEvent = async (state, storeEvent) => {
         case 'AppInitialized':
             console.log("APP INITIALIZED")
             livepeerAppAddress = address
+            api.identify(`Livepeer: ${livepeerAppAddress}`)
 
             const initState = await initialState(state)
 
@@ -288,9 +288,9 @@ api.store(onNewEventCatchError,
     ]
 )
 
-const errorReturnDefaultOperator = (whileFetching, defaultReturnValue) =>
+const errorReturnDefaultOperator = (errorContext, defaultReturnValue) =>
     catchError(error => {
-        console.error(`Error fetching ${whileFetching}: ${error}`)
+        console.error(`Error fetching ${errorContext}: ${error}`)
         return of(defaultReturnValue)
     })
 
