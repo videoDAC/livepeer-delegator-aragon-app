@@ -37,6 +37,7 @@ dao apps <DAO-Address> --all --environment aragon:rinkeby
 dao token change-controller <DAO-Token-Address> <Token-Manager-Proxy-Address> --environment aragon:rinkeby
 dao acl create <DAO-Address> <Token-Manager-Proxy-Address> MINT_ROLE <Your-AragonCLI-Address> <Your-AragonCLI-Address> --environment aragon:rinkeby
 dao exec <DAO-Address> <Token-Manager-Proxy-Address> initialize <DAO-Token-Address> true 0 --environment aragon:rinkeby
+dao exec <DAO-Address> <Token-Manager-Proxy-Address> mint <Your-AragonCLI-Address> 1 --environment aragon:rinkeby
 dao install <DAO-Address> voting --app-init-args <DAO-Token-Address> 500000000000000000 250000000000000000 86400 --environment aragon:rinkeby
 dao apps <DAO-Address> --all --environment aragon:rinkeby
 ```
@@ -45,28 +46,9 @@ dao apps <DAO-Address> --all --environment aragon:rinkeby
 
 ```
 dao acl create <DAO-Address> <Voting-App-Proxy-Address> CREATE_VOTES_ROLE <Token-Manager-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
-dao install <DAO-Address> vault --environment aragon:rinkeby
-dao apps <DAO-Address> --all --environment aragon:rinkeby
-```
-
-> This returns `<Vault-App-Proxy-Address>` for use in future commands.
-
-```
-dao install <DAO-Address> finance --app-init-args <Vault-App-Proxy-Address> 2592000 --environment aragon:rinkeby
-dao apps <DAO-Address> --all --environment aragon:rinkeby
-```
-
-> This returns `<Finance-App-Proxy-Address>` for use in future commands.
-
-```
-dao acl create <DAO-Address> <Vault-App-Proxy-Address> TRANSFER_ROLE <Finance-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
-dao acl create <DAO-Address> <Finance-App-Proxy-Address> CREATE_PAYMENTS_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
-dao acl create <DAO-Address> <Finance-App-Proxy-Address> EXECUTE_PAYMENTS_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
-dao acl create <DAO-Address> <Finance-App-Proxy-Address> MANAGE_PAYMENTS_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
 ```
 
 You have now created a basic app on Aragon, with a token and basic apps.
-
 
 ### Install the Livepeer Aragon App
 

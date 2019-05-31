@@ -14,6 +14,7 @@ The following commands set the roles which can be performed by "Any account", wi
 dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> REWARD_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
 dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> WITHDRAW_STAKE_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
 dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> CLAIM_EARNINGS_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> WITHDRAW_FEES_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
 ```
 
 REWARD_ROLE allows the entity to call `reward` on behalf of app when it is acting as a Transcoder.
@@ -36,4 +37,5 @@ dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> TRANSFER_ROLE <Voting-
 dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> APPROVE_ROLE <Voting-Address> <Voting-Address>
 dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> BOND_ROLE <Voting-Address> <Voting-Address>
 dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> SET_CONTROLLER_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> REBOND_ROLE <Voting-Address> <Voting-Address>
 ```
