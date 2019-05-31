@@ -37,6 +37,7 @@ dao apps <DAO-Address> --all --environment aragon:rinkeby
 dao token change-controller <DAO-Token-Address> <Token-Manager-Proxy-Address> --environment aragon:rinkeby
 dao acl create <DAO-Address> <Token-Manager-Proxy-Address> MINT_ROLE <Your-AragonCLI-Address> <Your-AragonCLI-Address> --environment aragon:rinkeby
 dao exec <DAO-Address> <Token-Manager-Proxy-Address> initialize <DAO-Token-Address> true 0 --environment aragon:rinkeby
+dao exec <DAO-Address> <Token-Manager-Proxy-Address> mint <Your-AragonCLI-Address> 1 --environment aragon:rinkeby
 dao install <DAO-Address> voting --app-init-args <DAO-Token-Address> 500000000000000000 250000000000000000 86400 --environment aragon:rinkeby
 dao apps <DAO-Address> --all --environment aragon:rinkeby
 ```
