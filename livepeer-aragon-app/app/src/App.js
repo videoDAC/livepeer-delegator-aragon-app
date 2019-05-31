@@ -42,32 +42,32 @@ function App() {
     const [sidePanel, setSidePanel] = useState(undefined)
 
     const setController = (address) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         setLivepeerController(api, address)
     }
 
     const transferEthOut = (toAddress, amount) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         transferEthFromApp(api, toAddress, amount)
     }
 
     const transferTokensIn = (amount) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         transferLptToApp(api, amount)
     }
 
     const transferTokensOut = (toAddress, amount) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         transferLptFromApp(api, toAddress, amount)
     }
 
     const approveAndBondTokens = (tokenCount, bondToAddress) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         approveAndBond(api, tokenCount, bondToAddress)
     }
 
     const unbondTokens = (tokenCount) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         bondingManagerUnbond(api, tokenCount)
     }
 
@@ -80,12 +80,12 @@ function App() {
     }
 
     const rebondFromUnbonded = (to, unbondingLockId) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         bondingManagerRebondFromUnbonded(api, to, unbondingLockId)
     }
 
     const claimEarnings = (upToRound) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         bondingManagerClaimEarnings(api, upToRound)
     }
 
@@ -94,16 +94,18 @@ function App() {
     const withdrawTokens = (unbondingLockId) => bondingManagerWithdraw(api, unbondingLockId)
 
     const declareTranscoder = (rewardCut, feeShare, pricePerSegment) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         bondingManagerDeclareTranscoder(api, rewardCut, feeShare, pricePerSegment)
     }
 
     const transcoderReward = () => bondingManagerTranscoderReward(api)
 
     const setServiceUri = (serviceUri) => {
-        setSidePanel(undefined)
+        closeSidePanel()
         serviceRegistrySetServiceUri(api, serviceUri)
     }
+
+    const closeSidePanel = () => setSidePanel(undefined)
 
     const sidePanels = {
         APPROVE_AND_BOND: {
@@ -273,7 +275,7 @@ function App() {
             </AppContainer>
 
             <SidePanel title={sidePanel ? sidePanel.title : ''} opened={sidePanel !== undefined}
-                       onClose={() => setSidePanel(undefined)}>
+                       onClose={() => closeSidePanel()}>
                 {sidePanel ? sidePanel.sidePanelComponent : <div/>}
             </SidePanel>
         </Main>

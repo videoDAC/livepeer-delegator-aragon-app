@@ -169,6 +169,7 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 delegatorInfo: {
+                    ...state.delegatorInfo,
                     ...await delegatorInfo$().toPromise(),
                     pendingFees: await delegatorPendingFees$().toPromise()
                 }
@@ -179,6 +180,7 @@ const onNewEvent = async (state, storeEvent) => {
                 ...state,
                 appEthBalance: await appEthBalance$().toPromise(),
                 delegatorInfo: {
+                    ...state.delegatorInfo,
                     ...await delegatorInfo$().toPromise(),
                     pendingFees: await delegatorPendingFees$().toPromise()
                 }
@@ -212,7 +214,10 @@ const onNewEvent = async (state, storeEvent) => {
             console.log("APP REWARD")
             return {
                 ...state,
-                delegatorInfo: await delegatorInfo$().toPromise(),
+                delegatorInfo: {
+                    ...state.delegatorInfo,
+                    ...await delegatorInfo$().toPromise()
+                },
                 transcoder: {
                     ...state.transcoder,
                     ...await transcoderDetails$().toPromise()
@@ -243,7 +248,10 @@ const onNewEvent = async (state, storeEvent) => {
             console.log("LIVEPEER REWARD")
             return {
                 ...state,
-                delegatorInfo: await delegatorInfo$().toPromise()
+                delegatorInfo: {
+                    ...state.delegatorInfo,
+                    ...await delegatorInfo$().toPromise()
+                }
             }
         case ACCOUNT_CHANGED_EVENT:
             console.log("ACCOUNT CHANGED")
