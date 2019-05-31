@@ -45,28 +45,9 @@ dao apps <DAO-Address> --all --environment aragon:rinkeby
 
 ```
 dao acl create <DAO-Address> <Voting-App-Proxy-Address> CREATE_VOTES_ROLE <Token-Manager-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
-dao install <DAO-Address> vault --environment aragon:rinkeby
-dao apps <DAO-Address> --all --environment aragon:rinkeby
-```
-
-> This returns `<Vault-App-Proxy-Address>` for use in future commands.
-
-```
-dao install <DAO-Address> finance --app-init-args <Vault-App-Proxy-Address> 2592000 --environment aragon:rinkeby
-dao apps <DAO-Address> --all --environment aragon:rinkeby
-```
-
-> This returns `<Finance-App-Proxy-Address>` for use in future commands.
-
-```
-dao acl create <DAO-Address> <Vault-App-Proxy-Address> TRANSFER_ROLE <Finance-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
-dao acl create <DAO-Address> <Finance-App-Proxy-Address> CREATE_PAYMENTS_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
-dao acl create <DAO-Address> <Finance-App-Proxy-Address> EXECUTE_PAYMENTS_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
-dao acl create <DAO-Address> <Finance-App-Proxy-Address> MANAGE_PAYMENTS_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
 ```
 
 You have now created a basic app on Aragon, with a token and basic apps.
-
 
 ### Install the Livepeer Aragon App
 
