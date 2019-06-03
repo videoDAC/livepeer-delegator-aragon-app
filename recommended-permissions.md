@@ -2,8 +2,6 @@
 
 This document contains the recommended set of permissions for configuration of the Livepeer Aragon DAO.
 
-The permissions are as set on the [video.aragonid.eth DAO on Rinkeby](https://rinkeby.aragon.org/#/video.aragonid.eth/permissions?p=app.0x0069ee94a2c6964221c45a402d8b1ff0c45224b6).
-
 If your DAO is on Mainnet, you must change the `--environment` from `aragon:rinkeby` to `aragon:mainnet` in each command.
 
 #### Roles which control functions which could be performed by anyone
