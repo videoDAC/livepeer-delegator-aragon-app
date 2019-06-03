@@ -11,10 +11,10 @@ If your DAO is on Mainnet, you must change the `--environment` from `aragon:rink
 The following commands set the roles which can be performed by "Any account", with any changes to role permissions managed by the Voting app:
 
 ```
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> REWARD_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> WITHDRAW_STAKE_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> CLAIM_EARNINGS_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> WITHDRAW_FEES_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> REWARD_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> WITHDRAW_STAKE_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> CLAIM_EARNINGS_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> WITHDRAW_FEES_ROLE 0xffffffffffffffffffffffffffffffffffffffff <Voting-App-Proxy-Address>
 ```
 
 REWARD_ROLE allows the entity to call `reward` on behalf of app when it is acting as a Transcoder.
@@ -29,13 +29,13 @@ WITHDRAW_STAKE_ROLE allows the entity to withdraw stake on behalf of the Delegat
 The following commands set the roles to be managed fully by the Voting app.
 
 ```
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> APPROVE_AND_BOND_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> DECLARE_TRANSCODER_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> SET_SERVICE_URI_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> UNBOND_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> TRANSFER_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> APPROVE_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> BOND_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> SET_CONTROLLER_ROLE <Voting-Address> <Voting-Address>
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> REBOND_ROLE <Voting-Address> <Voting-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> APPROVE_AND_BOND_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> DECLARE_TRANSCODER_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> SET_SERVICE_URI_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> UNBOND_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> TRANSFER_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> APPROVE_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> BOND_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> SET_CONTROLLER_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address>
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> REBOND_ROLE <Voting-App-Proxy-Address> <Voting-App-Proxy-Address>
 ```
