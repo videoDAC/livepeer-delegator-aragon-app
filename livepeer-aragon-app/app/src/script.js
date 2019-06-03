@@ -20,10 +20,11 @@ const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
 const api = new AragonApi()
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
-//TODO: Add retryEvery function (perhaps no need as we don't have any identifying info in the contract to fetch
-// before declaring store and store presumably won't emit until connected)
+//TODO: Refactor out streams (probably pass api and appAddress to each)
+//TODO: Refactor switch statement into actions.
 //TODO: More disabling of buttons/error handling when functions can't be called.
 //TODO: Remove unused transcoder total stake fetching.
+//TODO: Remove unused fetching and updating of user account balance
 
 const initialState = async (state) => {
     return {
@@ -52,6 +53,7 @@ const initialState = async (state) => {
 const onNewEvent = async (state, storeEvent) => {
 
     const {event, returnValues, address} = storeEvent
+    const {delegatorInfo, transcoder} = state
 
     switch (event) {
         case 'AppInitialized':
@@ -111,7 +113,7 @@ const onNewEvent = async (state, storeEvent) => {
                 },
                 disableUnbondTokens: await disableUnbondTokens$().toPromise(),
                 transcoder: {
-                    ...state.transcoder,
+                    ...transcoder,
                     totalStake: await transcoderStake$().toPromise()
                 }
             }
@@ -120,7 +122,7 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 delegatorInfo: {
-                    ...state.delegatorInfo,
+                    ...delegatorInfo,
                     ...await delegatorInfo$().toPromise()
                 },
             }
@@ -135,7 +137,7 @@ const onNewEvent = async (state, storeEvent) => {
                 },
                 unbondingLockInfos: await unbondingLockInfos$().toPromise(),
                 transcoder: {
-                    ...state.transcoder,
+                    ...transcoder,
                     ...await transcoderDetails$().toPromise()
                 }
             }
@@ -144,7 +146,7 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 delegatorInfo: {
-                    ...state.delegatorInfo,
+                    ...delegatorInfo,
                     ...await delegatorInfo$().toPromise()
                 }
             }
@@ -160,7 +162,7 @@ const onNewEvent = async (state, storeEvent) => {
                 },
                 unbondingLockInfos: await unbondingLockInfos$().toPromise(),
                 transcoder: {
-                    ...state.transcoder,
+                    ...transcoder,
                     ...await transcoderDetails$().toPromise()
                 }
             }
@@ -169,7 +171,7 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 delegatorInfo: {
-                    ...state.delegatorInfo,
+                    ...delegatorInfo,
                     ...await delegatorInfo$().toPromise(),
                     pendingFees: await delegatorPendingFees$().toPromise()
                 }
@@ -180,7 +182,7 @@ const onNewEvent = async (state, storeEvent) => {
                 ...state,
                 appEthBalance: await appEthBalance$().toPromise(),
                 delegatorInfo: {
-                    ...state.delegatorInfo,
+                    ...delegatorInfo,
                     ...await delegatorInfo$().toPromise(),
                     pendingFees: await delegatorPendingFees$().toPromise()
                 }
@@ -197,7 +199,7 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 delegatorInfo: {
-                    ...state.delegatorInfo,
+                    ...delegatorInfo,
                     pendingFees: await delegatorPendingFees$().toPromise()
                 }
             }
@@ -206,7 +208,7 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 transcoder: {
-                    ...state.transcoder,
+                    ...transcoder,
                     ...await transcoderDetails$().toPromise()
                 }
             }
@@ -215,11 +217,11 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 delegatorInfo: {
-                    ...state.delegatorInfo,
+                    ...delegatorInfo,
                     ...await delegatorInfo$().toPromise()
                 },
                 transcoder: {
-                    ...state.transcoder,
+                    ...transcoder,
                     ...await transcoderDetails$().toPromise()
                 }
             }
@@ -228,7 +230,7 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 transcoder: {
-                    ...state.transcoder,
+                    ...transcoder,
                     serviceUri: await transcoderServiceUri$().toPromise()
                 }
             }
@@ -240,7 +242,7 @@ const onNewEvent = async (state, storeEvent) => {
                 unbondingLockInfos: await unbondingLockInfos$().toPromise(),
                 disableUnbondTokens: await disableUnbondTokens$().toPromise(),
                 transcoder: {
-                    ...state.transcoder,
+                    ...transcoder,
                     ...await transcoderDetails$().toPromise()
                 }
             }
@@ -249,7 +251,7 @@ const onNewEvent = async (state, storeEvent) => {
             return {
                 ...state,
                 delegatorInfo: {
-                    ...state.delegatorInfo,
+                    ...delegatorInfo,
                     ...await delegatorInfo$().toPromise()
                 }
             }
@@ -288,38 +290,39 @@ api.store(onNewEventCatchError,
     ]
 )
 
-const errorReturnDefaultOperator = (errorContext, defaultReturnValue) =>
+const onErrorReturnDefault = (errorContext, defaultReturnValue) =>
     catchError(error => {
         console.error(`Error fetching ${errorContext}: ${error}`)
         return of(defaultReturnValue)
     })
 
 const appEthBalance$ = () =>
-    livepeerAragonApp$(api, livepeerAppAddress).balance(ETHER_TOKEN_FAKE_ADDRESS).pipe(
-        errorReturnDefaultOperator('appEthBalance', 0))
+    livepeerAragonApp$(api, livepeerAppAddress)
+        .balance(ETHER_TOKEN_FAKE_ADDRESS).pipe(
+        onErrorReturnDefault('appEthBalance', 0))
 
 const userLptBalance$ = () =>
     api.accounts().pipe(
         first(),
         zip(livepeerToken$(api)),
         mergeMap(([accounts, token]) => token.balanceOf(accounts[0])),
-        errorReturnDefaultOperator('userLptBalance', 0))
+        onErrorReturnDefault('userLptBalance', 0))
 
 const appLptBalance$ = () =>
     livepeerToken$(api).pipe(
         mergeMap(token => token.balanceOf(livepeerAppAddress)),
-        errorReturnDefaultOperator('appLptBalance', 0))
+        onErrorReturnDefault('appLptBalance', 0))
 
 const appApprovedTokens$ = () =>
     livepeerToken$(api).pipe(
         zip(bondingManagerAddress$(api)),
         mergeMap(([token, bondingManagerAddress]) => token.allowance(livepeerAppAddress, bondingManagerAddress)),
-        errorReturnDefaultOperator('appApprovedTokens', 0))
+        onErrorReturnDefault('appApprovedTokens', 0))
 
 const currentRound$ = () =>
     roundsManager$(api).pipe(
         mergeMap(roundsManager => roundsManager.currentRound()),
-        errorReturnDefaultOperator('currentRound', 0))
+        onErrorReturnDefault('currentRound', 0))
 
 const pendingStakeFallback$ = (delegator) =>
     currentRound$().pipe(
@@ -335,7 +338,7 @@ const pendingStakeSuccess$ = (delegator) =>
 const pendingStake$ = (delegator) =>
     pendingStakeSuccess$(delegator).pipe(
         merge(pendingStakeFallback$(delegator)),
-        errorReturnDefaultOperator('pendingStake', 0))
+        onErrorReturnDefault('pendingStake', 0))
 
 const delegatorInfo$ = () =>
     bondingManager$(api).pipe(
@@ -351,7 +354,7 @@ const delegatorInfo$ = () =>
                     pendingStake: pendingStake
                 }
             }))),
-        errorReturnDefaultOperator('delegatorInfo', {
+        onErrorReturnDefault('delegatorInfo', {
             bondedAmount: 0,
             fees: 0,
             delegateAddress: 0x00,
@@ -363,7 +366,7 @@ const delegatorInfo$ = () =>
 const delegatorStatus$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.delegatorStatus(livepeerAppAddress)),
-        errorReturnDefaultOperator('delegatorStatus', 0))
+        onErrorReturnDefault('delegatorStatus', 0))
 
 const delegatorPendingFees$ = () =>
     bondingManager$(api).pipe(
@@ -394,35 +397,35 @@ const unbondingLockInfos$ = () =>
         filter(unbondingLockInfo => parseInt(unbondingLockInfo.amount) !== 0),
         toArray(),
         map(unbondingLockInfos => unbondingLockInfos.sort(sortByLockId)),
-        errorReturnDefaultOperator('unbondingLockInfos', []))
+        onErrorReturnDefault('unbondingLockInfos', []))
 
 const disableUnbondTokens$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.maxEarningsClaimsRounds()),
         zip(currentRound$(), delegatorInfo$()),
         map(([maxRounds, currentRound, delegatorInfo]) => delegatorInfo.lastClaimRound <= currentRound - maxRounds),
-        errorReturnDefaultOperator('disableUnbondTokens', false))
+        onErrorReturnDefault('disableUnbondTokens', false))
 
 const transcoderStake$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.transcoderTotalStake(livepeerAppAddress)),
-        errorReturnDefaultOperator('transcoderStake', 0))
+        onErrorReturnDefault('transcoderStake', 0))
 
 const transcoderStatus$ = () =>
     bondingManager$(api).pipe(
         mergeMap(bondingManager => bondingManager.transcoderStatus(livepeerAppAddress)),
-        errorReturnDefaultOperator('transcoderStatus', 0))
+        onErrorReturnDefault('transcoderStatus', 0))
 
 const transcoderActive$ = () =>
     bondingManager$(api).pipe(
         zip(currentRound$()),
         mergeMap(([bondingManager, currentRound]) => bondingManager.isActiveTranscoder(livepeerAppAddress, currentRound)),
-        errorReturnDefaultOperator('transcoderActive', false))
+        onErrorReturnDefault('transcoderActive', false))
 
 const transcoderServiceUri$ = () =>
     serviceRegistry$(api).pipe(
         mergeMap(serviceRegistry => serviceRegistry.getServiceURI(livepeerAppAddress)),
-        errorReturnDefaultOperator('transcoderServiceUri', ''))
+        onErrorReturnDefault('transcoderServiceUri', ''))
 
 const transcoderDetails$ = () =>
     bondingManager$(api).pipe(
@@ -442,7 +445,7 @@ const transcoderDetails$ = () =>
                     pendingPricePerSegment: transcoderDetails.pendingPricePerSegment
                 }
             },
-            errorReturnDefaultOperator('transcoderDetails', {
+            onErrorReturnDefault('transcoderDetails', {
                 status: 0,
                 active: false,
                 totalStake: 0,
