@@ -3,6 +3,7 @@ const EVMScriptRegistryFactory = artifacts.require('EVMScriptRegistryFactory')
 const ACL = artifacts.require('ACL')
 const Kernel = artifacts.require('Kernel')
 
+// TODO: Make this extendable for individual aragon apps and experiment with snapshot/revert approach of livepeer fixture.
 export default class DaoDeployment {
 
     async deployBefore() {

@@ -21,10 +21,12 @@ const api = new AragonApi()
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
 //TODO: Refactor out streams (probably pass api and appAddress to each)
-//TODO: Refactor switch statement into actions.
+//TODO: Refactor switch statement into actions related to certain tabs/areas of the app.
 //TODO: More disabling of buttons/error handling when functions can't be called.
 //TODO: Remove unused transcoder total stake fetching.
 //TODO: Remove unused fetching and updating of user account balance
+//TODO: Remove log statements or make them conditional on while in development.
+//TODO: Add syncing UI widget.
 
 const initialState = async (state) => {
     return {

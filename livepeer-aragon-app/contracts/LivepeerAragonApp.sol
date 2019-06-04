@@ -22,7 +22,6 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
  LivepeerDelegator includes a reference to a modified Agent contract which includes a reference to a modified Vault contract.
 
  TODO: Get decimal numbers from LPT contract in Radspec strings
- TODO: Remove trailing zeros from fractional token amount (not sure how)
  TODO: Write tests
  */
 contract LivepeerAragonApp is Agent {

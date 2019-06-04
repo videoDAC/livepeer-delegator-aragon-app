@@ -15,7 +15,7 @@
     "solidity-bytes-utils": "0.0.6"
   },
   "devDependencies": {
-    "@aragon/cli": "^5.7.1",
+    "@aragon/cli": "5.7.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-stage-2": "^6.24.1",
@@ -27,8 +27,8 @@
     "start": "npm run start:ipfs",
     "start:ipfs": "aragon run",
     "start:http": "aragon run --http localhost:8001 --http-served-from ./dist",
-    "start:ipfs:template": "npm run start:ipfs -- --template Template --template-init @ARAGON_ENS 0x48c2Eac33521070509f9819A824a3D5686Ba5ce8",
-    "start:http:template": "npm run start:http -- --template Template --template-init @ARAGON_ENS 0x48c2Eac33521070509f9819A824a3D5686Ba5ce8",
+    "start:ipfs:template": "npm run start:ipfs -- --template Template --template-init @ARAGON_ENS 0x515afE0fDaee79e35988d9bC3A9eaF600c229D9a",
+    "start:http:template": "npm run start:http -- --template Template --template-init @ARAGON_ENS 0x515afE0fDaee79e35988d9bC3A9eaF600c229D9a",
     "prepare": "cd app && npm install && cd ..",
     "start:app": "cd app && npm start && cd ..",
     "test": "aragon contracts test",
