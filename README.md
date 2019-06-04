@@ -20,7 +20,7 @@ This project uses a modified version of the [Aragon Agent App](https://blog.arag
 
 It currently includes the ability to call the following smart contract functions on Livepeer's protocol, and for the functions' execution to be governed by a vote of the DAO:
 
-- **Delegator** functions: `approve`, `bond`, `claimEarnings`, `unbond`, and `withdraw`.
+- **Delegator** functions: `approve`, `bond`, `claimEarnings`, `unbond`, `rebond`, `withdrawFees` and `withdrawStake`.
 - **Transcoder** functions: `transcoder`, `reward`, `setServiceURI`
 
 ![Screenshot from 2019-05-18 17-12-14](https://user-images.githubusercontent.com/2212651/57972471-086c9d00-7993-11e9-896d-ee7fa5f471aa.png)

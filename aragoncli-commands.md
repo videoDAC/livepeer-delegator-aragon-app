@@ -61,4 +61,4 @@ dao apps <DAO-Address> --all --environment aragon:rinkeby
 
 ### Set the Livepeer Aragon App's permissions as recommended
 
-Complete this script by setting the permissions as per [recommended set of permissions for configuration of the Livepeer Aragon DAO.](https://github.com/videoDAC/livepeer-aragon/blob/master/recommended-permissions.md).
+Complete this script by setting the permissions as per [recommended set of permissions for configuration of the Livepeer Aragon DAO](https://github.com/videoDAC/livepeer-aragon/blob/master/recommended-permissions.md).
