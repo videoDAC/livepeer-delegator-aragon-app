@@ -55,7 +55,14 @@ const initialState = async (state) => {
 const onNewEvent = async (state, storeEvent) => {
 
     const {event, returnValues, address} = storeEvent
-    const {delegatorInfo, transcoder} = state
+
+    let delegatorInfo
+    let transcoder
+
+    if (state != null) {
+        delegatorInfo = state.delegatorInfo
+        transcoder = state.transcoder
+    }
 
     switch (event) {
         case 'AppInitialized':
