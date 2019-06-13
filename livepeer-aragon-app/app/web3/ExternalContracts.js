@@ -1,3 +1,4 @@
+import AgentAbi from '../abi/agent-abi'
 import LivepeerAppAbi from '../abi/livepeerAragonApp-abi'
 import BondingManagerAbi from '../abi/bondingManager-abi'
 import LivepeerTokenAbi from '../abi/livepeerToken-abi'
@@ -9,6 +10,14 @@ import {contractId} from './utils/livepeerHelpers'
 import {map, mergeMap, tap} from 'rxjs/operators'
 
 //TODO: Convert to an object or use memoirzation and return const observables with shareReplay(1), could reduce load time.
+
+const agentAddress$ = api => api.call('agent')
+
+const agentApp$ = (api) =>
+    agentAddress$(api).pipe(
+        tap(agentAdd => console.log("Agent address " + agentAdd)),
+        map(agentAddress => api.external(agentAddress, AgentAbi)))
+
 const controllerAddress$ = (api) => api.call("livepeerController")
 
 const controller$ = (api) =>
@@ -28,9 +37,6 @@ const roundsManagerAddress$ = (api) => livepeerAddressOf$(api, "RoundsManager")
 const jobsManagerAddress$ = api => livepeerAddressOf$(api, "JobsManager")
 
 const serviceRegistryAddress$ = (api) => livepeerAddressOf$(api, "ServiceRegistry")
-
-const livepeerAragonApp$ = (api, livepeerAppAddress) =>
-    api.external(livepeerAppAddress, LivepeerAppAbi)
 
 const livepeerToken$ = (api) =>
     livepeerTokenAddress$(api).pipe(
@@ -57,11 +63,12 @@ const serviceRegistry$ = (api) =>
         map(address => api.external(address, ServiceRegistryAbi)))
 
 export {
+    agentAddress$,
+    agentApp$,
     controllerAddress$,
     livepeerTokenAddress$,
     bondingManagerAddress$,
     roundsManagerAddress$,
-    livepeerAragonApp$,
     livepeerToken$,
     bondingManager$,
     roundsManager$,

@@ -1,9 +1,10 @@
 import '@babel/polyfill'
 import AragonApi from '@aragon/api'
 import {
+    agentAddress$,
+    agentApp$,
     controllerAddress$,
     livepeerTokenAddress$,
-    livepeerAragonApp$,
     livepeerToken$,
     bondingManagerAddress$,
     bondingManager$,
@@ -14,10 +15,13 @@ import {
 import {range, of} from "rxjs";
 import {first, mergeMap, map, filter, toArray, zip, tap, merge, catchError} from "rxjs/operators"
 import {ETHER_TOKEN_FAKE_ADDRESS} from "../SharedConstants";
+import retryEvery from "./lib/retryEvery";
 
 const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
 
 const api = new AragonApi()
+//TODO: Remove this in favour of address$
+let agentAddress = "0x0000000000000000000000000000000000000000"
 let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
 //TODO: Refactor out streams (probably pass api and appAddress to each)
@@ -28,9 +32,54 @@ let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 //TODO: Remove log statements or make them conditional on while in development.
 //TODO: Add syncing UI widget.
 
+// Wait until we can get the agents address (demonstrating we are connected to the app) before initializing the store.
+//TODO: Is this necessary?
+retryEvery(retry => {
+    api.call('agent').subscribe(
+        () => initialize(),
+        error => {
+            console.error(
+                'Could not start background script execution due to the contract not loading the agent address:',
+                error
+            )
+            retry()
+        }
+    )
+})
+
+const initialize = () => {
+    api.store(onNewEventCatchError,
+        [
+            accountChangedEvent$(),
+            agentApp$(api).pipe(mergeMap(agentApp => agentApp.events())),
+            livepeerToken$(api).pipe(mergeMap(livepeerToken => livepeerToken.events())),
+            bondingManager$(api).pipe(mergeMap(bondingManager => bondingManager.events())),
+            roundsManager$(api).pipe(mergeMap(roundsManager => roundsManager.events())),
+            jobsManager$(api).pipe(mergeMap(jobsManager => jobsManager.events()))
+        ]
+    )
+}
+
+const onNewEventCatchError = async (state, event) => {
+    try {
+        return await onNewEvent(state, event)
+    } catch (error) {
+        console.error(`Caught error: ${error}`)
+    }
+}
+
+const accountChangedEvent$ = () =>
+    api.accounts().pipe(
+        map(account => {
+            return {event: ACCOUNT_CHANGED_EVENT, account: account}
+        }))
+
+
+
 const initialState = async (state) => {
     return {
         ...state,
+        agentAddress: await agentAddress$(api).toPromise(),
         livepeerTokenAddress: await livepeerTokenAddress$(api).toPromise(),
         livepeerControllerAddress: await controllerAddress$(api).toPromise(),
         appEthBalance: await appEthBalance$().toPromise(),
@@ -275,30 +324,6 @@ const onNewEvent = async (state, storeEvent) => {
     }
 }
 
-const onNewEventCatchError = async (state, event) => {
-    try {
-        return await onNewEvent(state, event)
-    } catch (error) {
-        console.error(`Caught error: ${error}`)
-    }
-}
-
-const accountChangedEvent$ = () =>
-    api.accounts().pipe(
-        map(account => {
-            return {event: ACCOUNT_CHANGED_EVENT, account: account}
-        }))
-
-api.store(onNewEventCatchError,
-    [
-        accountChangedEvent$(),
-        livepeerToken$(api).pipe(mergeMap(livepeerToken => livepeerToken.events())),
-        bondingManager$(api).pipe(mergeMap(bondingManager => bondingManager.events())),
-        roundsManager$(api).pipe(mergeMap(roundsManager => roundsManager.events())),
-        jobsManager$(api).pipe(mergeMap(jobsManager => jobsManager.events()))
-    ]
-)
-
 const onErrorReturnDefault = (errorContext, defaultReturnValue) =>
     catchError(error => {
         console.error(`Error fetching ${errorContext}: ${error}`)
@@ -306,8 +331,8 @@ const onErrorReturnDefault = (errorContext, defaultReturnValue) =>
     })
 
 const appEthBalance$ = () =>
-    livepeerAragonApp$(api, livepeerAppAddress)
-        .balance(ETHER_TOKEN_FAKE_ADDRESS).pipe(
+    agentApp$(api).pipe(
+        mergeMap(agentApp => agentApp.balance(ETHER_TOKEN_FAKE_ADDRESS)),
         onErrorReturnDefault('appEthBalance', 0))
 
 const userLptBalance$ = () =>
@@ -319,13 +344,14 @@ const userLptBalance$ = () =>
 
 const appLptBalance$ = () =>
     livepeerToken$(api).pipe(
-        mergeMap(token => token.balanceOf(livepeerAppAddress)),
+        zip(agentAddress$(api)),
+        mergeMap(([token, agentAddress]) => token.balanceOf(agentAddress)),
         onErrorReturnDefault('appLptBalance', 0))
 
 const appApprovedTokens$ = () =>
     livepeerToken$(api).pipe(
-        zip(bondingManagerAddress$(api)),
-        mergeMap(([token, bondingManagerAddress]) => token.allowance(livepeerAppAddress, bondingManagerAddress)),
+        zip(bondingManagerAddress$(api), agentAddress$(api)),
+        mergeMap(([token, bondingManagerAddress, agentAddress]) => token.allowance(agentAddress, bondingManagerAddress)),
         onErrorReturnDefault('appApprovedTokens', 0))
 
 const currentRound$ = () =>
@@ -341,8 +367,8 @@ const pendingStakeFallback$ = (delegator) =>
 const pendingStakeSuccess$ = (delegator) =>
     currentRound$().pipe(
         filter((currentRound) => currentRound > delegator.lastClaimRound),
-        zip(bondingManager$(api)),
-        mergeMap(([currentRound, bondingManager]) => bondingManager.pendingStake(livepeerAppAddress, currentRound)))
+        zip(bondingManager$(api), agentAddress$(api)),
+        mergeMap(([currentRound, bondingManager, agentAddress]) => bondingManager.pendingStake(agentAddress, currentRound)))
 
 const pendingStake$ = (delegator) =>
     pendingStakeSuccess$(delegator).pipe(
@@ -351,7 +377,8 @@ const pendingStake$ = (delegator) =>
 
 const delegatorInfo$ = () =>
     bondingManager$(api).pipe(
-        mergeMap(bondingManager => bondingManager.getDelegator(livepeerAppAddress)),
+        zip(agentAddress$(api)),
+        mergeMap(([bondingManager, agentAddress]) => bondingManager.getDelegator(agentAddress)),
         mergeMap(delegator => pendingStake$(delegator).pipe(
             map((pendingStake) => {
                 return {
@@ -374,20 +401,21 @@ const delegatorInfo$ = () =>
 
 const delegatorStatus$ = () =>
     bondingManager$(api).pipe(
-        mergeMap(bondingManager => bondingManager.delegatorStatus(livepeerAppAddress)),
+        zip(agentAddress$(api)),
+        mergeMap(([bondingManager, agentAddress]) => bondingManager.delegatorStatus(agentAddress)),
         onErrorReturnDefault('delegatorStatus', 0))
 
 const delegatorPendingFees$ = () =>
     bondingManager$(api).pipe(
-        zip(currentRound$()),
-        mergeMap(([bondingManager, currentRound]) => bondingManager.pendingFees(livepeerAppAddress, currentRound)),
+        zip(currentRound$(), agentAddress$(api)),
+        mergeMap(([bondingManager, currentRound, agentAddress]) => bondingManager.pendingFees(agentAddress, currentRound)),
         catchError(error => of(0))) // Don't log error as pendingFees always reverts unless there are pending fees.
 
-const mapBondingManagerToLockInfo = bondingManager =>
-    bondingManager.getDelegator(livepeerAppAddress).pipe(
+const mapBondingManagerToLockInfo = ([bondingManager, agentAddress]) =>
+    bondingManager.getDelegator(agentAddress).pipe(
         zip(currentRound$()), // Zip here so we only get the current round once, if we did it after the range observable we would do it more times than necessary.
         mergeMap(([delegator, currentRound]) => range(0, delegator.nextUnbondingLockId).pipe(
-            mergeMap(unbondingLockId => bondingManager.getDelegatorUnbondingLock(livepeerAppAddress, unbondingLockId).pipe(
+            mergeMap(unbondingLockId => bondingManager.getDelegatorUnbondingLock(agentAddress, unbondingLockId).pipe(
                 map(unbondingLockInfo => {
                     return {...unbondingLockInfo, id: unbondingLockId}
                 }))),
@@ -402,6 +430,7 @@ const sortByLockId = (first, second) => first.id > second.id ? 1 : -1
 
 const unbondingLockInfos$ = () =>
     bondingManager$(api).pipe(
+        zip(agentAddress$(api)),
         mergeMap(mapBondingManagerToLockInfo),
         filter(unbondingLockInfo => parseInt(unbondingLockInfo.amount) !== 0),
         toArray(),
@@ -417,28 +446,32 @@ const disableUnbondTokens$ = () =>
 
 const transcoderStake$ = () =>
     bondingManager$(api).pipe(
-        mergeMap(bondingManager => bondingManager.transcoderTotalStake(livepeerAppAddress)),
+        zip(agentAddress$(api)),
+        mergeMap(([bondingManager, agentAddress]) => bondingManager.transcoderTotalStake(agentAddress)),
         onErrorReturnDefault('transcoderStake', 0))
 
 const transcoderStatus$ = () =>
     bondingManager$(api).pipe(
-        mergeMap(bondingManager => bondingManager.transcoderStatus(livepeerAppAddress)),
+        zip(agentAddress$(api)),
+        mergeMap(([bondingManager, agentAddress]) => bondingManager.transcoderStatus(agentAddress)),
         onErrorReturnDefault('transcoderStatus', 0))
 
 const transcoderActive$ = () =>
     bondingManager$(api).pipe(
-        zip(currentRound$()),
-        mergeMap(([bondingManager, currentRound]) => bondingManager.isActiveTranscoder(livepeerAppAddress, currentRound)),
+        zip(currentRound$(), agentAddress$(api)),
+        mergeMap(([bondingManager, currentRound, agentAddress]) => bondingManager.isActiveTranscoder(agentAddress, currentRound)),
         onErrorReturnDefault('transcoderActive', false))
 
 const transcoderServiceUri$ = () =>
     serviceRegistry$(api).pipe(
-        mergeMap(serviceRegistry => serviceRegistry.getServiceURI(livepeerAppAddress)),
+        zip(agentAddress$(api)),
+        mergeMap(([serviceRegistry, agentAddress]) => serviceRegistry.getServiceURI(agentAddress)),
         onErrorReturnDefault('transcoderServiceUri', ''))
 
 const transcoderDetails$ = () =>
     bondingManager$(api).pipe(
-        mergeMap(bondingManager => bondingManager.getTranscoder(livepeerAppAddress)),
+        zip(agentAddress$(api)),
+        mergeMap(([bondingManager, agentAddress]) => bondingManager.getTranscoder(agentAddress)),
         zip(transcoderStake$(), transcoderStatus$(), transcoderActive$()),
         map(([transcoderDetails, totalStake, status, active]) => {
                 return {

@@ -1,14 +1,14 @@
-import {fromDecimals} from "./lib/math-utils";
-import {BN} from "../../node_modules/bn.js/lib/bn";
-import {TOKEN_DECIMALS} from "../SharedConstants";
+import {fromDecimals} from './lib/math-utils';
+import {BN} from '../../node_modules/bn.js/lib/bn';
+import {TOKEN_DECIMALS} from '../SharedConstants';
 
 //TODO: Break reducer up into smaller groups of state transformations
 
 const PERCENTAGE_AS_FRACTION_DIVISOR = 10000;
 
 const TRANSCODER_STATUS = {
-    0: "Not Registered",
-    1: "Registered"
+    0: 'Not Registered',
+    1: 'Registered'
 }
 
 const DELEGATOR_STATUS = {
@@ -18,8 +18,9 @@ const DELEGATOR_STATUS = {
 }
 
 let defaultState = {
-    appAddress: "0x0000000000000000000000000000000000000000",
-    livepeerTokenAddress: "0x0000000000000000000000000000000000000000",
+    agentAddress: '0x0000000000000000000000000000000000000000',
+    appAddress: '0x0000000000000000000000000000000000000000',
+    livepeerTokenAddress: '0x0000000000000000000000000000000000000000',
     appEthBalance: 0,
     userLptBalance: 0,
     appsLptBalance: 0,
@@ -30,7 +31,7 @@ let defaultState = {
         pendingFees: 0,
         showPendingFees: false,
         fees: 0,
-        delegateAddress: "",
+        delegateAddress: '',
         delegatedAmount: 0,
         lastClaimRound: 0,
         pendingStake: 0,
@@ -50,7 +51,7 @@ let defaultState = {
         pendingFeeShare: 0,
         pendingPricePerSegment: 0,
         disableReward: false,
-        serviceUri: ""
+        serviceUri: ''
     }
 }
 

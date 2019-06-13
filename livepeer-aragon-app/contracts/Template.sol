@@ -20,6 +20,7 @@ import "@aragon/apps-voting/contracts/Voting.sol";
 import "@aragon/apps-token-manager/contracts/TokenManager.sol";
 import "@aragon/apps-shared-minime/contracts/MiniMeToken.sol";
 
+import "@aragon/apps-agent/contracts/Agent.sol";
 import "./LivepeerAragonApp.sol";
 
 contract TemplateBase is APMNamehash {
@@ -59,7 +60,6 @@ contract Template is TemplateBase {
     function Template(ENS ens, address _livepeerController) TemplateBase(DAOFactory(0), ens) {
         tokenFactory = new MiniMeTokenFactory();
         livepeerController = _livepeerController;
-
     }
 
     function newInstance() {
@@ -68,22 +68,26 @@ contract Template is TemplateBase {
         acl.createPermission(this, dao, dao.APP_MANAGER_ROLE(), this);
 
         address root = msg.sender;
-        bytes32 appId = apmNamehash("livepeer");
+        bytes32 agentId = apmNamehash("agent");
+        bytes32 livepeerAppId = apmNamehash("livepeer");
         bytes32 votingAppId = apmNamehash("voting");
         bytes32 tokenManagerAppId = apmNamehash("token-manager");
 
-        LivepeerAragonApp app = LivepeerAragonApp(dao.newAppInstance(appId, latestVersionAppBase(appId)));
-
+        Agent agent = Agent(dao.newAppInstance(agentId, latestVersionAppBase(agentId)));
+        LivepeerAragonApp livepeerApp = LivepeerAragonApp(dao.newAppInstance(livepeerAppId, latestVersionAppBase(livepeerAppId)));
         Voting voting = Voting(dao.newAppInstance(votingAppId, latestVersionAppBase(votingAppId)));
         TokenManager tokenManager = TokenManager(dao.newAppInstance(tokenManagerAppId, latestVersionAppBase(tokenManagerAppId)));
-
         MiniMeToken token = tokenFactory.createCloneToken(MiniMeToken(0), 0, "App token", 0, "APP", true);
         token.changeController(tokenManager);
 
-        app.initialize(livepeerController);
+        agent.initialize();
+        livepeerApp.initialize(address(agent), livepeerController);
         tokenManager.initialize(token, true, 0);
-        // Initialize apps
         voting.initialize(token, 50 * PCT, 20 * PCT, 1 days);
+
+        acl.createPermission(ANY_ENTITY, agent, agent.EXECUTE_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, agent, agent.RUN_SCRIPT_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, agent, agent.TRANSFER_ROLE(), root);
 
         acl.createPermission(this, tokenManager, tokenManager.MINT_ROLE(), this);
         tokenManager.mint(root, 1); // Give one token to root
@@ -91,21 +95,20 @@ contract Template is TemplateBase {
         acl.createPermission(ANY_ENTITY, voting, voting.CREATE_VOTES_ROLE(), root);
         acl.grantPermission(voting, tokenManager, tokenManager.MINT_ROLE());
 
-
         // Agent Permissions
-        acl.createPermission(ANY_ENTITY, app, app.SET_CONTROLLER_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.TRANSFER_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.SET_CONTROLLER_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.TRANSFER_ROLE(), root);
 //        acl.createPermission(ANY_ENTITY, app, app.APPROVE_ROLE(), root);
 //        acl.createPermission(ANY_ENTITY, app, app.BOND_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.APPROVE_AND_BOND_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.CLAIM_EARNINGS_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.WITHDRAW_FEES_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.UNBOND_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.REBOND_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.WITHDRAW_STAKE_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.DECLARE_TRANSCODER_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.REWARD_ROLE(), root);
-        acl.createPermission(ANY_ENTITY, app, app.SET_SERVICE_URI_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.APPROVE_AND_BOND_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.CLAIM_EARNINGS_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.WITHDRAW_FEES_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.UNBOND_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.REBOND_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.WITHDRAW_STAKE_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.DECLARE_TRANSCODER_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.REWARD_ROLE(), root);
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.SET_SERVICE_URI_ROLE(), root);
 
 
         // Clean up permissions

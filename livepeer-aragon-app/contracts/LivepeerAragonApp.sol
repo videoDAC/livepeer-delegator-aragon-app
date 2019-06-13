@@ -1,6 +1,9 @@
 pragma solidity ^0.4.24;
 
-import "./Agent.sol";
+import "@aragon/apps-agent/contracts/Agent.sol";
+import "@aragon/os/contracts/apps/AragonApp.sol";
+import "@aragon/os/contracts/common/SafeERC20.sol";
+import "@aragon/os/contracts/lib/token/ERC20.sol";
 import "./IController.sol";
 import "solidity-bytes-utils/contracts/BytesLib.sol";
 
@@ -23,8 +26,17 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
 
  TODO: Get decimal numbers from LPT contract in Radspec strings
  TODO: Write tests
+ TODO: Update Transfer and Deposit permissions and fix deposit function
  */
-contract LivepeerAragonApp is Agent {
+contract LivepeerAragonApp is AragonApp {
+
+    using SafeERC20 for ERC20;
+
+    address internal constant ETH = address(0);
+
+    string private constant ERROR_VALUE_MISMATCH = "LIVEPEERARAGONAPP_VALUE_MISMATCH";
+    string private constant ERROR_TOKEN_TRANSFER_FROM_REVERTED = "LIVEPEERARAGONAPP_TOKEN_TRANSFER_FROM_REVERT";
+    string private constant ERROR_TOKEN_APPROVE_REVERTED = "LIVEPEERARAGONAPP_TOKEN_APPROVE_REVERT";
 
     bytes32 public constant SET_CONTROLLER_ROLE = keccak256("SET_CONTROLLER_ROLE");
     bytes32 public constant APPROVE_ROLE = keccak256("APPROVE_ROLE");
@@ -38,7 +50,9 @@ contract LivepeerAragonApp is Agent {
     bytes32 public constant DECLARE_TRANSCODER_ROLE = keccak256("DECLARE_TRANSCODER_ROLE");
     bytes32 public constant REWARD_ROLE = keccak256("REWARD_ROLE");
     bytes32 public constant SET_SERVICE_URI_ROLE = keccak256("SET_SERVICE_URI_ROLE");
+    bytes32 public constant TRANSFER_ROLE = keccak256("TRANSFER_ROLE");
 
+    Agent public agent;
     IController public livepeerController;
 
     event AppInitialized(address livepeerController);
@@ -56,13 +70,15 @@ contract LivepeerAragonApp is Agent {
     event LivepeerAragonAppSetServiceUri(string serviceURI);
 
     /**
-    * @notice Initialize the LivepeerHack contract
+    * @notice Initialize the LivepeerAragonApp
+    * @param _agent The Agent contract address
     * @param _livepeerController The Livepeer Controller contract address
     */
-    function initialize(address _livepeerController) external onlyInit {
+    function initialize(address _agent, address _livepeerController) external onlyInit {
         initialized();
+
+        agent = Agent(_agent);
         livepeerController = IController(_livepeerController);
-        setDepositable(true);
 
         emit AppInitialized(_livepeerController);
     }
@@ -90,7 +106,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppApproval(_value);
 
-        _execute(livepeerTokenAddress, 0, encodedFunctionCall);
+        agent.execute(livepeerTokenAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -107,7 +123,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppBond(_amount, _to);
 
-        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+        agent.execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -133,7 +149,7 @@ contract LivepeerAragonApp is Agent {
         emit LivepeerAragonAppApproval(_amount);
         emit LivepeerAragonAppBond(_amount, _to);
 
-        _forward(specAndApproveAndBond);
+        agent.forward(specAndApproveAndBond);
     }
 
     /**
@@ -148,7 +164,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppEarnings(_endRound);
 
-        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+        agent.execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -162,7 +178,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppFees();
 
-        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+        agent.execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -178,7 +194,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppUnbond(_amount);
 
-        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+        agent.execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -193,7 +209,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppRebond(_unbondingLockId);
 
-        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+        agent.execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -208,7 +224,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppRebondFromUnbonded(_to, _unbondingLockId);
 
-        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+        agent.execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -223,7 +239,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppWithdrawStake(_unbondingLockId);
 
-        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+        agent.execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -240,7 +256,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppDeclareTranscoder(_rewardCut, _feeShare, _pricePerSegment);
 
-        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+        agent.execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -254,7 +270,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppReward();
 
-        _execute(bondingManagerAddress, 0, encodedFunctionCall);
+        agent.execute(bondingManagerAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -269,7 +285,7 @@ contract LivepeerAragonApp is Agent {
 
         emit LivepeerAragonAppSetServiceUri(_serviceUri);
 
-        _execute(serviceRegistryAddress, 0, encodedFunctionCall);
+        agent.execute(serviceRegistryAddress, 0, encodedFunctionCall);
     }
 
     /**
@@ -279,8 +295,8 @@ contract LivepeerAragonApp is Agent {
     * @param _value Amount of tokens being transferred
     */
     /* solium-disable-next-line function-order */
-    function transfer(address _token, address _to, uint256 _value) external authP(TRANSFER_ROLE, arr(_token, _to, _value)) {
-        _transfer(_token, _to, _value);
+    function transfer(address _token, address _to, uint256 _value) external auth(TRANSFER_ROLE) {
+        agent.transfer(_token, _to, _value);
     }
 
     /**
@@ -288,8 +304,10 @@ contract LivepeerAragonApp is Agent {
     * @param _token Address of the token being transferred
     * @param _value Amount of tokens being transferred
     */
-    function deposit(address _token, uint256 _value) external payable isInitialized {
-        _deposit(_token, _value);
+    function deposit(address _token, uint256 _value) external payable {
+        require(ERC20(_token).safeTransferFrom(msg.sender, address(this), _value), ERROR_TOKEN_TRANSFER_FROM_REVERTED);
+        require(ERC20(_token).safeApprove(address(agent), _value), ERROR_TOKEN_APPROVE_REVERTED);
+        agent.deposit(_token, _value);
     }
 
     /**
