@@ -3,6 +3,11 @@ import {livepeerTokenAddress$} from "./ExternalContracts";
 import {mergeMap} from "rxjs/operators";
 import {ETHER_TOKEN_FAKE_ADDRESS, TOKEN_DECIMALS} from "../SharedConstants";
 
+const setAgent = (api, address) => {
+    api.setAgent(address)
+        .subscribe()
+}
+
 const setLivepeerController = (api, address) => {
     api.setLivepeerController(address)
         .subscribe()
@@ -104,6 +109,7 @@ const serviceRegistrySetServiceUri = (api, serviceUri) => {
 }
 
 export {
+    setAgent,
     setLivepeerController,
     livepeerTokenApprove,
     transferEthFromApp,

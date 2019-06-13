@@ -96,6 +96,7 @@ contract Template is TemplateBase {
         acl.grantPermission(voting, tokenManager, tokenManager.MINT_ROLE());
 
         // Agent Permissions
+        acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.SET_AGENT_ROLE(), root);
         acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.SET_CONTROLLER_ROLE(), root);
         acl.createPermission(ANY_ENTITY, livepeerApp, livepeerApp.TRANSFER_ROLE(), root);
 //        acl.createPermission(ANY_ENTITY, app, app.APPROVE_ROLE(), root);

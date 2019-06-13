@@ -38,6 +38,7 @@ contract LivepeerAragonApp is AragonApp {
     string private constant ERROR_TOKEN_TRANSFER_FROM_REVERTED = "LIVEPEERARAGONAPP_TOKEN_TRANSFER_FROM_REVERT";
     string private constant ERROR_TOKEN_APPROVE_REVERTED = "LIVEPEERARAGONAPP_TOKEN_APPROVE_REVERT";
 
+    bytes32 public constant SET_AGENT_ROLE = keccak256("SET_AGENT_ROLE");
     bytes32 public constant SET_CONTROLLER_ROLE = keccak256("SET_CONTROLLER_ROLE");
     bytes32 public constant APPROVE_ROLE = keccak256("APPROVE_ROLE");
     bytes32 public constant BOND_ROLE = keccak256("BOND_ROLE");
@@ -56,6 +57,7 @@ contract LivepeerAragonApp is AragonApp {
     IController public livepeerController;
 
     event AppInitialized(address livepeerController);
+    event NewAgentSet(address agent);
     event NewControllerSet(address livepeerController);
     event LivepeerAragonAppApproval(uint256 value);
     event LivepeerAragonAppBond(uint256 amount, address to);
@@ -90,6 +92,15 @@ contract LivepeerAragonApp is AragonApp {
     function setLivepeerController(address _address) external auth(SET_CONTROLLER_ROLE) {
         livepeerController = IController(_address);
         emit NewControllerSet(_address);
+    }
+
+    /**
+    * @notice Update the Agent address to `_address`
+    * @param _address New Agent address
+    */
+    function setAgent(address _address) external auth(SET_AGENT_ROLE) {
+        agent = Agent(_address);
+        emit NewAgentSet(_address);
     }
 
     /**

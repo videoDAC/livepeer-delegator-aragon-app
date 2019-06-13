@@ -18,12 +18,6 @@ const DetailContainer = styled.div`
     padding: 10px;
     margin-bottom: 30px;
 `
-const DetailsCard = styled(Card)`
-    padding: 10px;
-    height: auto;
-    width: auto;
-    margin-top: 10px;
-`
 const EthBalanceDetailsCard = styled(Card)`
     padding: 10px;
     height: auto;
@@ -48,20 +42,13 @@ const TransferButton = styled(Button)`
 
 const Account = ({appState, handleTransferIn, handleTransferOut, handleTransferEthOut}) => {
 
-    const {appAddress, appEthBalance, appsLptBalance} = appState
+    const {appEthBalance, appsLptBalance} = appState
 
     const livepeerAccountLink = LivepeerAccountLink(appAddress)
 
     return (
         <AccountContainer>
             <div>
-
-                <DetailContainer>
-                    <Text.Block size="normal">Livepeer App Address</Text.Block>
-                    <DetailsCard>
-                        <Text.Block size="normal">{appAddress}</Text.Block>
-                    </DetailsCard>
-                </DetailContainer>
 
                 <DetailContainer>
                     <Text.Block size="normal">ETH Balance</Text.Block>
@@ -96,7 +83,6 @@ const Account = ({appState, handleTransferIn, handleTransferOut, handleTransferE
                 </SafeLink>
 
             </div>
-
         </AccountContainer>
     )
 }

@@ -3,6 +3,7 @@ import {Main, TabBar, SidePanel} from '@aragon/ui'
 import {useAragonApi} from '@aragon/api-react'
 
 import {
+    setAgent,
     setLivepeerController,
     transferLptFromApp,
     transferLptToApp,
@@ -35,6 +36,11 @@ function App() {
     const {api, appState} = useAragonApi()
     const [tabBarSelected, setTabBarSelected] = useState(0)
     const [sidePanel, setSidePanel] = useState(undefined)
+
+    const setAgentAddress = (address) => {
+        closeSidePanel()
+        setAgent(api, address)
+    }
 
     const setController = (address) => {
         closeSidePanel()
@@ -200,6 +206,18 @@ function App() {
                                    handleSubmit={transferTokensOut}/>
             )
         },
+        CHANGE_AGENT: {
+            title: 'Change the Agent',
+            sidePanelComponent: (
+                <GenericInputPanel actionTitle={'Livepeer Action'}
+                                   actionDescription={`This action will change the Agent which represents an EOA and is responsible
+                                    for interacting with the Livepeer protocol`}
+                                   inputFieldList={[
+                                       {id: 1, label: 'address', type: 'text'}]}
+                                   submitLabel={'Change agent'}
+                                   handleSubmit={setAgentAddress}/>
+            )
+        },
         CHANGE_CONTROLLER: {
             title: 'Change the Livepeer Controller',
             sidePanelComponent: (
@@ -250,6 +268,7 @@ function App() {
             tabComponent: (
                 <Settings appState={appState}
                           handleNewController={() => setSidePanel(sidePanels.CHANGE_CONTROLLER)}
+                          handleNewAgent={() => setSidePanel(sidePanels.CHANGE_AGENT)}
                 />)
         }
     ]

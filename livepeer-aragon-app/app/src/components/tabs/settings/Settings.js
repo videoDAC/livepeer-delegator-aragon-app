@@ -34,8 +34,8 @@ const ButtonContainer = styled.div`
     display: flex;
 `
 
-const Settings = ({handleNewController, appState}) => {
-    const {appAddress, livepeerTokenAddress, livepeerControllerAddress} = appState
+const Settings = ({handleNewController, hendleNewAgent, appState}) => {
+    const {appAddress, livepeerTokenAddress, agentAddress, livepeerControllerAddress} = appState
 
     return (
         <SettingsContainer>
@@ -45,6 +45,19 @@ const Settings = ({handleNewController, appState}) => {
                     <AddressCard>
                         <Text.Block size="normal">{appAddress}</Text.Block>
                     </AddressCard>
+                </DetailContainer>
+
+                <DetailContainer>
+                    <Text.Block size="normal">Agent Address</Text.Block>
+                    <ControllerAddressCard>
+                        <Text.Block size="normal">{agentAddress}</Text.Block>
+                    </ControllerAddressCard>
+
+                    <ButtonContainer>
+                        <Button mode="strong" onClick={() => hendleNewAgent()}>
+                            Change Agent
+                        </Button>
+                    </ButtonContainer>
                 </DetailContainer>
 
                 <DetailContainer>

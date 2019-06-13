@@ -1,6 +1,11 @@
 {
   "roles": [
     {
+      "name": "Set Agent",
+      "id": "SET_AGENT_ROLE",
+      "params": []
+    },
+    {
       "name": "Set Livepeer Controller",
       "id": "SET_CONTROLLER_ROLE",
       "params": []
