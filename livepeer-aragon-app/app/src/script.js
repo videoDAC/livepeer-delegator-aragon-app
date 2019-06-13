@@ -13,25 +13,23 @@ import {
     serviceRegistry$
 } from '../web3/ExternalContracts'
 import {range, of} from "rxjs";
-import {first, mergeMap, map, filter, toArray, zip, tap, merge, catchError} from "rxjs/operators"
+import {mergeMap, map, filter, toArray, zip, tap, merge, catchError} from "rxjs/operators"
 import {ETHER_TOKEN_FAKE_ADDRESS} from "../SharedConstants";
 import retryEvery from "./lib/retryEvery";
-
-const api = new AragonApi()
-//TODO: Remove this in favour of address$
-let agentAddress = "0x0000000000000000000000000000000000000000"
-let livepeerAppAddress = "0x0000000000000000000000000000000000000000"
 
 //TODO: Refactor out streams (probably pass api and appAddress to each)
 //TODO: Refactor switch statement into actions related to certain tabs/areas of the app.
 //TODO: More disabling of buttons/error handling when functions can't be called.
-//TODO: Remove unused transcoder total stake fetching.
-//TODO: Remove unused fetching and updating of user account balance
-//TODO: Remove log statements or make them conditional on while in development.
-//TODO: Add syncing UI widget.
+//TODO: Add syncing UI widget, add better input UI eg sliders.
+
+const DEBUG = true; // set to false to disable debug messages.
+const INITIALIZATION_TRIGGER = Symbol('INITIALIZATION_TRIGGER')
+
+const debugLog = message => {if (DEBUG) {console.log(message)}}
+
+const api = new AragonApi()
 
 // Wait until we can get the agents address (demonstrating we are connected to the app) before initializing the store.
-//TODO: Is this necessary?
 retryEvery(retry => {
     api.call('agent').subscribe(
         () => initialize(),
@@ -48,6 +46,7 @@ retryEvery(retry => {
 const initialize = () => {
     api.store(onNewEventCatchError,
         [
+            of({ event: INITIALIZATION_TRIGGER }),
             agentApp$(api).pipe(mergeMap(agentApp => agentApp.events())),
             livepeerToken$(api).pipe(mergeMap(livepeerToken => livepeerToken.events())),
             bondingManager$(api).pipe(mergeMap(bondingManager => bondingManager.events())),
@@ -56,16 +55,6 @@ const initialize = () => {
         ]
     )
 }
-
-const onNewEventCatchError = async (state, event) => {
-    try {
-        return await onNewEvent(state, event)
-    } catch (error) {
-        console.error(`Caught error: ${error}`)
-    }
-}
-
-
 
 const initialState = async (state) => {
     return {
@@ -91,9 +80,17 @@ const initialState = async (state) => {
     }
 }
 
+const onNewEventCatchError = async (state, event) => {
+    try {
+        return await onNewEvent(state, event)
+    } catch (error) {
+        console.error(`Caught error: ${error}`)
+    }
+}
+
 const onNewEvent = async (state, storeEvent) => {
 
-    const {event, returnValues, address} = storeEvent
+    const {event: eventName, returnValues, address: eventAddress} = storeEvent
 
     let delegatorInfo
     let transcoder
@@ -103,46 +100,45 @@ const onNewEvent = async (state, storeEvent) => {
         transcoder = state.transcoder
     }
 
-    switch (event) {
+    switch (eventName) {
+        case INITIALIZATION_TRIGGER:
+            debugLog("APP INITIALISED")
+            return initialState(state)
         case 'AppInitialized':
-            console.log("APP INITIALIZED")
-            livepeerAppAddress = address
-            api.identify(`Livepeer: ${livepeerAppAddress}`)
-
-            const initState = await initialState(state)
-
+            debugLog("APP CONSTRUCTOR EVENT")
+            api.identify(`Livepeer: ${eventAddress}`)
             return {
-                ...initState,
-                appAddress: livepeerAppAddress
+                ...state,
+                appAddress: eventAddress
             }
         case 'NewAgentSet':
-            console.log("NEW AGENT SET")
+            debugLog("NEW AGENT SET")
             return {
                 ...state,
                 agentAddress: await agentAddress$(api).toPromise()
             }
         case 'NewControllerSet':
-            console.log("NEW CONTROLLER SET")
+            debugLog("NEW CONTROLLER SET")
             return {
                 ...state,
                 livepeerControllerAddress: returnValues.livepeerController
             }
         case 'VaultTransfer':
         case 'VaultDeposit':
-            console.log("TRANSFER IN/OUT")
+            debugLog("TRANSFER IN/OUT")
             return {
                 ...state,
                 appEthBalance: await appEthBalance$().toPromise(),
                 appsLptBalance: await appLptBalance$().toPromise(),
             }
         case 'LivepeerAragonAppApproval':
-            console.log("APPROVAL")
+            debugLog("APPROVAL")
             return {
                 ...state,
                 appApprovedTokens: await appApprovedTokens$().toPromise()
             }
         case 'LivepeerAragonAppBond':
-            console.log("BOND")
+            debugLog("BOND")
             return {
                 ...state,
                 appApprovedTokens: await appApprovedTokens$().toPromise(),
@@ -152,14 +148,10 @@ const onNewEvent = async (state, storeEvent) => {
                     delegatorStatus: await delegatorStatus$().toPromise(),
                     pendingFees: await delegatorPendingFees$().toPromise()
                 },
-                disableUnbondTokens: await disableUnbondTokens$().toPromise(),
-                transcoder: {
-                    ...transcoder,
-                    totalStake: await transcoderStake$().toPromise()
-                }
+                disableUnbondTokens: await disableUnbondTokens$().toPromise()
             }
         case 'Bond':
-            console.log("BONDING MANAGER BOND")
+            debugLog("BONDING MANAGER BOND")
             return {
                 ...state,
                 delegatorInfo: {
@@ -168,7 +160,7 @@ const onNewEvent = async (state, storeEvent) => {
                 },
             }
         case 'LivepeerAragonAppUnbond':
-            console.log("UNBOND")
+            debugLog("UNBOND")
             return {
                 ...state,
                 delegatorInfo: {
@@ -183,7 +175,7 @@ const onNewEvent = async (state, storeEvent) => {
                 }
             }
         case 'Unbond':
-            console.log("BONDING MANAGER UNBOND")
+            debugLog("BONDING MANAGER UNBOND")
             return {
                 ...state,
                 delegatorInfo: {
@@ -193,7 +185,7 @@ const onNewEvent = async (state, storeEvent) => {
             }
         case 'LivepeerAragonAppRebond':
         case 'LivepeerAragonAppRebondFromUnbonded':
-            console.log("REBOND")
+            debugLog("REBOND")
             return {
                 ...state,
                 delegatorInfo: {
@@ -208,7 +200,7 @@ const onNewEvent = async (state, storeEvent) => {
                 }
             }
         case 'LivepeerAragonAppEarnings':
-            console.log("CLAIM EARNINGS")
+            debugLog("CLAIM EARNINGS")
             return {
                 ...state,
                 delegatorInfo: {
@@ -218,7 +210,7 @@ const onNewEvent = async (state, storeEvent) => {
                 }
             }
         case 'LivepeerAragonAppFees':
-            console.log('WITHDRAW FEES')
+            debugLog('WITHDRAW FEES')
             return {
                 ...state,
                 appEthBalance: await appEthBalance$().toPromise(),
@@ -229,14 +221,14 @@ const onNewEvent = async (state, storeEvent) => {
                 }
             }
         case 'LivepeerAragonAppWithdrawStake':
-            console.log("WITHDRAW STAKE")
+            debugLog("WITHDRAW STAKE")
             return {
                 ...state,
                 unbondingLockInfos: await unbondingLockInfos$().toPromise(),
                 appsLptBalance: await appLptBalance$().toPromise()
             }
         case 'DistributeFees':
-            console.log("DISTRIBUTE FEES")
+            debugLog("DISTRIBUTE FEES")
             return {
                 ...state,
                 delegatorInfo: {
@@ -245,7 +237,7 @@ const onNewEvent = async (state, storeEvent) => {
                 }
             }
         case 'LivepeerAragonAppDeclareTranscoder':
-            console.log("DECLARE TRANSCODER")
+            debugLog("DECLARE TRANSCODER")
             return {
                 ...state,
                 transcoder: {
@@ -254,7 +246,7 @@ const onNewEvent = async (state, storeEvent) => {
                 }
             }
         case 'LivepeerAragonAppReward':
-            console.log("APP REWARD")
+            debugLog("APP REWARD")
             return {
                 ...state,
                 delegatorInfo: {
@@ -267,7 +259,7 @@ const onNewEvent = async (state, storeEvent) => {
                 }
             }
         case 'LivepeerAragonAppSetServiceUri':
-            console.log("UPDATE SERVICE URI")
+            debugLog("UPDATE SERVICE URI")
             return {
                 ...state,
                 transcoder: {
@@ -276,7 +268,7 @@ const onNewEvent = async (state, storeEvent) => {
                 }
             }
         case 'NewRound':
-            console.log("NEW ROUND")
+            debugLog("NEW ROUND")
             return {
                 ...state,
                 currentRound: await currentRound$().toPromise(),
@@ -288,7 +280,7 @@ const onNewEvent = async (state, storeEvent) => {
                 }
             }
         case 'Reward':
-            console.log("LIVEPEER REWARD")
+            debugLog("LIVEPEER REWARD")
             return {
                 ...state,
                 delegatorInfo: {
@@ -414,12 +406,6 @@ const disableUnbondTokens$ = () =>
         map(([maxRounds, currentRound, delegatorInfo]) => delegatorInfo.lastClaimRound <= currentRound - maxRounds),
         onErrorReturnDefault('disableUnbondTokens', false))
 
-const transcoderStake$ = () =>
-    bondingManager$(api).pipe(
-        zip(agentAddress$(api)),
-        mergeMap(([bondingManager, agentAddress]) => bondingManager.transcoderTotalStake(agentAddress)),
-        onErrorReturnDefault('transcoderStake', 0))
-
 const transcoderStatus$ = () =>
     bondingManager$(api).pipe(
         zip(agentAddress$(api)),
@@ -442,12 +428,11 @@ const transcoderDetails$ = () =>
     bondingManager$(api).pipe(
         zip(agentAddress$(api)),
         mergeMap(([bondingManager, agentAddress]) => bondingManager.getTranscoder(agentAddress)),
-        zip(transcoderStake$(), transcoderStatus$(), transcoderActive$()),
-        map(([transcoderDetails, totalStake, status, active]) => {
+        zip(transcoderStatus$(), transcoderActive$()),
+        map(([transcoderDetails, status, active]) => {
                 return {
                     status: status,
                     active: active,
-                    totalStake: totalStake,
                     lastRewardRound: transcoderDetails.lastRewardRound,
                     rewardCut: transcoderDetails.rewardCut,
                     feeShare: transcoderDetails.feeShare,
@@ -460,7 +445,6 @@ const transcoderDetails$ = () =>
             onErrorReturnDefault('transcoderDetails', {
                 status: 0,
                 active: false,
-                totalStake: 0,
                 lastRewardRound: 0,
                 rewardCut: 0,
                 feeShare: 0,

@@ -41,7 +41,6 @@ let defaultState = {
     transcoder: {
         status: TRANSCODER_STATUS[0],
         active: false,
-        totalStake: 0,
         lastRewardRound: 0,
         rewardCut: 0,
         feeShare: 0,
@@ -85,7 +84,6 @@ const reducer = state => {
         feeShare,
         pendingRewardCut,
         pendingFeeShare,
-        totalStake,
         lastRewardRound
     } = transcoder
 
@@ -111,7 +109,6 @@ const reducer = state => {
             feeShare: feeShare / PERCENTAGE_AS_FRACTION_DIVISOR,
             pendingRewardCut: pendingRewardCut / PERCENTAGE_AS_FRACTION_DIVISOR,
             pendingFeeShare: pendingFeeShare / PERCENTAGE_AS_FRACTION_DIVISOR,
-            totalStake: fromDecimals(totalStake, TOKEN_DECIMALS),
             disableReward: lastRewardRound === currentRound
         }
     }
