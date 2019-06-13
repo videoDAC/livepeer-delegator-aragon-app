@@ -86,21 +86,21 @@ contract LivepeerAragonApp is AragonApp {
     }
 
     /**
-    * @notice Update the Livepeer Controller address to `_address`
-    * @param _address New Livepeer Controller address
-    */
-    function setLivepeerController(address _address) external auth(SET_CONTROLLER_ROLE) {
-        livepeerController = IController(_address);
-        emit NewControllerSet(_address);
-    }
-
-    /**
     * @notice Update the Agent address to `_address`
     * @param _address New Agent address
     */
     function setAgent(address _address) external auth(SET_AGENT_ROLE) {
         agent = Agent(_address);
         emit NewAgentSet(_address);
+    }
+
+    /**
+    * @notice Update the Livepeer Controller address to `_address`
+    * @param _address New Livepeer Controller address
+    */
+    function setLivepeerController(address _address) external auth(SET_CONTROLLER_ROLE) {
+        livepeerController = IController(_address);
+        emit NewControllerSet(_address);
     }
 
     /**

@@ -1,5 +1,4 @@
 import AgentAbi from '../abi/agent-abi'
-import LivepeerAppAbi from '../abi/livepeerAragonApp-abi'
 import BondingManagerAbi from '../abi/bondingManager-abi'
 import LivepeerTokenAbi from '../abi/livepeerToken-abi'
 import ControllerAbi from '../abi/controller-abi'
@@ -15,7 +14,6 @@ const agentAddress$ = api => api.call('agent')
 
 const agentApp$ = (api) =>
     agentAddress$(api).pipe(
-        tap(agentAdd => console.log("Agent address " + agentAdd)),
         map(agentAddress => api.external(agentAddress, AgentAbi)))
 
 const controllerAddress$ = (api) => api.call("livepeerController")

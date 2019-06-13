@@ -42,7 +42,7 @@ const TransferButton = styled(Button)`
 
 const Account = ({appState, handleTransferIn, handleTransferOut, handleTransferEthOut}) => {
 
-    const {appEthBalance, appsLptBalance} = appState
+    const {appAddress, appEthBalance, appsLptBalance} = appState
 
     const livepeerAccountLink = LivepeerAccountLink(appAddress)
 

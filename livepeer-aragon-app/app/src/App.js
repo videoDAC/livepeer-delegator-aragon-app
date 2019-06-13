@@ -173,7 +173,7 @@ function App() {
             sidePanelComponent: (
                 <GenericInputPanel actionTitle={'Transfer Action'}
                                    actionDescription={`This action will transfer the specified amount of Ethereum (ETH)
-                                   from the Livepeer App to the address specified`}
+                                   from the Livepeer App to the address specified.`}
                                    inputFieldList={[
                                        {id: 1, label: 'address', type: 'text'},
                                        {id: 2, label: 'amount', type: 'number'}]}
@@ -211,7 +211,7 @@ function App() {
             sidePanelComponent: (
                 <GenericInputPanel actionTitle={'Livepeer Action'}
                                    actionDescription={`This action will change the Agent which represents an EOA and is responsible
-                                    for interacting with the Livepeer protocol`}
+                                    for interacting with the Livepeer protocol.`}
                                    inputFieldList={[
                                        {id: 1, label: 'address', type: 'text'}]}
                                    submitLabel={'Change agent'}
@@ -223,7 +223,7 @@ function App() {
             sidePanelComponent: (
                 <GenericInputPanel actionTitle={'Livepeer Action'}
                                    actionDescription={`This action will change the Livepeer Controller which is responsible
-                                    for defining the addresses of the Livepeer Contracts`}
+                                    for defining the addresses of the Livepeer Contracts.`}
                                    inputFieldList={[
                                        {id: 1, label: 'address', type: 'text'}]}
                                    submitLabel={'Change controller'}

@@ -125,6 +125,12 @@ const onNewEvent = async (state, storeEvent) => {
                 ...initState,
                 appAddress: livepeerAppAddress
             }
+        case 'NewAgentSet':
+            console.log("NEW AGENT SET")
+            return {
+                ...state,
+                agentAddress: await agentAddress$(api).toPromise()
+            }
         case 'NewControllerSet':
             console.log("NEW CONTROLLER SET")
             return {
