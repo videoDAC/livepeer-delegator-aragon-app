@@ -25,9 +25,11 @@ import retryEvery from "./lib/retryEvery";
 const DEBUG = true; // set to false to disable debug messages.
 const INITIALIZATION_TRIGGER = Symbol('INITIALIZATION_TRIGGER')
 
-const debugLog = message => {if (DEBUG) {console.log(message)}}
-
 const api = new AragonApi()
+
+const debugLog = message => {if (DEBUG) {console.log(message)}}
+// TODO: Check network value on Rinkeby and consider using to determine whether debug statements are enabled.
+console.log(api.network().subscribe(network => {console.log("Network:"); console.log(network)}))
 
 // Wait until we can get the agents address (demonstrating we are connected to the app) before initializing the store.
 retryEvery(retry => {
