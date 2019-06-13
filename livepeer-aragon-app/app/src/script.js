@@ -17,8 +17,6 @@ import {first, mergeMap, map, filter, toArray, zip, tap, merge, catchError} from
 import {ETHER_TOKEN_FAKE_ADDRESS} from "../SharedConstants";
 import retryEvery from "./lib/retryEvery";
 
-const ACCOUNT_CHANGED_EVENT = Symbol("ACCOUNT_CHANGED")
-
 const api = new AragonApi()
 //TODO: Remove this in favour of address$
 let agentAddress = "0x0000000000000000000000000000000000000000"
@@ -50,7 +48,6 @@ retryEvery(retry => {
 const initialize = () => {
     api.store(onNewEventCatchError,
         [
-            accountChangedEvent$(),
             agentApp$(api).pipe(mergeMap(agentApp => agentApp.events())),
             livepeerToken$(api).pipe(mergeMap(livepeerToken => livepeerToken.events())),
             bondingManager$(api).pipe(mergeMap(bondingManager => bondingManager.events())),
@@ -68,12 +65,6 @@ const onNewEventCatchError = async (state, event) => {
     }
 }
 
-const accountChangedEvent$ = () =>
-    api.accounts().pipe(
-        map(account => {
-            return {event: ACCOUNT_CHANGED_EVENT, account: account}
-        }))
-
 
 
 const initialState = async (state) => {
@@ -83,7 +74,6 @@ const initialState = async (state) => {
         livepeerTokenAddress: await livepeerTokenAddress$(api).toPromise(),
         livepeerControllerAddress: await controllerAddress$(api).toPromise(),
         appEthBalance: await appEthBalance$().toPromise(),
-        userLptBalance: await userLptBalance$().toPromise(),
         appsLptBalance: await appLptBalance$().toPromise(),
         appApprovedTokens: await appApprovedTokens$().toPromise(),
         currentRound: await currentRound$().toPromise(),
@@ -137,25 +127,12 @@ const onNewEvent = async (state, storeEvent) => {
                 ...state,
                 livepeerControllerAddress: returnValues.livepeerController
             }
-        case 'Transfer':
-            console.log("LPT TRANSFER")
-            const account = (await api.accounts().pipe(first()).toPromise())[0]
-
-            if (account === returnValues.from || account === returnValues.to) {
-                return {
-                    ...state,
-                    userLptBalance: await userLptBalance$().toPromise()
-                }
-            } else {
-                return state
-            }
         case 'VaultTransfer':
         case 'VaultDeposit':
             console.log("TRANSFER IN/OUT")
             return {
                 ...state,
                 appEthBalance: await appEthBalance$().toPromise(),
-                userLptBalance: await userLptBalance$().toPromise(),
                 appsLptBalance: await appLptBalance$().toPromise(),
             }
         case 'LivepeerAragonAppApproval':
@@ -319,12 +296,6 @@ const onNewEvent = async (state, storeEvent) => {
                     ...await delegatorInfo$().toPromise()
                 }
             }
-        case ACCOUNT_CHANGED_EVENT:
-            console.log("ACCOUNT CHANGED")
-            return {
-                ...state,
-                userLptBalance: await userLptBalance$().toPromise()
-            }
         default:
             return state
     }
@@ -340,13 +311,6 @@ const appEthBalance$ = () =>
     agentApp$(api).pipe(
         mergeMap(agentApp => agentApp.balance(ETHER_TOKEN_FAKE_ADDRESS)),
         onErrorReturnDefault('appEthBalance', 0))
-
-const userLptBalance$ = () =>
-    api.accounts().pipe(
-        first(),
-        zip(livepeerToken$(api)),
-        mergeMap(([accounts, token]) => token.balanceOf(accounts[0])),
-        onErrorReturnDefault('userLptBalance', 0))
 
 const appLptBalance$ = () =>
     livepeerToken$(api).pipe(

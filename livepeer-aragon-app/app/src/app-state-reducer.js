@@ -22,7 +22,6 @@ let defaultState = {
     appAddress: '0x0000000000000000000000000000000000000000',
     livepeerTokenAddress: '0x0000000000000000000000000000000000000000',
     appEthBalance: 0,
-    userLptBalance: 0,
     appsLptBalance: 0,
     appApprovedTokens: 0,
     currentRound: 0,
@@ -63,7 +62,6 @@ const reducer = state => {
 
     const {
         appEthBalance,
-        userLptBalance,
         appsLptBalance,
         appApprovedTokens,
         delegatorInfo,
@@ -94,7 +92,6 @@ const reducer = state => {
     return {
         ...state,
         appEthBalance: fromDecimals(appEthBalance.toString(), TOKEN_DECIMALS),
-        userLptBalance: fromDecimals(userLptBalance.toString(), TOKEN_DECIMALS),
         appsLptBalance: fromDecimals(appsLptBalance.toString(), TOKEN_DECIMALS),
         appApprovedTokens: fromDecimals(appApprovedTokens.toString(), TOKEN_DECIMALS),
         delegatorInfo: {
