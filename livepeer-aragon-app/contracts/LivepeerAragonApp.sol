@@ -9,7 +9,6 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
 
 // TODO: Get decimal numbers from LPT contract in Radspec strings
 // TODO: Write tests
-// TODO: Update Transfer and Deposit permissions and fix deposit function
 contract LivepeerAragonApp is AragonApp {
 
     using SafeERC20 for ERC20;

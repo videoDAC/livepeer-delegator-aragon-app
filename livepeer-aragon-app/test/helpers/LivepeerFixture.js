@@ -1,5 +1,5 @@
-import RPC from "../../../utils/rpc"
-import {contractId} from "../../../utils/helpers"
+import RPC from "../../../livepeer-protocol/utils/rpc"
+import {contractId} from "../../../livepeer-protocol/utils/helpers"
 
 const Controller = artifacts.require("Controller")
 const GenericMock = artifacts.require("GenericMock")
@@ -40,4 +40,5 @@ export default class Fixture {
     async tearDown() {
         await this.rpc.revert(this.currentSnapshotId)
     }
+
 }

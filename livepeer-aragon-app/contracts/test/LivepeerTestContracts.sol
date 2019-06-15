@@ -1,5 +1,6 @@
 pragma solidity ^0.4.24;
 
+// Comment out for DAO deployment, otherwise will not compile.
 //import "../../../livepeer-protocol/contracts/Controller.sol";
 //import "../../../livepeer-protocol/contracts/test/GenericMock.sol";
 //import "../../../livepeer-protocol/contracts/bonding/BondingManager.sol";

@@ -84,10 +84,9 @@ contract('LivepeerAragonApp', ([root, livepeerControllerMock]) => {
             })
         })
 
-        describe('livepeerTokenApprove(uint256 _value)', () => {
-
-            it()
-        })
+        // describe('livepeerTokenApprove(uint256 _value)', () => {
+        //
+        // })
     })
 
 })
