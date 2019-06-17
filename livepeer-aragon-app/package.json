@@ -21,14 +21,15 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.17.0",
     "babel-register": "^6.23.0",
+    "eth-ens-namehash": "^2.0.8",
     "zeppelin-solidity": "1.5.0"
   },
   "scripts": {
     "start": "npm run start:ipfs",
     "start:ipfs": "aragon run",
     "start:http": "aragon run --http localhost:8001 --http-served-from ./dist",
-    "start:ipfs:template": "npm run start:ipfs -- --template Template --template-init @ARAGON_ENS 0x31b5f3EBB519AEebE04025Ff90a2780d36AC0153",
-    "start:http:template": "npm run start:http -- --template Template --template-init @ARAGON_ENS 0x31b5f3EBB519AEebE04025Ff90a2780d36AC0153",
+    "start:ipfs:template": "npm run start:ipfs -- --template Template --template-init @ARAGON_ENS 0x3Ba4cC0a7C29198e7e2C6c83331D894E4E8F59cc",
+    "start:http:template": "npm run start:http -- --template Template --template-init @ARAGON_ENS 0x3Ba4cC0a7C29198e7e2C6c83331D894E4E8F59cc",
     "prepare": "cd app && npm install && cd ..",
     "start:app": "cd app && npm start && cd ..",
     "test": "aragon contracts test",

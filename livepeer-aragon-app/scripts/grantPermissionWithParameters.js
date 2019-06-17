@@ -1,17 +1,27 @@
 const bn = require("bn.js")
 const ACL = artifacts.require("ACL.sol")
 const Agent = artifacts.require("Agent.sol")
+const { hash } = require('eth-ens-namehash')
 
-const ACL_ADDRESS = "0x184c81675e89b6445befad31f9dfbd63b8c95a36"
-const AGENT_ADDRESS = "0xfBCBa648Dff9dB0d8aA472bA9CD3e24fEe7B041D"
-const LIVEPEER_APP_ADDRESS = "0x8401Eb5ff34cc943f096A32EF3d5113FEbE8D4Eb"
+const ACL_ADDRESS = "0x6419d92055cacd5e484552ae3eea414443ab83c3"
+const AGENT_ADDRESS = "0x768188B6d051efDB6EcB75F5AEeDe499029E5912"
+const LIVEPEER_APP_ADDRESS = "0x9de2f17ffaaf273cd8a58bc857728fb3235b72bb"
 
 const ANY_ACCOUNT = "0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF"
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 const FUNCTION_SIGNATURES = {
     BOND: 'b78d27dc',
-    APPROVE: '095ea7b3'
+    APPROVE: '095ea7b3',
+    CLAIM_EARNINGS: '24b1babf',
+    WITHDRAW: '476343ee',
+    UNBOND: '27de9e32',
+    REBOND: 'eaffb3f9',
+    REBOND_FROM_UNBONDED: '3a080e93',
+    WIDTHDRAW_STAKE: '25d5971f',
+    TRANSCODER: '85aaff62',
+    REWARD: '228cb733',
+    SET_SERVICE_URI: '5f11301b'
 }
 
 /**
@@ -31,22 +41,36 @@ const grantPermissionToExecuteFunction = async (permissionManager, acl, agent, f
     console.log(`Granting permission to execute ${functionSignature} to ${agent.address}...`)
 
     const param = createParam("0x02", "01", functionSignature)
-    const role = await agent.EXECUTE_ROLE()
+    const executeRole = await agent.EXECUTE_ROLE()
 
-    const rolePermissionManager = await acl.getPermissionManager(agent.address, role)
+    const executePermissionManager = await acl.getPermissionManager(agent.address, executeRole)
 
-    if (rolePermissionManager === ZERO_ADDRESS) {
-        const createPermissionReceipt = await acl.createPermission(ZERO_ADDRESS, agent.address, role, permissionManager)
-        console.log(`Permission created: ${createPermissionReceipt.tx}`)
+    if (executePermissionManager === ZERO_ADDRESS) {
+        const createPermissionReceipt = await acl.createPermission(ZERO_ADDRESS, agent.address, executeRole, permissionManager)
+        console.log(`Execute permission created: ${createPermissionReceipt.tx}`)
     }
 
-    const grantPermissionReceipt = await acl.grantPermissionP(LIVEPEER_APP_ADDRESS, agent.address, role, [param], { from: permissionManager })
-    console.log(`Permission granted: ${grantPermissionReceipt.tx}`)
+    const grantPermissionReceipt = await acl.grantPermissionP(LIVEPEER_APP_ADDRESS, agent.address, executeRole, [param], { from: permissionManager })
+    console.log(`Execute permission granted: ${grantPermissionReceipt.tx}`)
 
-    const permissionGrantedToZeroAddress = await acl.hasPermission(ZERO_ADDRESS, agent.address, role)
+    const permissionGrantedToZeroAddress = await acl.hasPermission(ZERO_ADDRESS, agent.address, executeRole)
     if (permissionGrantedToZeroAddress) {
-        const revokePermissionReceipt = await acl.revokePermission(ZERO_ADDRESS, agent.address, role)
-        console.log(`Permission revoked for ${ZERO_ADDRESS}: ${revokePermissionReceipt.tx}`)
+        const revokePermissionReceipt = await acl.revokePermission(ZERO_ADDRESS, agent.address, executeRole)
+        console.log(`Execute permission revoked for ${ZERO_ADDRESS}: ${revokePermissionReceipt.tx}`)
+    }
+}
+
+const grantRunScriptPermission = async (permissionManager, acl, agent) => {
+    const runScriptRole = await agent.RUN_SCRIPT_ROLE()
+    const runScriptPermissionManager = await acl.getPermissionManager(agent.address, runScriptRole)
+    const hasRunScriptPermission = await acl.hasPermission(LIVEPEER_APP_ADDRESS, agent.address, runScriptRole)
+
+    if (runScriptPermissionManager === ZERO_ADDRESS) {
+        const createPermissionReceipt = await acl.createPermission(LIVEPEER_APP_ADDRESS, agent.address, runScriptRole, permissionManager)
+        console.log(`Run script permission created: ${createPermissionReceipt.tx}`)
+    } else if (!hasRunScriptPermission) {
+        const grantPermissionReceipt = await acl.grantPermission(LIVEPEER_APP_ADDRESS, agent.address, runScriptRole, { from: permissionManager })
+        console.log(`Run script permission granted: ${grantPermissionReceipt.tx}`)
     }
 }
 
@@ -56,9 +80,11 @@ module.exports = async () => {
         const permissionManager = (await web3.eth.getAccounts())[0]
         const acl = await ACL.at(ACL_ADDRESS)
         const agent = await Agent.at(AGENT_ADDRESS)
-        const functionSignature = FUNCTION_SIGNATURES.APPROVE
 
-        await grantPermissionToExecuteFunction(permissionManager, acl, agent, functionSignature)
+        // await grantRunScriptPermission(permissionManager, acl, agent)
+
+        // const functionSignature = FUNCTION_SIGNATURES.APPROVE
+        // await grantPermissionToExecuteFunction(permissionManager, acl, agent, functionSignature)
 
         // TODO: Add and test revokePermission function.
         // const grantPermissionReceipt = await acl.revokePermission(GRANT_TO_ADDRESS, LIVEPEER_APP_ADDRESS, role)
