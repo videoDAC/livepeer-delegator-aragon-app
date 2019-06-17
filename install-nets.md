@@ -128,7 +128,7 @@ Depending on your DAO's set up and intended usage, some permissions may require 
 
 [A sample set of permissions can be found in this DAO on Rinkeby](https://rinkeby.aragon.org/#/video.aragonid.eth/permissions?p=app.0x0069ee94a2c6964221c45a402d8b1ff0c45224b6). [Here is a list of CLI commands to run to set the permissions as per this example](https://github.com/videoDAC/livepeer-aragon/blob/master/recommended-permissions.md).
 
-A preliminary script for modifying parameter permissions can be found at `/livepeer-aragon-app/scripts/grantPermissionWithParameters.js`
+A script for setting the agent parameter permissions can be found at `/livepeer-aragon-app/scripts/setAgentPermissions.js`
 
 ### Installing to an Aragon DAO on Mainnet
 
