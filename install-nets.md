@@ -32,20 +32,51 @@ To see information about the published app, run `aragon apm info livepeer.open.a
 
 ### Installing to an Aragon DAO on Rinkeby
 
-**1. Install the app**
+**0. Install the Aragon Agent
 
-**Run the `install` command using aragonCLI:**
+The Agent App is an application which acts on behalf of the DAO. The Livepeer Aragon App will transact via this application.
 
 ```
-dao install <DAO-Address> livepeer.open.aragonpm.eth --app-init-args <Livepeer-Controller> --environment aragon:rinkeby
+dao install <DAO-Address> agent --environment aragon:rinkeby
 ```
 
 Where:
 
 - `<DAO-Address>` is the address of the Aragon DAO you are installing on. This can be the full address or the ENS name.
+
+**1. Pass the vote on the Aragon DAO to install the Agent app.**
+
+_This step is only required if the aragonCLI does not have permission to Manage apps._
+
+There should be a vote in the DAO's Voting app entitled
+
+> Kernel: Create a new upgradeable instance of 0x9ac98dc5f995bf0211ed589ef022719d1487e5cb2bab505676f0d084c07cf89a  app linked to the Kernel...
+
+The Agent app will be installed when this vote passes.
+
+**2. Discover the Agent App Proxy Address**
+
+When the Agent app is installed, run the following command:
+
+```
+dao apps <DAO-Address> --all --environment aragon:rinkeby
+```
+
+> This returns the `Proxy address` for an app named `0x9ac98dc5f995bf0211ed589ef022719d1487e5cb2bab505676f0d084c07cf89a` as the `<Agent-App-Proxy-Address>` for use in future commands.
+
+**3. Install the Livepeer app**
+
+**Run the `install` command using aragonCLI:**
+
+```
+dao install <DAO-Address> livepeer.open.aragonpm.eth --app-init-args <Agent-App-Proxy-Address> <Livepeer-Controller> --environment aragon:rinkeby
+```
+
+Where:
+
 - `<Livepeer-Controller>` address is `0x37dC71366Ec655093b9930bc816E16e6b587F968` for Rinkeby.
 
-**2. Pass the vote on the Aragon DAO to install the app.**
+**4. Pass the vote on the Aragon DAO to install the Livepeer app.**
 
 _This step is only required if the aragonCLI does not have permission to Manage apps._
 
@@ -53,9 +84,19 @@ There should be a vote in the DAO's Voting app entitled
 
 > Kernel: Create a new upgradeable instance of 0x668fe7ef9366b1f27e1e18a59fd2cdec041ad223e3506bf0cb6d1ab981781e75 app linked to the Kernel...
 
-The app will be installed when this vote passes.
+The Livepeer app will be installed when this vote passes.
 
-**3. Make a note of the App Proxy Addresses**
+**5. Discover the Livepeer App and Voting App Proxy Addresses**
+
+When the Livepeer app is installed, run the following command:
+
+```
+dao apps <DAO-Address> --all --environment aragon:rinkeby
+```
+
+> This returns the `Proxy address` for an app named `0x9ac98dc5f995bf0211ed589ef022719d1487e5cb2bab505676f0d084c07cf89a` as the `<Agent-App-Proxy-Address>` for use in future commands.
+
+**5. Discover the Livepeer and Voting App Proxy Addresses**
 
 **Run the `apps` command using aragonCLI:**
 
@@ -65,24 +106,25 @@ dao apps <DAO-Address> --all --environment aragon:rinkeby
 
 This will list the apps currently installed on the DAO, including:
 
+This will list the apps currently installed on the DAO, including:
+
 - an `App` called `voting@v2.0.3` (or perhaps another version). This is the Voting App. **Make a note of the `<Voting-App-Proxy-Address>` for later steps**.
 
 - a `Permissionless app` labelled `0x668fe7ef9366b1f27e1e18a59fd2cdec041ad223e3506bf0cb6d1ab981781e75`. This is the Livepeer App. **Make a note of the `<Livepeer-App-Proxy-Address>` for later steps**.
 
-**4. Set the first Permission on the App**
+**6. Set the first Permission on the App**
 
 **Run the `acl create` command using aragonCLI:**
 
 ```
-dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> APPROVE_AND_BOND_ROLE <Voting-App-Proxy-Address> <Manager-Address> --environment aragon:rinkeby
+dao acl create <DAO-Address> <Livepeer-App-Proxy-Address> APPROVE_AND_BOND_ROLE <Voting-App-Proxy-Address>  <Voting-App-Proxy-Address> --environment aragon:rinkeby
 ```
 
 Where:
 
 - `<Livepeer-App-Proxy-Address>` and `<Voting-App-Proxy-Address>` were noted in a previous step
-- `<Manager-Address>` is the address of whatever entity will manage this permission. You can set this to the Ethereum account being used by aragonCLI until you are ready to assign to another entity.
 
-**5. Pass the vote to set the first Permission**
+**7. Pass the vote to set the first Permission**
 
 _This step is only required if the aragonCLI does not have permission to Create permissions._
 
