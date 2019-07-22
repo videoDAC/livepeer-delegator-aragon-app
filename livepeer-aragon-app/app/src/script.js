@@ -105,7 +105,7 @@ const onNewEvent = async (state, storeEvent) => {
     switch (eventName) {
         case INITIALIZATION_TRIGGER:
             debugLog("APP INITIALISED")
-            return initialState(state)
+            return await initialState(state)
         case 'AppInitialized':
             debugLog("APP CONSTRUCTOR EVENT")
             api.identify(`Livepeer: ${eventAddress}`)

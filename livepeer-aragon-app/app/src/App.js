@@ -289,7 +289,8 @@ function App() {
 
             </AppLayout>
 
-            <SidePanel title={sidePanel ? sidePanel.title : ''} opened={sidePanel !== undefined}
+            <SidePanel title={sidePanel ? sidePanel.title : ''}
+                       opened={sidePanel !== undefined}
                        onClose={() => closeSidePanel()}>
                 {sidePanel ? sidePanel.sidePanelComponent : <div/>}
             </SidePanel>
