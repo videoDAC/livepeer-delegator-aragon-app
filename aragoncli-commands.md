@@ -50,14 +50,34 @@ dao acl create <DAO-Address> <Voting-App-Proxy-Address> CREATE_VOTES_ROLE <Token
 
 You have now created a basic app on Aragon, with a token and basic apps.
 
+### Install the Aragon Agent App
+
+The Agent App is an application which acts on behalf of the DAO. The Livepeer Aragon App will transact via this application.
+
+```
+dao install <DAO-Address> agent --environment aragon:rinkeby
+dao apps <DAO-Address> --all --environment aragon:rinkeby
+```
+
+> This returns the `Proxy address` for an app named `0x9ac98dc5f995bf0211ed589ef022719d1487e5cb2bab505676f0d084c07cf89a` as the `<Agent-App-Proxy-Address>` for use in future commands.
+
 ### Install the Livepeer Aragon App
 
 ```
-dao install <DAO-Address> livepeer.open.aragonpm.eth --app-init-args 0x37dC71366Ec655093b9930bc816E16e6b587F968 --environment aragon:rinkeby
+dao install <DAO-Address> livepeer.open.aragonpm.eth --app-init-args <Agent-App-Proxy-Address> 0x37dC71366Ec655093b9930bc816E16e6b587F968 --environment aragon:rinkeby
 dao apps <DAO-Address> --all --environment aragon:rinkeby
 ```
 
 > This returns  the `Proxy address` for an app named `0x668fe7ef9366b1f27e1e18a59fd2cdec041ad223e3506bf0cb6d1ab981781e75` as the `<Livepeer-App-Proxy-Address>` for use in future commands.
+
+### Set the Agent App's permissions
+
+In order for the Livepeer Aragon App to transact via the Agent, the following commands need to be run, to set the permissions on the Agent app:
+
+```
+dao acl create <DAO-Address> <Agent-App-Proxy-Address> EXECUTE_ROLE <Livepeer-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
+dao acl create <DAO-Address> <Agent-App-Proxy-Address> RUN_SCRIPT_ROLE <Livepeer-App-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
+```
 
 ### Set the Livepeer Aragon App's permissions as recommended
 
