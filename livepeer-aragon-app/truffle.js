@@ -65,7 +65,7 @@ module.exports = {
             network_id: 4,
             provider: providerForNetwork('rinkeby'),
             skipDryRun: true,
-            gasPrice: 3000000000 // 3 Gwei
+            gasPrice: 4000000000 // 4 Gwei
         }
     },
     // Configure your compilers

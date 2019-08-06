@@ -14,9 +14,9 @@ const TranscoderContainer = styled.div`
 
 const Transcoder = ({handleDeclareTranscoder, handleTranscoderReward, handleSetServiceUri, appState}) => {
 
-    const {appAddress} = appState
+    const {agentAddress} = appState
 
-    const livepeerTranscoderLink = LivepeerTranscoderLink(appAddress)
+    const livepeerTranscoderLink = LivepeerTranscoderLink(agentAddress)
 
     return (
         <TranscoderContainer>

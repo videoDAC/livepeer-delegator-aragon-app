@@ -18,9 +18,9 @@ const ExplorerLink = styled(Button)`
 
 const Delegator = ({appState, approveAndBondTokens, unbondTokens, rebondTokens, claimEarnings, withdrawFees, withdrawTokens}) => {
 
-    const {appAddress} = appState
+    const {agentAddress} = appState
 
-    const livepeerDelegatorLink = LivepeerDelegatorLink(appAddress)
+    const livepeerDelegatorLink = LivepeerDelegatorLink(agentAddress)
 
     return (
         <TopContainer>

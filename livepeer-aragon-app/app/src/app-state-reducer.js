@@ -2,7 +2,7 @@ import {fromDecimals} from './lib/math-utils';
 import {BN} from '../../node_modules/bn.js/lib/bn';
 import {TOKEN_DECIMALS} from '../SharedConstants';
 
-//TODO: Break reducer up into smaller groups of state transformations
+//TODO: Break reducer up into smaller groups of state transformations, move some processing to components and null check there.
 
 const PERCENTAGE_AS_FRACTION_DIVISOR = 10000;
 
@@ -89,15 +89,15 @@ const reducer = state => {
 
     return {
         ...state,
-        appEthBalance: fromDecimals(appEthBalance.toString(), TOKEN_DECIMALS),
-        appsLptBalance: fromDecimals(appsLptBalance.toString(), TOKEN_DECIMALS),
-        appApprovedTokens: fromDecimals(appApprovedTokens.toString(), TOKEN_DECIMALS),
+        appEthBalance: fromDecimals(appEthBalance ? appEthBalance.toString() : "0", TOKEN_DECIMALS),
+        appsLptBalance: fromDecimals(appsLptBalance ? appsLptBalance.toString() : "0", TOKEN_DECIMALS),
+        appApprovedTokens: fromDecimals(appApprovedTokens ? appApprovedTokens.toString() : "0", TOKEN_DECIMALS),
         delegatorInfo: {
             ...delegatorInfo,
-            pendingFees: fromDecimals(pendingFees.toString(), TOKEN_DECIMALS),
-            showPendingFees: showPendingFees(pendingFees, fees),
-            fees: fromDecimals(fees.toString(), TOKEN_DECIMALS),
-            delegatedAmount: fromDecimals(delegatedAmount.toString(), TOKEN_DECIMALS),
+            pendingFees: fromDecimals(pendingFees ? pendingFees.toString() : "0", TOKEN_DECIMALS),
+            showPendingFees: showPendingFees(pendingFees ? pendingFees : "0", fees),
+            fees: fromDecimals(fees ? fees.toString() : "0", TOKEN_DECIMALS),
+            delegatedAmount: fromDecimals(delegatedAmount ? delegatedAmount.toString() : "0", TOKEN_DECIMALS),
             totalStake: calculateTotalStake(bondedAmount, pendingStake),
             delegatorStatus: parseInt(delegatorStatus)
         },

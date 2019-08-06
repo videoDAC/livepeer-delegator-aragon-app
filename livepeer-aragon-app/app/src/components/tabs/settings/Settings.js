@@ -23,7 +23,7 @@ const AddressCard = styled(Card)`
     margin-top: 10px;
     width: auto;
 `
-const ControllerAddressCard = styled(Card)`
+const DetailAddressCard = styled(Card)`
     padding: 10px;
     height: auto;
     margin-top: 10px;
@@ -40,12 +40,26 @@ const Settings = ({handleNewController, handleNewAgent, appState}) => {
     return (
         <SettingsContainer>
             <div>
+
                 <DetailContainer>
-                    <Text.Block size="normal">Livepeer App Address</Text.Block>
-                    <AddressCard>
-                        <Text.Block size="normal">{appAddress}</Text.Block>
-                    </AddressCard>
+                    <Text.Block size="normal">Agent Address</Text.Block>
+                    <DetailAddressCard>
+                        <Text.Block size="normal">{agentAddress}</Text.Block>
+                    </DetailAddressCard>
+
+                    <ButtonContainer>
+                        <Button mode="strong" onClick={() => handleNewAgent()}>
+                            Change Agent
+                        </Button>
+                    </ButtonContainer>
                 </DetailContainer>
+
+                {/*<DetailContainer>*/}
+                {/*    <Text.Block size="normal">Livepeer App Address</Text.Block>*/}
+                {/*    <AddressCard>*/}
+                {/*        <Text.Block size="normal">{appAddress}</Text.Block>*/}
+                {/*    </AddressCard>*/}
+                {/*</DetailContainer>*/}
 
                 <DetailContainer>
                     <Text.Block size="normal">Livepeer Token Address</Text.Block>
@@ -55,23 +69,10 @@ const Settings = ({handleNewController, handleNewAgent, appState}) => {
                 </DetailContainer>
 
                 <DetailContainer>
-                    <Text.Block size="normal">Agent Address</Text.Block>
-                    <ControllerAddressCard>
-                        <Text.Block size="normal">{agentAddress}</Text.Block>
-                    </ControllerAddressCard>
-
-                    <ButtonContainer>
-                        <Button mode="strong" onClick={() => handleNewAgent()}>
-                            Change Agent
-                        </Button>
-                    </ButtonContainer>
-                </DetailContainer>
-
-                <DetailContainer>
                     <Text.Block size="normal">Livepeer Controller Address</Text.Block>
-                    <ControllerAddressCard>
+                    <DetailAddressCard>
                         <Text.Block size="normal">{livepeerControllerAddress}</Text.Block>
-                    </ControllerAddressCard>
+                    </DetailAddressCard>
 
                     <ButtonContainer>
                         <Button mode="strong" onClick={() => handleNewController()}>

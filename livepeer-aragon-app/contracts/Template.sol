@@ -85,9 +85,9 @@ contract Template is TemplateBase {
         tokenManager.initialize(token, true, 0);
         voting.initialize(token, 50 * PCT, 20 * PCT, 1 days);
 
-        acl.createPermission(address(agent), agent, agent.EXECUTE_ROLE(), root);
-        acl.createPermission(address(agent), agent, agent.RUN_SCRIPT_ROLE(), root);
-        acl.createPermission(address(agent), agent, agent.TRANSFER_ROLE(), root);
+        acl.createPermission(address(livepeerApp), agent, agent.EXECUTE_ROLE(), root);
+        acl.createPermission(address(livepeerApp), agent, agent.RUN_SCRIPT_ROLE(), root);
+        acl.createPermission(address(livepeerApp), agent, agent.TRANSFER_ROLE(), root);
 
         acl.createPermission(this, tokenManager, tokenManager.MINT_ROLE(), this);
         tokenManager.mint(root, 1); // Give one token to root

@@ -39,16 +39,30 @@ const ButtonsContainer = styled.div`
 const TransferButton = styled(Button)`
     margin-right: 20px;
 `
+const DetailAddressCard = styled(Card)`
+    padding: 10px;
+    height: auto;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    width: auto;
+`
 
 const Account = ({appState, handleTransferIn, handleTransferOut, handleTransferEthOut}) => {
 
-    const {appAddress, appEthBalance, appsLptBalance} = appState
+    const {appEthBalance, appsLptBalance, agentAddress} = appState
 
-    const livepeerAccountLink = LivepeerAccountLink(appAddress)
+    const livepeerAccountLink = LivepeerAccountLink(agentAddress)
 
     return (
         <AccountContainer>
             <div>
+
+                <DetailContainer>
+                    <Text.Block size="normal">Agent Address</Text.Block>
+                    <DetailAddressCard>
+                        <Text.Block size="normal">{agentAddress}</Text.Block>
+                    </DetailAddressCard>
+                </DetailContainer>
 
                 <DetailContainer>
                     <Text.Block size="normal">ETH Balance</Text.Block>
@@ -58,7 +72,7 @@ const Account = ({appState, handleTransferIn, handleTransferOut, handleTransferE
 
                     <div>
                         <TransferButton mode="strong" onClick={() => handleTransferEthOut()}>
-                            Transfer From App
+                            Transfer From Agent
                         </TransferButton>
                     </div>
                 </DetailContainer>
@@ -71,8 +85,8 @@ const Account = ({appState, handleTransferIn, handleTransferOut, handleTransferE
 
                     <ButtonsContainer>
                         <TransferButton mode="strong" onClick={() => handleTransferIn()}>Transfer To
-                            App</TransferButton>
-                        <Button mode="strong" onClick={() => handleTransferOut()}>Transfer From App</Button>
+                            Agent</TransferButton>
+                        <Button mode="strong" onClick={() => handleTransferOut()}>Transfer From Agent</Button>
                     </ButtonsContainer>
                 </DetailContainer>
 

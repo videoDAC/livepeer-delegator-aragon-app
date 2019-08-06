@@ -34,7 +34,7 @@ console.log(api.network().subscribe(network => {console.log("Network:"); console
 // Wait until we can get the agents address (demonstrating we are connected to the app) before initializing the store.
 retryEvery(retry => {
     api.call('agent').subscribe(
-        () => initialize(),
+        agentAddress => initialize(),
         error => {
             console.error(
                 'Could not start background script execution due to the contract not loading the agent address:',
