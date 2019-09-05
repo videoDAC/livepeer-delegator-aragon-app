@@ -28,21 +28,19 @@ dao token new "LivepeerDAOToken" "LPDAO" 0 --environment aragon:rinkeby
 
 ```
 dao install <DAO-Address> token-manager --app-init none --environment aragon:rinkeby
-dao apps <DAO-Address> --all --environment aragon:rinkeby
 ```
 
-> This returns the `<Token-Manager-Proxy-Address>` for use in future commands.
+> This returns the address where the `token-manager` has been installed, which can be used as the `<Token-Manager-Proxy-Address>` in future commands.
 
 ```
 dao token change-controller <DAO-Token-Address> <Token-Manager-Proxy-Address> --environment aragon:rinkeby
 dao acl create <DAO-Address> <Token-Manager-Proxy-Address> MINT_ROLE <Your-AragonCLI-Address> <Your-AragonCLI-Address> --environment aragon:rinkeby
 dao exec <DAO-Address> <Token-Manager-Proxy-Address> initialize <DAO-Token-Address> true 0 --environment aragon:rinkeby
 dao exec <DAO-Address> <Token-Manager-Proxy-Address> mint <Your-AragonCLI-Address> 1 --environment aragon:rinkeby
-dao install <DAO-Address> voting --app-init-args <DAO-Token-Address> 500000000000000000 250000000000000000 86400 --environment aragon:rinkeby
-dao apps <DAO-Address> --all --environment aragon:rinkeby
+dao install <DAO-Address> voting --app-init-args <DAO-Token-Address> 500000000000000000 500000000000000000 86400 --environment aragon:rinkeby
 ```
 
-> This returns `<Voting-App-Proxy-Address>` for use in future commands.
+> This displays the proxy address where the `voting` app has been installed, which can be used as the `<Voting-App-Proxy-Address>` in future commands.
 
 ```
 dao acl create <DAO-Address> <Voting-App-Proxy-Address> CREATE_VOTES_ROLE <Token-Manager-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
@@ -56,19 +54,17 @@ The Agent App is an application which acts on behalf of the DAO. The Livepeer Ar
 
 ```
 dao install <DAO-Address> agent --environment aragon:rinkeby
-dao apps <DAO-Address> --all --environment aragon:rinkeby
 ```
 
-> This returns the `Proxy address` for an app named `0x9ac98dc5f995bf0211ed589ef022719d1487e5cb2bab505676f0d084c07cf89a` as the `<Agent-App-Proxy-Address>` for use in future commands.
+> This returns the proxy address where the `agent` app has been installed, which can be used as the `<Agent-App-Proxy-Address>` for use in future commands.
 
 ### Install the Livepeer Aragon App
 
 ```
 dao install <DAO-Address> livepeer.open.aragonpm.eth --app-init-args <Agent-App-Proxy-Address> 0x37dC71366Ec655093b9930bc816E16e6b587F968 --environment aragon:rinkeby
-dao apps <DAO-Address> --all --environment aragon:rinkeby
 ```
 
-> This returns  the `Proxy address` for an app named `0x668fe7ef9366b1f27e1e18a59fd2cdec041ad223e3506bf0cb6d1ab981781e75` as the `<Livepeer-App-Proxy-Address>` for use in future commands.
+> This returns the address where `livepeer.open.aragonpm.eth` is installed, which will be used as the `<Livepeer-App-Proxy-Address>` for use in future commands.
 
 ### Set the Agent App's permissions
 
