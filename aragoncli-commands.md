@@ -48,7 +48,7 @@ dao apps <DAO-Address> --all --environment aragon:rinkeby
 dao acl create <DAO-Address> <Voting-App-Proxy-Address> CREATE_VOTES_ROLE <Token-Manager-Proxy-Address> <Voting-App-Proxy-Address> --environment aragon:rinkeby
 ```
 
-You have now created a basic app on Aragon, with a token and basic apps.
+You have now created a basic DAO on Aragon, with a token and basic apps.
 
 ### Install the Aragon Agent App
 
