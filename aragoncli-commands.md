@@ -61,7 +61,7 @@ dao install <DAO-Address> agent --environment aragon:rinkeby
 ### Install the Livepeer Aragon App
 
 ```
-dao install <DAO-Address> livepeer.open.aragonpm.eth --app-init-args <Agent-App-Proxy-Address> 0x37dC71366Ec655093b9930bc816E16e6b587F968 --environment aragon:rinkeby
+dao install <DAO-Address> livepeer.open.aragonpm.eth "8.3.0" --app-init-args <Agent-App-Proxy-Address> 0x37dC71366Ec655093b9930bc816E16e6b587F968 --environment aragon:rinkeby
 ```
 
 > This returns the address where `livepeer.open.aragonpm.eth` is installed, which will be used as the `<Livepeer-App-Proxy-Address>` for use in future commands.
