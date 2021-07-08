@@ -174,12 +174,6 @@ A script for setting the agent parameter permissions can be found at `/livepeer-
 
 ### Installing to an Aragon DAO on Mainnet
 
-As far as we are aware, at the time of writing, this application has not been installed on Mainnet.
+This application has not yet been published to aragonPM on mainnet.
 
-***It has not yet passed a security audit, so if you install on Mainnet, you do so at your own risk.***
-
-However, for those who like living on the edge, you can use the same instructions as for installing on Rinkeby, with the following changes:
-
-1. Substitute `--environment aragon:rinkeby` with `--environment aragon:mainnet` for all the aragonCLI commands.
-
-2. Use `<Livepeer-Controller>` address as `0xf96d54e490317c557a967abfa5d6e33006be69b3` for Mainnet when you install the app.
+If you would like to this app to be published on mainnet, you can contact the app's creators by searching for them in this repository.
